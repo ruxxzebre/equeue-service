@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import moment from "moment";
+import swal from 'sweetalert2';
 import { getInstance } from '../lib/momentCalendar';
 
 const getOffsetDay = (offset, date) => {
@@ -15,7 +16,6 @@ const getOffsetDay = (offset, date) => {
 
 const optimizeDays = (date, days, week) => {
   if (!days.filter(parseInt).length) return days;
-  // console.log(days);
   date = date.split('-').map(i => i.trim());
   date[1] = parseInt(date[1]);
   if (!date[1]) {
@@ -23,15 +23,16 @@ const optimizeDays = (date, days, week) => {
   }
   date = date.join('-');
   let daysAmount = moment(date).daysInMonth();
-
-  days = days.map((day, idx) => {
-    if (day) return day;
-    if (week === 1) {
-      return daysAmount - days.length + idx + 2;
-    }
-    return idx;
-  });
-  console.log(days);
+  const truthyDays = days.filter(Boolean).map(parseInt);
+  const firstTrueDay = truthyDays[0];
+  let newMonthCounter = 0;
+  days = days.reverse().map((day, idx, arr) => {
+    if (day)
+      return day;
+    if (firstTrueDay === 1)
+      return daysAmount - idx;
+    return null;
+  }).reverse().map(i => i || (newMonthCounter += 1));
   return days;
 };
 
@@ -49,7 +50,25 @@ const Calendar = ({ date: dateProp }) => {
         days = optimizeDays(date, days, i);
         return <div className="week" key={i}>
           {days.map( (day, di) =>{
-            return <div className="day" key={di}>
+            return <div className="day" key={di} onClick={async () => {
+              await swal.fire({
+                title: 'Зареєструватись до черги',
+                html:
+                  '<input id="swal-input1" class="swal2-input" placeholder="ПІБ">' +
+                  '<input id="swal-input2" class="swal2-input" placeholder="Номер телефону">',
+                focusConfirm: false,
+                preConfirm: () => {
+                  return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                  ]
+                }
+              });
+              swal.fire({
+                title: 'Вас успішно зареєстровано'
+              });
+
+            }}>
               {day}
             </div>
           })}
