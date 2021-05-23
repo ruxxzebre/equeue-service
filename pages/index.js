@@ -1,25 +1,36 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import {useEffect, useState} from 'react';
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import styles from '../styles/Home.module.css';
+import styled from 'styled-components';
 import Layout from '../components/layout';
 import Calendar from '../components/calendar';
 
+const StyledHeadline = styled.h2`
+  
+`;
+
 const leftPad = (str, len, ch) => {
   str = String(str);
-  var i = -1;
+  let i = -1;
   if (!ch && ch !== 0) ch = ' ';
   len = len - str.length;
-  while (++i < len) {
+  while (i++ < len) {
     str = ch + str;
   }
   return str;
 }
+const formatMonth = (month) => {
+  if (month/10 > 1) {
+    return `${month}`;
+  }
+  return `0${month}`;
+};
 
 export default function Home() {
   const today = new Date();
   const [day, setDay] = useState(today.getDate());
-  const [month, setMonth] = useState(today.getMonth() + 1);
+  const [month, setMonth] = useState(formatMonth(today.getMonth() + 1));
   const [year, setYear] = useState(today.getFullYear());
   const [yearRange, setYearRange] = useState();
   const [formattedDate, setFormattedDate] = useState();
@@ -50,7 +61,7 @@ export default function Home() {
 
     <Layout>
       <div className="App-header">
-        <h2>Book a visit</h2>
+        <StyledHeadline>Book a visit</StyledHeadline>
       </div>
       {initialized &&
         <div>
@@ -59,7 +70,6 @@ export default function Home() {
         <select name="month" value={month} onChange={(e) => setMonth(e.target.value)}>
           <option value="01">01 - January</option>
           <option value="02">02 - February</option>
-          <option value="03">03 - March</option>
           <option value="04">04 - April</option>
           <option value="05">05 - May</option>
           <option value="06">06 - June</option>
