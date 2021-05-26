@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
+import { Booking } from "../lib/bookCrud";
 import styled from 'styled-components';
 import Layout from '../components/layout';
 import Calendar from '../components/calendar';
@@ -27,7 +28,7 @@ const formatMonth = (month) => {
   return `0${month}`;
 };
 
-export default function Home() {
+export default function Home({ recordContextState }) {
   const today = new Date();
   const [day, setDay] = useState(today.getDate());
   const [month, setMonth] = useState(formatMonth(today.getMonth() + 1));
@@ -59,7 +60,7 @@ export default function Home() {
 
   return (
 
-    <Layout>
+    <Layout recordContextState={recordContextState}>
       <div className="App-header">
         <StyledHeadline>Book a visit</StyledHeadline>
       </div>
@@ -95,3 +96,15 @@ export default function Home() {
     </Layout>
   )
 }
+
+export async function getServerSideProps(context) {
+  const records = await Booking.getRecords();
+  const props = {};
+  if (records && records.length) {
+    props.recordContextState = records;
+  } else {
+    props.recordContextState = [];
+  }
+
+  return { props };
+};
