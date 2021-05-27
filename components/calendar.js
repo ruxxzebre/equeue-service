@@ -114,6 +114,7 @@ const getCellBackground = (records) => {
 const DayCell = ({ day, records, onClick }) => {
   const [blur, setBlur] = useState(false);
   const [dayRecords, setDayRecords] = useState([]);
+  const [cellBackground, setCellBackground] = useState('white');
 
   useEffect(() => {
     setDayRecords(records.filter((record) => {
@@ -122,10 +123,14 @@ const DayCell = ({ day, records, onClick }) => {
     }));
   }, [records]);
 
+  useEffect(() => {
+    setCellBackground(getCellBackground(dayRecords));
+  }, [dayRecords]);
+
   return (<div className="day"
                onClick={onClick}
                style={{
-      background: getCellBackground(dayRecords),
+      background: cellBackground,
       cursor: day.day ? 'pointer' : 'default',
       filter: parseInt(day.day) ? (blur && 'blur(4px)') : ''
     }}

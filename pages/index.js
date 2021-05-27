@@ -97,14 +97,16 @@ export default function Home({ recordContextState }) {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const records = await Booking.getRecords();
-  const props = {};
-  if (records && records.length) {
-    props.recordContextState = records;
-  } else {
-    props.recordContextState = [];
-  }
+  let recordContextState =
+    (records && records.length)
+      ? records
+      : [];
 
-  return { props };
+  return {
+    props: {
+      recordContextState
+    }
+  };
 };
