@@ -111,6 +111,106 @@ const getCellBackground = (records) => {
   // return `linear-gradient(to bottom, red 50%, white 50%)`;
 };
 
+const restrN = {
+  low: '9:00',
+  high: '18:00',
+  range: 10
+};
+
+const makeTimeRange = ({low, high, range}) => {
+  const prs = (a) => parseInt(a, 10);
+  const timedata = {
+    low: {
+      hrs: prs(low.split(':')[0]),
+      min: prs(low.split(':')[1])
+    },
+    high: {
+      hrs: prs(high.split(':')[0]),
+      min: prs(high.split(':')[1])
+    }
+  };
+  const arlen =
+    ((timedata.high.hrs*60 + timedata.high.min) -
+    (timedata.low.hrs*60 + timedata.low.min))/range;
+  let counters = {
+    min: 0,
+    hr: prs(low.split(':')[0])
+  };
+  const rar = Array(arlen).fill(0).map((_, idx) => {
+    if (idx !== 0)
+      counters.min += range;
+    if (counters.min === 60) {
+      counters.min = 0;
+      counters.hr += 1;
+    }
+    return `${counters.hr}:${
+      counters.min < 10
+        ? `0${counters.min}`
+        : counters.min
+    }`;
+  });
+  return rar;
+};
+
+const DayScheduleRow = ({ timeLabel, clickDay }) => {
+  const [
+    backColorOnHover,
+    setBackColorOnHover
+  ] = useState('rgba(255, 54, 0, 0.3)');
+  const checkTimeLabel = () => parseInt(timeLabel.split(':')[1]) !== 0;
+  const [
+    collapse,
+    setCollapse
+  ] = useState(checkTimeLabel());
+
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      margin: '2px',
+      padding: '5px',
+      height: collapse ? '3px' : '',
+      // background: 'rgba(255, 54, 0, 0.3)',
+      background: backColorOnHover,
+      borderRadius: '5px',
+      cursor: 'pointer'
+    }}
+         onClick={clickDay}
+         onMouseOver={() => {
+           setBackColorOnHover('#7FDBFF');
+           if (checkTimeLabel())
+            setCollapse(false);
+         }}
+         onMouseOut={() => {
+           setBackColorOnHover('rgba(255, 54, 0, 0.3)');
+           if (checkTimeLabel())
+            setCollapse(true);
+         }
+         }
+    >
+      <div style={{
+        color: 'white'
+      }}>{collapse ? '' : timeLabel}</div>
+    </div>
+  );
+};
+
+const DaySchedule = ({ onClick }) => {
+  return (
+    <div>
+      {makeTimeRange(restrN).map((tLabel) => {
+        return (
+          <DayScheduleRow clickDay={() => {
+            console.log('flex');
+            onClick(tLabel);
+          }} timeLabel={tLabel} />
+        );
+      })}
+    </div>
+  );
+};
+
 const DayCell = ({ day, records, onClick }) => {
   const [blur, setBlur] = useState(false);
   const [dayRecords, setDayRecords] = useState([]);
@@ -149,46 +249,58 @@ const DayCellInteract = async (
   day,
   date
 ) => {
+  const fnn = RegisterRecordSwal(recordDispatch);
+
   if (day.booked && day.day) {
     return swal.fire({
       title: 'На даний день черга заповнена, оберіть інший.'
     });
   }
   await swal.fire({
-    title: 'Зареєструватись до черги',
-    html:
-      '<input id="swal-input1" class="swal2-input" autocomplete="off" placeholder="ПІБ">' +
-      '<input id="swal-input2" class="swal2-input" autocomplete="off" placeholder="Номер телефону">',
-    focusConfirm: false,
-    preConfirm: () => {
-      return [
-        document.getElementById('swal-input1').value,
-        document.getElementById('swal-input2').value
-      ]
-    },
-    confirmButtonText: "Зареєструватись"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      if (validate(result.value)) {
-        recordDispatch(
-          {
-            data:
-              {
-                name: result.value[0],
-                phone: result.value[1],
-                date: formatDatesDay(date, day.day)
-              },
-            type: 'addRecord'
-          }
-        );
-        return;
-      }
-      return swal.fire({
-        title: 'Дані введено некорректно'
-      });
-    }
+    title: 'Оберіть час',
+    html: <DaySchedule onClick={fnn} />
   });
+
 };
+
+const RegisterRecordSwal = (recordDispatch) => {
+  return async (hhmmLabel) => {
+    await swal.fire({
+      title: `Зареєструватись до черги о ${hhmmLabel}`,
+      html:
+        '<input id="swal-input1" class="swal2-input" autocomplete="off" placeholder="ПІБ">' +
+        '<input id="swal-input2" class="swal2-input" autocomplete="off" placeholder="Номер телефону">',
+      focusConfirm: false,
+      preConfirm: () => {
+        return [
+          document.getElementById('swal-input1').value,
+          document.getElementById('swal-input2').value
+        ]
+      },
+      confirmButtonText: "Зареєструватись"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (validate(result.value)) {
+          recordDispatch(
+            {
+              data:
+                {
+                  name: result.value[0],
+                  phone: result.value[1],
+                  date: formatDatesDay(date, day.day)
+                },
+              type: 'addRecord'
+            }
+          );
+          return;
+        }
+        return swal.fire({
+          title: 'Дані введено некорректно'
+        });
+      }
+    });
+  };
+}
 
 const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
   const [date, setDate] = useState(dateProp);
