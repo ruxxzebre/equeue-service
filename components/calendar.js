@@ -152,59 +152,93 @@ const makeTimeRange = ({low, high, range}) => {
   return rar;
 };
 
-const DayScheduleRow = ({ timeLabel, clickDay }) => {
+const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
+  const checkTimeLabel = () => parseInt(timeLabel.split(':')[1]) !== 0;
+  const hovBackConst = '#7FDBFF';
+  const hovBackConstOut = checkTimeLabel() ? 'rgba(255, 126, 0, 0.3)' : 'rgba(255, 126, 0, 0.3)';
   const [
     backColorOnHover,
     setBackColorOnHover
-  ] = useState('rgba(255, 54, 0, 0.3)');
-  const checkTimeLabel = () => parseInt(timeLabel.split(':')[1]) !== 0;
+  ] = useState(checkTimeLabel()
+    ? 'rgba(255, 54, 0, 0.3)'
+    : hovBackConstOut
+    // : 'rgba(255, 126, 0, 0.3)'
+  );
+  const [
+    showNested,
+    setShowNested
+  ] = useState(false);
   const [
     collapse,
     setCollapse
   ] = useState(checkTimeLabel());
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      margin: '2px',
-      padding: '5px',
-      height: collapse ? '3px' : '',
-      // background: 'rgba(255, 54, 0, 0.3)',
-      background: backColorOnHover,
-      borderRadius: '5px',
-      cursor: 'pointer'
-    }}
-         onClick={clickDay}
-         onMouseOver={() => {
-           setBackColorOnHover('#7FDBFF');
-           if (checkTimeLabel())
-            setCollapse(false);
-         }}
-         onMouseOut={() => {
-           setBackColorOnHover('rgba(255, 54, 0, 0.3)');
-           if (checkTimeLabel())
-            setCollapse(true);
-         }
-         }
-    >
+    <div>
       <div style={{
-        color: 'white'
-      }}>{collapse ? '' : timeLabel}</div>
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        margin: '2px',
+        padding: '5px',
+        height: collapse ? '3px' : '',
+        // background: 'rgba(255, 54, 0, 0.3)',
+        background: backColorOnHover,
+        borderRadius: '5px',
+        cursor: 'pointer'
+      }}
+           onClick={() => {
+             if (!nested.length) {
+               clickDay();
+             }
+             setShowNested(!showNested);
+           }}
+           onMouseOver={() => {
+             setBackColorOnHover(hovBackConst);
+             if (checkTimeLabel())
+               setCollapse(false);
+           }}
+           onMouseOut={() => {
+             setBackColorOnHover(hovBackConstOut);
+             if (checkTimeLabel())
+               setCollapse(true);
+           }
+           }
+      >
+        <div style={{
+          color: 'white'
+        }}>{collapse ? '' : timeLabel}</div>
+      </div>
+      { showNested && nested }
     </div>
   );
 };
 
 const DaySchedule = ({ onClick }) => {
+  let prevsr = [];
+
   return (
     <div>
       {makeTimeRange(restrN).map((tLabel) => {
-        return (
+        const isa = parseInt(tLabel.split(':')[1], 10) === 0;
+        if (!isa) prevsr.push(
           <DayScheduleRow clickDay={() => {
-            console.log('flex');
             onClick(tLabel);
           }} timeLabel={tLabel} />
+        );
+        return (
+          <div>
+            {(() => {
+              if (isa) {
+                prevsr = [];
+                return                 <DayScheduleRow clickDay={() => {
+                  onClick(tLabel);
+                }} timeLabel={tLabel} nested={prevsr} />
+
+              }
+            })()
+            }
+          </div>
         );
       })}
     </div>
