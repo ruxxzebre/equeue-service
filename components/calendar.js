@@ -153,14 +153,15 @@ const makeTimeRange = ({low, high, range}) => {
 };
 
 const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
-  const checkTimeLabel = () => parseInt(timeLabel.split(':')[1]) !== 0;
+  const isMainTimeLabel = () => parseInt(timeLabel.split(':')[1]) === 0;
   const hovBackConst = '#7FDBFF';
-  const hovBackConstOut = checkTimeLabel() ? 'rgba(255, 126, 0, 0.3)' : 'rgba(255, 126, 0, 0.3)';
+  const backConst = 'rgba(255, 54, 0, 0.3)';
+  const hovBackConstOut = isMainTimeLabel() ? backConst : 'rgba(255, 126, 0, 0.3)';
   const [
     backColorOnHover,
     setBackColorOnHover
-  ] = useState(checkTimeLabel()
-    ? 'rgba(255, 54, 0, 0.3)'
+  ] = useState(isMainTimeLabel()
+    ? backConst
     : hovBackConstOut
     // : 'rgba(255, 126, 0, 0.3)'
   );
@@ -171,7 +172,7 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
   const [
     collapse,
     setCollapse
-  ] = useState(checkTimeLabel());
+  ] = useState(!isMainTimeLabel());
 
   return (
     <div>
@@ -190,17 +191,18 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
            onClick={() => {
              if (!nested.length) {
                clickDay();
+             } else {
+               setShowNested(!showNested);
              }
-             setShowNested(!showNested);
            }}
            onMouseOver={() => {
              setBackColorOnHover(hovBackConst);
-             if (checkTimeLabel())
+             if (!isMainTimeLabel())
                setCollapse(false);
            }}
            onMouseOut={() => {
              setBackColorOnHover(hovBackConstOut);
-             if (checkTimeLabel())
+             if (!isMainTimeLabel())
                setCollapse(true);
            }
            }
