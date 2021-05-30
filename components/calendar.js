@@ -30,6 +30,12 @@ export const formatDatesDay = (date, day, fromui = true, obj = false) => {
     // console.log('formatted: ' + date.toString(), 'day is: ' + day);
   return obj ? date : date.toString();
 };
+export const formatDatesHHMM = (date, hh, mm, obj = false) => {
+  date = moment(date);
+  date.hour(hh);
+  date.minute(mm);
+  return obj ? date : date.toString();
+}
 
 const optimizeDays = (date, days, recordStore) => {
   if (!days.filter(parseInt).length)
@@ -152,8 +158,9 @@ const makeTimeRange = ({low, high, range}) => {
   return rar;
 };
 
-const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
-  const isMainTimeLabel = () => parseInt(timeLabel.split(':')[1]) === 0;
+const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested }) => {
+  // const isMainTimeLabel = () => parseInt(timeLabel.split(':')[1]) === 0;
+  const isMainTimeLabel = () => isNested;
   const hovBackConst = '#7FDBFF';
   const backConst = 'rgba(255, 54, 0, 0.3)';
   const hovBackConstOut = isMainTimeLabel() ? backConst : 'rgba(255, 126, 0, 0.3)';
@@ -216,16 +223,25 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested }) => {
   );
 };
 
-const DaySchedule = ({ onClick }) => {
+const DaySchedule = ({ onClick, date }) => {
+  // const { recordDispatch } = useRecord();
+
   let prevsr = [];
+  const addtoprevsr = (thing) => {
+    prevsr = [
+      ...prevsr, thing
+    ];
+  }
 
   return (
     <div>
       {makeTimeRange(restrN).map((tLabel) => {
         const isa = parseInt(tLabel.split(':')[1], 10) === 0;
-        if (!isa) prevsr.push(
-          <DayScheduleRow clickDay={() => {
-            onClick(tLabel);
+        const isf = parseInt(tLabel.split(':')[0], 10) === 9;
+        // if (!isa)
+          prevsr.push(
+           <DayScheduleRow clickDay={() => {
+            onClick(tLabel, date);
           }} timeLabel={tLabel} />
         );
         return (
@@ -233,11 +249,10 @@ const DaySchedule = ({ onClick }) => {
             {(() => {
               if (isa) {
                 prevsr = [];
-                return                 <DayScheduleRow clickDay={() => {
+                 return <DayScheduleRow clickDay={() => {
                   onClick(tLabel);
-                }} timeLabel={tLabel} nested={prevsr} />
-
-              }
+                }} timeLabel={tLabel} isNested={true} nested={prevsr} />
+                }
             })()
             }
           </div>
@@ -294,13 +309,13 @@ const DayCellInteract = async (
   }
   await swal.fire({
     title: 'Оберіть час',
-    html: <DaySchedule onClick={fnn} />
+    html: <DaySchedule date={date} onClick={fnn} />
   });
 
 };
 
 const RegisterRecordSwal = (recordDispatch) => {
-  return async (hhmmLabel) => {
+  return async (hhmmLabel, date) => {
     await swal.fire({
       title: `Зареєструватись до черги о ${hhmmLabel}`,
       html:
@@ -323,7 +338,7 @@ const RegisterRecordSwal = (recordDispatch) => {
                 {
                   name: result.value[0],
                   phone: result.value[1],
-                  date: formatDatesDay(date, day.day)
+                  date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
                 },
               type: 'addRecord'
             }
@@ -345,7 +360,7 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
     name: "",
     phone: ""
   });
-  // calendar.setCurrentDate(date);
+  calendar.setCurrentDate(date);
   const [weeks, setWeeks] = useState(calendar.getWeeksTable(true));
   const { recordStore, recordDispatch } = useRecord();
 
@@ -367,7 +382,7 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
                 day={day}
                 records={recordStore}
                 onClick={() => DayCellInteract(
-                  recordDispatch, day, date
+                  recordDispatch, day, formatDatesDay(date, day.day)
               )} />
           )}
         </div>
