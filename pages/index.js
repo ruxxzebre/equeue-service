@@ -89,6 +89,12 @@ export default function Home({ recordContextState }) {
             return <option key={year} value={year}>{year}</option>
           })}
         </select>
+
+        <label htmlFor="exportBtn">XLSX Export</label>
+        <button name="exportBtn" onClick={(e) => {
+          e.preventDefault();
+        }}>EXPORT</button>
+
       </form>
         <Calendar key={formattedDate} date={formattedDate}/>
         </div>
