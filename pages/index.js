@@ -91,9 +91,12 @@ export default function Home({ recordContextState }) {
         </select>
 
         <label htmlFor="exportBtn">XLSX Export</label>
-        <button name="exportBtn" onClick={(e) => {
-          e.preventDefault();
-        }}>EXPORT</button>
+        <a href="http://localhost:3000/api/xlexport"><span style={{
+         border: '1px solid black',
+         padding: '5px',
+         background: 'rgba(0,0,0,0.1)',
+         borderRadius: '5px'
+        }}>EXPORT</span></a>
 
       </form>
         <Calendar key={formattedDate} date={formattedDate}/>
