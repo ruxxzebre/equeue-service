@@ -329,20 +329,37 @@ const RegisterRecordSwal = (recordDispatch) => {
         ]
       },
       confirmButtonText: "Зареєструватись"
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         if (validate(result.value)) {
-          recordDispatch(
-            {
-              data:
-                {
-                  name: result.value[0],
-                  phone: result.value[1],
-                  date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
-                },
-              type: 'addRecord'
-            }
-          );
+          const sendEventToAPI = async (evv) => {
+            const ap = await fetch('http://localhost:3000/api/bookmeet', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(evv)
+            });
+            return await ap.json();
+          };
+          await sendEventToAPI({
+              name: result.value[0],
+              phone: result.value[1],
+              date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
+            }).then(res => {
+              console.log(res)
+          });
+          // recordDispatch(
+          //   {
+          //     data:
+          //       {
+          //         name: result.value[0],
+          //         phone: result.value[1],
+          //         date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
+          //       },
+          //     type: 'addRecord'
+          //   }
+          // );
           return;
         }
         return swal.fire({

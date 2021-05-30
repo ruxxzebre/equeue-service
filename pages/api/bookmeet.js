@@ -16,7 +16,7 @@ export default async (req, res) => {
     return res.send(await Booking.getRecords(params));
   }
   if (req.method === 'POST') {
-    if (BookMeetSchema.validate(req.body).error) {
+    if (!BookMeetSchema.validate(req.body).error) {
       const event = req.body;
       const result = await Booking.makeRecord(event);
       if (result.error)
@@ -24,5 +24,6 @@ export default async (req, res) => {
       else
         return res.send(result);
     }
+    return res.status(400).send(BookMeetSchema.validate(req.body));
   }
 }
