@@ -4,6 +4,7 @@ import swali from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useRecord } from '../lib/recordContext';
 import { getInstance } from '../lib/momentCalendar';
+import {useRouter} from "next/router";
 
 const swal = withReactContent(swali);
 
@@ -298,9 +299,10 @@ const DayCell = ({ day, records, onClick }) => {
 const DayCellInteract = async (
   recordDispatch,
   day,
-  date
+  date,
+  refreshData
 ) => {
-  const fnn = RegisterRecordSwal(recordDispatch);
+  const fnn = RegisterRecordSwal(recordDispatch, refreshData);
 
   if (day.booked && day.day) {
     return swal.fire({
@@ -314,7 +316,7 @@ const DayCellInteract = async (
 
 };
 
-const RegisterRecordSwal = (recordDispatch) => {
+const RegisterRecordSwal = (recordDispatch, refreshData = () => '') => {
   return async (hhmmLabel, date) => {
     await swal.fire({
       title: `Зареєструватись до черги о ${hhmmLabel}`,
@@ -347,19 +349,34 @@ const RegisterRecordSwal = (recordDispatch) => {
               phone: result.value[1],
               date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
             }).then(res => {
-              console.log(res)
-          });
-          // recordDispatch(
-          //   {
-          //     data:
-          //       {
-          //         name: result.value[0],
-          //         phone: result.value[1],
-          //         date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
-          //       },
-          //     type: 'addRecord'
-          //   }
-          // );
+              if (!res.error) {
+                recordDispatch(
+                  {
+                    data:
+                      {
+                        name: result.value[0],
+                        phone: result.value[1],
+                        date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
+                      },
+                    type: 'addRecord'
+                  }
+                );
+                const currentDate = formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1], true);
+                swal.fire({
+                  title: `Вас успішно зареєстровано. Приходь о ${
+                    currentDate.format('HH:mm').toString()
+                  } ${
+                    currentDate
+                      .format('DD.MM.YYYY')
+                      .toString()
+                  }`}).then(refreshData);
+              } else {
+                return swal.fire({
+                  title: 'Дані введено некорректно',
+                  text: res.error
+                });
+              }
+            });
           return;
         }
         return swal.fire({
@@ -372,6 +389,7 @@ const RegisterRecordSwal = (recordDispatch) => {
 
 const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
   const [date, setDate] = useState(dateProp);
+  const router = useRouter();
   const [calendar, setCalendar] = useState(getInstance(date));
   const [input, setInput] = useState({
     name: "",
@@ -380,6 +398,10 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
   calendar.setCurrentDate(date);
   const [weeks, setWeeks] = useState(calendar.getWeeksTable(true));
   const { recordStore, recordDispatch } = useRecord();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+
 
   useEffect(() => {
     calendar.setCurrentDate(date);
@@ -399,7 +421,7 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
                 day={day}
                 records={recordStore}
                 onClick={() => DayCellInteract(
-                  recordDispatch, day, formatDatesDay(date, day.day)
+                  recordDispatch, day, formatDatesDay(date, day.day), refreshData
               )} />
           )}
         </div>
