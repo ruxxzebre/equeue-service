@@ -1,0 +1,28 @@
+%CellRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 2px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cellRowMain {
+  @extend %CellRow;
+  background: rgba(255, 54, 0, 0.3);
+
+  &:hover {
+    background: rgba(255, 126, 0, 0.3);
+  }
+}
+
+.cellRowNested {
+  @extend %CellRow;
+  background: rgba(255, 86, 0, 0.3);
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background: #7FDBFF;
+  }
+}

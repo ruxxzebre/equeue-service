@@ -4,7 +4,9 @@ import swali from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useRecord } from '../lib/recordContext';
 import { getInstance } from '../lib/momentCalendar';
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import { dayCellBackground } from "../styles/colors";
+import calendarStyles from "./calendar.module.scss";
 
 const swal = withReactContent(swali);
 
@@ -12,17 +14,6 @@ const validate = (values) => {
   const schem = (v) => v.length > 1;
   return values.filter(schem).length === 2;
 }
-
-const getOffsetDay = (offset, date) => {
-  date = date.split('-').map(i => i.trim());
-  date[1] = parseInt(date[1]);
-  if (!date[1]) {
-    date[1] = 12;
-  }
-  date = date.join('-');
-  const daysAmount = moment(date).daysInMonth();
-  return Math.abs( - daysAmount + offset);
-};
 
 export const formatDatesDay = (date, day, fromui = true, obj = false) => {
   date = moment(date);
@@ -38,84 +29,24 @@ export const formatDatesHHMM = (date, hh, mm, obj = false) => {
   return obj ? date : date.toString();
 }
 
-const optimizeDays = (date, days, recordStore) => {
-  if (!days.filter(parseInt).length)
-    return days.map(day => ({ day, booked: false }));
-  // date = date.split('-').map(i => i.trim());
-  // date[1] = parseInt(date[1]);
-  // if (!date[1]) {
-  //   date[1] = 12;
-  // }
-  // date = date.join('-');
-  const momented = moment(date);
-  let daysAmount = moment(date).daysInMonth();
-  const truthyDays = days.filter(Boolean).map(parseInt);
-  const firstTrueDay = truthyDays[0];
-  let newMonthCounter = 0;
-  days = days
-    .reverse()
-    .map((day, idx) => {
-    if (day)
-      return day;
-    if (firstTrueDay === 1)
-      return daysAmount - idx;
-    return null;
-  })
-    .reverse()
-    .map(i => i || (newMonthCounter += 1))
-    .map(day => {
-      let dated = momented;
-      dated.day(day);
-      dated = dated.toString();
-      return { booked: false, day, date: dated };
+const filterRecToCertDay = (records, daynumb, obj = false) => {
+  records = records
+    .map(i => {
+      i.date = moment(i.date);
+      return i;
+    })
+    .filter(i => i.date.date() === daynumb)
+    .map(i => {
+      if (!obj) i.date = i.date.toString();
+      return i;
     });
-    // .map(day => {
-    //   const formattedRecord = Object.keys(recordStore).map(k => {
-    //     return recordStore[k];
-    //   });
-    //   if (formattedRecord.find((record) =>
-    //     record.date === formatDatesDay(date, day, false)
-    //   )) {
-    //     return { booked: false, day };
-    //   };
-    //   return { booked: false, day };
-    // });
-  return days;
-};
-
-const renderCalendarCell = (records) => {
-  const renderRow = (booked) => <div style={{
-    backgroundColor: booked ? '#ff6961' : 'white'
-  }}>
-
-  </div>;
-
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center'
-    }}>
-      {records.map((record) => {
-        return renderRow(record.booked);
-      })}
-    </div>
-  );
-};
+  return records;
+}
 
 const getCellBackground = (records) => {
-  // records = records
-  //   .map(i => {
-  //     i.date = moment(i.date);
-  //     return i;
-  //   })
-  //   .filter(i => i.date.date() === daynumb);
-  // FROM 9:00 TO 18:00
   const percent = records.length * 2;
   if (percent === 0) return 'white';
-  return `linear-gradient(to bottom, rgba(255,54,0,0.3) ${percent}%, white ${percent}%)`;
-  // return `linear-gradient(to bottom, red ${percent}%, white 50%)`;
-  // return `linear-gradient(to bottom, red 50%, white 50%)`;
+  return `linear-gradient(to bottom, ${dayCellBackground.MAIN} ${percent}%, ${dayCellBackground.SECONDARY} ${percent}%)`;
 };
 
 const restrN = {
@@ -159,20 +90,8 @@ const makeTimeRange = ({low, high, range}) => {
   return rar;
 };
 
-const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested }) => {
-  // const isMainTimeLabel = () => parseInt(timeLabel.split(':')[1]) === 0;
+const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }) => {
   const isMainTimeLabel = () => isNested;
-  const hovBackConst = '#7FDBFF';
-  const backConst = 'rgba(255, 54, 0, 0.3)';
-  const hovBackConstOut = isMainTimeLabel() ? backConst : 'rgba(255, 126, 0, 0.3)';
-  const [
-    backColorOnHover,
-    setBackColorOnHover
-  ] = useState(isMainTimeLabel()
-    ? backConst
-    : hovBackConstOut
-    // : 'rgba(255, 126, 0, 0.3)'
-  );
   const [
     showNested,
     setShowNested
@@ -184,36 +103,35 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested }) => {
 
   return (
     <div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        margin: '2px',
-        padding: '5px',
-        height: collapse ? '3px' : '',
-        // background: 'rgba(255, 54, 0, 0.3)',
-        background: backColorOnHover,
-        borderRadius: '5px',
-        cursor: 'pointer'
-      }}
+      <div
+        className={
+          isMainTimeLabel()
+          ? calendarStyles.cellRowMain
+          : calendarStyles.cellRowNested
+        }
+        style={{
+          height: collapse ? '3px' : '',
+          // background: backColorOnHover,
+        }}
            onClick={() => {
-             if (!nested.length) {
-               clickDay();
-             } else {
-               setShowNested(!showNested);
+             if (!isBooked) {
+               if (!nested.length) {
+                 clickDay();
+               } else {
+                 setShowNested(!showNested);
+               }
              }
            }}
            onMouseOver={() => {
-             setBackColorOnHover(hovBackConst);
-             if (!isMainTimeLabel())
+             if (!isBooked && !isMainTimeLabel()) {
                setCollapse(false);
+             }
            }}
            onMouseOut={() => {
-             setBackColorOnHover(hovBackConstOut);
-             if (!isMainTimeLabel())
-               setCollapse(true);
-           }
-           }
+             if (!isBooked && !isMainTimeLabel()) {
+                 setCollapse(true);
+             }
+           }}
       >
         <div style={{
           color: 'white'
@@ -224,41 +142,40 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested }) => {
   );
 };
 
-const DaySchedule = ({ onClick, date }) => {
-  // const { recordDispatch } = useRecord();
-
-  let prevsr = [];
-  const addtoprevsr = (thing) => {
-    prevsr = [
-      ...prevsr, thing
-    ];
-  }
+const DaySchedule = ({ onClick, date, dayDates }) => {
+  // const timeRange = makeTimeRange(restrN);
+  const renderRange = () => {
+    let prevsr = [];
+    return makeTimeRange(restrN).map((tLabel) => {
+      const isa = parseInt(tLabel.split(':')[1], 10) === 0;
+      const isbooked = !!(dayDates || []).find(({ date: d }) => {
+        const findlabel = `${d.hour()}:${d.minute() > 10 ? d.minute() : `0${d.minute()}`}`;
+        return findlabel === tLabel;
+      });
+      prevsr.push(
+        <DayScheduleRow clickDay={() => {
+          onClick(tLabel, date);
+        }} timeLabel={tLabel} isBooked={isbooked} />
+      );
+      return (
+        <div>
+          {(() => {
+            if (isa) {
+              prevsr = [];
+              return <DayScheduleRow clickDay={() => {
+                onClick(tLabel);
+              }} timeLabel={tLabel} isNested={true} nested={prevsr} />
+            }
+          })()
+          }
+        </div>
+      );
+    });
+  };
 
   return (
     <div>
-      {makeTimeRange(restrN).map((tLabel) => {
-        const isa = parseInt(tLabel.split(':')[1], 10) === 0;
-        const isf = parseInt(tLabel.split(':')[0], 10) === 9;
-        // if (!isa)
-          prevsr.push(
-           <DayScheduleRow clickDay={() => {
-            onClick(tLabel, date);
-          }} timeLabel={tLabel} />
-        );
-        return (
-          <div>
-            {(() => {
-              if (isa) {
-                prevsr = [];
-                 return <DayScheduleRow clickDay={() => {
-                  onClick(tLabel);
-                }} timeLabel={tLabel} isNested={true} nested={prevsr} />
-                }
-            })()
-            }
-          </div>
-        );
-      })}
+      {renderRange()}
     </div>
   );
 };
@@ -266,7 +183,7 @@ const DaySchedule = ({ onClick, date }) => {
 const DayCell = ({ day, records, onClick }) => {
   const [blur, setBlur] = useState(false);
   const [dayRecords, setDayRecords] = useState([]);
-  const [cellBackground, setCellBackground] = useState('white');
+  const [cellBackground, setCellBackground] = useState(dayCellBackground.SECONDARY);
 
   useEffect(() => {
     setDayRecords(records.filter((record) => {
@@ -286,17 +203,15 @@ const DayCell = ({ day, records, onClick }) => {
       cursor: day.day ? 'pointer' : 'default',
       filter: parseInt(day.day) ? (blur && 'blur(4px)') : ''
     }}
-               // onMouseOver={() => setBlur(false)}
-               // onMouseOut={() => setBlur(true)}
   >
     <div>
-      {/*{JSON.stringify(dayRecords)}*/}
       {day.day || '\u00a0'}
     </div>
   </div>);
 }
 
 const DayCellInteract = async (
+  recordStore,
   recordDispatch,
   day,
   date,
@@ -309,9 +224,12 @@ const DayCellInteract = async (
       title: 'На даний день черга заповнена, оберіть інший.'
     });
   }
+  if (!parseInt(day.day)) {
+    return;
+  }
   await swal.fire({
     title: 'Оберіть час',
-    html: <DaySchedule date={date} onClick={fnn} />
+    html: <DaySchedule date={date} onClick={fnn} dayDates={filterRecToCertDay(recordStore, day.day, true)} />
   });
 
 };
@@ -411,8 +329,6 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
   return (
     <div className="calendar">
       {weeks.map( (days, i) => {
-        // console.log(date);
-        // days = optimizeDays(date, days, recordStore);
         days = days.map(d => ({booked: false, day: d}));
         return <div className="week" key={i}>
           {days.map( (day, di) =>
@@ -420,7 +336,7 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
                 key={di}
                 day={day}
                 records={recordStore}
-                onClick={() => DayCellInteract(
+                onClick={() => DayCellInteract(recordStore,
                   recordDispatch, day, formatDatesDay(date, day.day), refreshData
               )} />
           )}
