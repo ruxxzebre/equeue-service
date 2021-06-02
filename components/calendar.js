@@ -46,7 +46,7 @@ const filterRecToCertDay = (records, daynumb, obj = false) => {
 const getCellBackground = (records) => {
   const percent = records.length * 2;
   if (percent === 0) return 'white';
-  return `linear-gradient(to bottom, ${dayCellBackground.MAIN} ${percent}%, ${dayCellBackground.SECONDARY} ${percent}%)`;
+  return `linear-gradient(to right, ${dayCellBackground.MAIN} ${percent}%, ${dayCellBackground.SECONDARY} ${percent}%)`;
 };
 
 const restrN = {
@@ -106,11 +106,16 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }
       <div
         className={
           isMainTimeLabel()
-          ? calendarStyles.cellRowMain
-          : calendarStyles.cellRowNested
+            ? calendarStyles.cellRowMain
+            : (
+              isBooked
+                ? { background: 'grey' }
+                : calendarStyles.cellRowNested
+              )
         }
         style={{
           height: collapse ? '3px' : '',
+          marginLeft: isMainTimeLabel() ? '' : '15px'
           // background: backColorOnHover,
         }}
            onClick={() => {
@@ -133,43 +138,53 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }
              }
            }}
       >
-        <div style={{
-          color: 'white'
-        }}>{collapse ? '' : timeLabel}</div>
+        <div className={calendarStyles.timeLabel}>{collapse ? '' : timeLabel}</div>
       </div>
       { showNested && nested }
     </div>
   );
 };
 
+const mutatelabel = (tLabel, hrOffset, mmOffset) => {
+  tLabel = tLabel.split(':');
+  if (hrOffset)
+    tLabel[0] = parseInt(tLabel[0], 10) + hrOffset;
+  if (mmOffset)
+    tLabel[0] = parseInt(tLabel[1], 10) + mmOffset;
+  return tLabel.join(':');
+}
+
 const DaySchedule = ({ onClick, date, dayDates }) => {
   // const timeRange = makeTimeRange(restrN);
   const renderRange = () => {
     let prevsr = [];
+    let baseRow = null;
     return makeTimeRange(restrN).map((tLabel) => {
+      baseRow = null;
       const isa = parseInt(tLabel.split(':')[1], 10) === 0;
       const isbooked = !!(dayDates || []).find(({ date: d }) => {
         const findlabel = `${d.hour()}:${d.minute() > 10 ? d.minute() : `0${d.minute()}`}`;
         return findlabel === tLabel;
       });
-      prevsr.push(
-        <DayScheduleRow clickDay={() => {
-          onClick(tLabel, date);
-        }} timeLabel={tLabel} isBooked={isbooked} />
-      );
-      return (
-        <div>
-          {(() => {
-            if (isa) {
-              prevsr = [];
-              return <DayScheduleRow clickDay={() => {
-                onClick(tLabel);
-              }} timeLabel={tLabel} isNested={true} nested={prevsr} />
-            }
-          })()
-          }
-        </div>
-      );
+
+      if (!isa)
+        prevsr.push(
+          <DayScheduleRow clickDay={() => {
+            onClick(tLabel, date);
+          }} timeLabel={tLabel} isBooked={isbooked} />
+        );
+
+      if (isa) {
+        prevsr.unshift(<DayScheduleRow clickDay={() => {
+          tLabel = mutatelabel(tLabel, -1);
+          onClick(tLabel);
+        }} timeLabel={mutatelabel(tLabel, -1)} isNested={false} />);
+        prevsr = [];
+        return <DayScheduleRow clickDay={() => {
+          onClick(tLabel);
+        }} timeLabel={tLabel} isNested={true} nested={prevsr} />;
+      }
+      return null;
     });
   };
 
@@ -199,12 +214,14 @@ const DayCell = ({ day, records, onClick }) => {
   return (<div className="day"
                onClick={onClick}
                style={{
-      background: cellBackground,
       cursor: day.day ? 'pointer' : 'default',
       filter: parseInt(day.day) ? (blur && 'blur(4px)') : ''
     }}
   >
-    <div>
+    <div style={{
+      // padding: '5px',
+      background: cellBackground
+    }}>
       {day.day || '\u00a0'}
     </div>
   </div>);
