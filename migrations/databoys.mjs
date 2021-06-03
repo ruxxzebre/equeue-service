@@ -8,16 +8,6 @@ const knex = knexInitial({
   useNullAsDefault: true
 });
 
-export const db = knex;
-
-export async function bookEvent(data, validator) {
-  if (validator(data)) {
-    await knex('users').insert(data);
-    return { error: null };
-  }
-  return { error: 'Failed event booking.' };
-}
-
 export const initializeDB = async (addTables) => {
   if (addTables) {
     await knex.schema.createTable('events', table => {
@@ -102,4 +92,4 @@ export const initializeDB = async (addTables) => {
   }
 };
 
-// initializeDB(true);
+initializeDB(true);

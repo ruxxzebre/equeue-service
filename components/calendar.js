@@ -116,7 +116,6 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }
         style={{
           height: collapse ? '3px' : '',
           marginLeft: isMainTimeLabel() ? '' : '15px'
-          // background: backColorOnHover,
         }}
            onClick={() => {
              if (!isBooked) {
@@ -155,7 +154,6 @@ const mutatelabel = (tLabel, hrOffset, mmOffset) => {
 }
 
 const DaySchedule = ({ onClick, date, dayDates }) => {
-  // const timeRange = makeTimeRange(restrN);
   const renderRange = () => {
     let prevsr = [];
     let baseRow = null;
@@ -163,9 +161,13 @@ const DaySchedule = ({ onClick, date, dayDates }) => {
       baseRow = null;
       const isa = parseInt(tLabel.split(':')[1], 10) === 0;
       const isbooked = !!(dayDates || []).find(({ date: d }) => {
-        const findlabel = `${d.hour()}:${d.minute() > 10 ? d.minute() : `0${d.minute()}`}`;
-        return findlabel === tLabel;
+        const hour = d.hour();
+        const minute = d.minute();
+        const foundLabel = `${hour}:${minute > 9 ? minute : `0${minute}`}`;
+        return foundLabel === tLabel;
       });
+
+      if (isbooked) return null;
 
       if (!isa)
         prevsr.push(
@@ -175,10 +177,6 @@ const DaySchedule = ({ onClick, date, dayDates }) => {
         );
 
       if (isa) {
-        prevsr.unshift(<DayScheduleRow clickDay={() => {
-          tLabel = mutatelabel(tLabel, -1);
-          onClick(tLabel);
-        }} timeLabel={mutatelabel(tLabel, -1)} isNested={false} />);
         prevsr = [];
         return <DayScheduleRow clickDay={() => {
           onClick(tLabel);
@@ -282,6 +280,7 @@ const RegisterRecordSwal = (recordDispatch, refreshData = () => '') => {
           await sendEventToAPI({
               name: result.value[0],
               phone: result.value[1],
+              created_at: Date.now(),
               date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
             }).then(res => {
               if (!res.error) {
