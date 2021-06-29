@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import { Booking } from "../lib/bookCrud";
 import styled from 'styled-components';
+import moment from 'moment';
 import Layout from '../components/layout';
 import Calendar from '../components/calendar';
 
@@ -35,6 +36,8 @@ export default function Home({ recordContextState }) {
   const [year, setYear] = useState(today.getFullYear());
   const [yearRange, setYearRange] = useState();
   const [formattedDate, setFormattedDate] = useState();
+  const [constraintDateFrom, setConstraintDateFrom] = useState(1);
+  const [constraintDateTo, setConstraintDateTo] = useState(10);
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -90,6 +93,21 @@ export default function Home({ recordContextState }) {
           })}
         </select>
 
+        <label htmlFor="dateFrom">Date From</label>
+        <select name="dateFrom" id="" value={constraintDateFrom}
+                onChange={(e) => setConstraintDateFrom(e.target.value)}>
+          {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
+            return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
+          })}
+        </select>
+        <label htmlFor="dateTo">Date To</label>
+        <select name="dateFrom" id="" value={constraintDateTo}
+                onChange={(e) => setConstraintDateTo(e.target.value)}>
+          {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
+            return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
+          })}
+        </select>
+
         <label htmlFor="exportBtn">XLSX Export</label>
         <a href="http://localhost:3000/api/xlexport"><span style={{
          border: '1px solid black',
@@ -99,7 +117,7 @@ export default function Home({ recordContextState }) {
         }}>EXPORT</span></a>
 
       </form>
-        <Calendar key={formattedDate} date={formattedDate}/>
+        <Calendar key={formattedDate} date={formattedDate} constraints={{ from: constraintDateFrom, to: constraintDateTo }}/>
         </div>
           }
     </Layout>

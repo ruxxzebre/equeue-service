@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import moment from "moment";
-import swali from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useRecord } from '../lib/recordContext';
 import { getInstance } from '../lib/momentCalendar';
@@ -8,6 +7,7 @@ import { useRouter } from "next/router";
 import { dayCellBackground } from "../styles/colors";
 import calendarStyles from "./calendar.module.scss";
 
+import swali from 'sweetalert2';
 const swal = withReactContent(swali);
 
 const validate = (values) => {
@@ -321,7 +321,7 @@ const RegisterRecordSwal = (recordDispatch, refreshData = () => '') => {
   };
 }
 
-const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
+const Calendar = ({ date: dateProp, recordValues, addRecord, constraints }) => {
   const [date, setDate] = useState(dateProp);
   const router = useRouter();
   const [calendar, setCalendar] = useState(getInstance(date));
@@ -352,9 +352,15 @@ const Calendar = ({ date: dateProp, recordValues, addRecord }) => {
                 key={di}
                 day={day}
                 records={recordStore}
-                onClick={() => DayCellInteract(recordStore,
-                  recordDispatch, day, formatDatesDay(date, day.day), refreshData
-              )} />
+                onClick={() => {
+                  if (day.day <= constraints.to && day.day >= constraints.from)
+                  return DayCellInteract(recordStore,
+                    recordDispatch, day, formatDatesDay(date, day.day), refreshData
+                  );
+                  else swal.fire({
+                    title: 'Неможливо зареєструватись на даний день'
+                  });
+                }} />
           )}
         </div>
       })}

@@ -50,6 +50,8 @@ $NestedCellRowColors: (
 }
 
 .cellRowNested {
+  transition: all 0.7s ease-in-out;
+
   @extend %CellRow;
   background: map.get($NestedCellRowColors, "background");
 
@@ -58,7 +60,7 @@ $NestedCellRowColors: (
   }
 
   &:hover {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.7s ease-in-out;
     background: map.get($NestedCellRowColors, "backgroundHover");
 
     .timeLabel {
