@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import {useEffect, useReducer, useState} from 'react';
 import styles from '../styles/Home.module.css';
 import { Booking } from "../lib/bookCrud";
 import styled from 'styled-components';
 import moment from 'moment';
 import Layout from '../components/layout';
+import _ from 'lodash';
 import Calendar from '../components/calendar';
 
 const StyledHeadline = styled.h2`
@@ -29,16 +30,29 @@ const formatMonth = (month) => {
   return `0${month}`;
 };
 
+function constraintReducer(state, action) {
+  action.from = parseInt(action.from);
+  action.to = parseInt(action.to);
+  if (!action.from || !action.to) return state;
+  if (action.from < action.to) return action;
+  return state;
+}
+
 export default function Home({ recordContextState }) {
   const today = new Date();
-  const [day, setDay] = useState(today.getDate());
+  const [day] = useState(today.getDate());
   const [month, setMonth] = useState(formatMonth(today.getMonth() + 1));
   const [year, setYear] = useState(today.getFullYear());
   const [yearRange, setYearRange] = useState();
   const [formattedDate, setFormattedDate] = useState();
-  const [constraintDateFrom, setConstraintDateFrom] = useState(1);
-  const [constraintDateTo, setConstraintDateTo] = useState(10);
+  const [constraints, dispatchConstraints] = useReducer(constraintReducer, { from: 1, to: 10 });
   const [initialized, setInitialized] = useState(false);
+  const [showDevMenu, setShowDevMenu] = useState(false);
+
+  if (window)
+  window.toggleDev = () => {
+    setShowDevMenu(!showDevMenu);
+  }
 
   useEffect(() => {
     const end = year + 1;
@@ -69,7 +83,7 @@ export default function Home({ recordContextState }) {
       </div>
       {initialized &&
         <div>
-      <form className="year-selection">
+      <form className="year-selection" hidden={!showDevMenu}>
         <label htmlFor="month">Month</label>
         <select name="month" value={month} onChange={(e) => setMonth(e.target.value)}>
           <option value="01">01 - January</option>
@@ -93,20 +107,25 @@ export default function Home({ recordContextState }) {
           })}
         </select>
 
-        <label htmlFor="dateFrom">Date From</label>
-        <select name="dateFrom" id="" value={constraintDateFrom}
-                onChange={(e) => setConstraintDateFrom(e.target.value)}>
-          {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
-            return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
-          })}
-        </select>
-        <label htmlFor="dateTo">Date To</label>
-        <select name="dateFrom" id="" value={constraintDateTo}
-                onChange={(e) => setConstraintDateTo(e.target.value)}>
-          {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
-            return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
-          })}
-        </select>
+        <div style={{ border: '1px solid black', display: 'inline-block', marginLeft: '10px', padding: '5px' }}>
+          <label htmlFor="dateFrom">Date From</label>
+          <select name="dateFrom" id="" value={constraints.from}
+                  onChange={(e) => dispatchConstraints({ ...constraints, from: e.target.value })}>
+            {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
+              return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
+            })}
+          </select>
+          <label htmlFor="dateTo">Date To</label>
+          <select name="dateFrom" id="" value={constraints.to}
+                  onChange={(e) => dispatchConstraints({ ...constraints, to: e.target.value })}>
+            {Array(moment(year + '-' + month, 'YYYY-MM').daysInMonth()).fill(0).map((_, idx) => {
+              return <option value={idx + 1} value={idx + 1}>{idx + 1}</option>
+            })}
+          </select>
+          <button type={"button"} onClick={() => {
+            console.log('fs')
+          }}>Submit</button>
+        </div>
 
         <label htmlFor="exportBtn">XLSX Export</label>
         <a href="http://localhost:3000/api/xlexport"><span style={{
@@ -117,7 +136,7 @@ export default function Home({ recordContextState }) {
         }}>EXPORT</span></a>
 
       </form>
-        <Calendar key={formattedDate} date={formattedDate} constraints={{ from: constraintDateFrom, to: constraintDateTo }}/>
+        <Calendar key={formattedDate} date={formattedDate} constraints={constraints}/>
         </div>
           }
     </Layout>

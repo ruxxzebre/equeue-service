@@ -3,92 +3,19 @@ import moment from "moment";
 import withReactContent from 'sweetalert2-react-content';
 import { useRecord } from '../lib/recordContext';
 import { getInstance } from '../lib/momentCalendar';
+import { formatDatesDay,
+  filterRecToCertDay,
+  validate,
+  getCellBackground,
+  makeTimeRange } from "../lib/helpers";
 import { useRouter } from "next/router";
 import { dayCellBackground } from "../styles/colors";
+import { submitEventBooking } from "../lib/controller";
+import { restrN } from "../lib/constants";
 import calendarStyles from "./calendar.module.scss";
 
 import swali from 'sweetalert2';
 const swal = withReactContent(swali);
-
-const validate = (values) => {
-  const schem = (v) => v.length > 1;
-  return values.filter(schem).length === 2;
-}
-
-export const formatDatesDay = (date, day, fromui = true, obj = false) => {
-  date = moment(date);
-  date.date(day);
-  if (fromui) '';
-    // console.log('formatted: ' + date.toString(), 'day is: ' + day);
-  return obj ? date : date.toString();
-};
-export const formatDatesHHMM = (date, hh, mm, obj = false) => {
-  date = moment(date);
-  date.hour(hh);
-  date.minute(mm);
-  return obj ? date : date.toString();
-}
-
-const filterRecToCertDay = (records, daynumb, obj = false) => {
-  records = records
-    .map(i => {
-      i.date = moment(i.date);
-      return i;
-    })
-    .filter(i => i.date.date() === daynumb)
-    .map(i => {
-      if (!obj) i.date = i.date.toString();
-      return i;
-    });
-  return records;
-}
-
-const getCellBackground = (records) => {
-  const percent = records.length * 2;
-  if (percent === 0) return 'white';
-  return `linear-gradient(to right, ${dayCellBackground.MAIN} ${percent}%, ${dayCellBackground.SECONDARY} ${percent}%)`;
-};
-
-const restrN = {
-  low: '9:00',
-  high: '18:00',
-  range: 10
-};
-
-const makeTimeRange = ({low, high, range}) => {
-  const prs = (a) => parseInt(a, 10);
-  const timedata = {
-    low: {
-      hrs: prs(low.split(':')[0]),
-      min: prs(low.split(':')[1])
-    },
-    high: {
-      hrs: prs(high.split(':')[0]),
-      min: prs(high.split(':')[1])
-    }
-  };
-  const arlen =
-    ((timedata.high.hrs*60 + timedata.high.min) -
-    (timedata.low.hrs*60 + timedata.low.min))/range;
-  let counters = {
-    min: 0,
-    hr: prs(low.split(':')[0])
-  };
-  const rar = Array(arlen).fill(0).map((_, idx) => {
-    if (idx !== 0)
-      counters.min += range;
-    if (counters.min === 60) {
-      counters.min = 0;
-      counters.hr += 1;
-    }
-    return `${counters.hr}:${
-      counters.min < 10
-        ? `0${counters.min}`
-        : counters.min
-    }`;
-  });
-  return rar;
-};
 
 const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }) => {
   const isMainTimeLabel = () => isNested;
@@ -144,15 +71,6 @@ const DayScheduleRow = ({ timeLabel, clickDay, nested = [], isNested, isBooked }
   );
 };
 
-const mutatelabel = (tLabel, hrOffset, mmOffset) => {
-  tLabel = tLabel.split(':');
-  if (hrOffset)
-    tLabel[0] = parseInt(tLabel[0], 10) + hrOffset;
-  if (mmOffset)
-    tLabel[0] = parseInt(tLabel[1], 10) + mmOffset;
-  return tLabel.join(':');
-}
-
 const DaySchedule = ({ onClick, date, dayDates }) => {
   const renderRange = () => {
     let prevsr = [];
@@ -193,6 +111,17 @@ const DaySchedule = ({ onClick, date, dayDates }) => {
   );
 };
 
+const DayCellInactive = ({ day, customColor }) => {
+  return (<div className="day"
+               style={{
+                 backgroundColor: customColor || 'rgba(0,0,0,0.25)',
+                 border: '1px solid rgba(0,0,0,0.2)'
+               }}
+  >
+      {day.day || '\u00a0'}
+  </div>);
+};
+
 const DayCell = ({ day, records, onClick }) => {
   const [blur, setBlur] = useState(false);
   const [dayRecords, setDayRecords] = useState([]);
@@ -217,7 +146,6 @@ const DayCell = ({ day, records, onClick }) => {
     }}
   >
     <div style={{
-      // padding: '5px',
       background: cellBackground
     }}>
       {day.day || '\u00a0'}
@@ -267,68 +195,17 @@ const RegisterRecordSwal = (recordDispatch, refreshData = () => '') => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         if (validate(result.value)) {
-          const sendEventToAPI = async (evv) => {
-            const ap = await fetch('http://localhost:3000/api/bookmeet', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(evv)
-            });
-            return await ap.json();
-          };
-          await sendEventToAPI({
-              name: result.value[0],
-              phone: result.value[1],
-              created_at: Date.now(),
-              date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
-            }).then(res => {
-              if (!res.error) {
-                recordDispatch(
-                  {
-                    data:
-                      {
-                        name: result.value[0],
-                        phone: result.value[1],
-                        date: formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1])
-                      },
-                    type: 'addRecord'
-                  }
-                );
-                const currentDate = formatDatesHHMM(date, hhmmLabel.split(':')[0], hhmmLabel.split(':')[1], true);
-                swal.fire({
-                  title: `Вас успішно зареєстровано. Приходь о ${
-                    currentDate.format('HH:mm').toString()
-                  } ${
-                    currentDate
-                      .format('DD.MM.YYYY')
-                      .toString()
-                  }`}).then(refreshData);
-              } else {
-                return swal.fire({
-                  title: 'Дані введено некорректно',
-                  text: res.error
-                });
-              }
-            });
-          return;
+          await submitEventBooking(result, hhmmLabel, refreshData);
         }
-        return swal.fire({
-          title: 'Дані введено некорректно'
-        });
-      }
+    }
     });
   };
 }
 
 const Calendar = ({ date: dateProp, recordValues, addRecord, constraints }) => {
-  const [date, setDate] = useState(dateProp);
+  const [date] = useState(dateProp);
   const router = useRouter();
-  const [calendar, setCalendar] = useState(getInstance(date));
-  const [input, setInput] = useState({
-    name: "",
-    phone: ""
-  });
+  const [calendar] = useState(getInstance(date));
   calendar.setCurrentDate(date);
   const [weeks, setWeeks] = useState(calendar.getWeeksTable(true));
   const { recordStore, recordDispatch } = useRecord();
@@ -347,20 +224,20 @@ const Calendar = ({ date: dateProp, recordValues, addRecord, constraints }) => {
       {weeks.map( (days, i) => {
         days = days.map(d => ({booked: false, day: d}));
         return <div className="week" key={i}>
-          {days.map( (day, di) =>
-             <DayCell
-                key={di}
-                day={day}
-                records={recordStore}
-                onClick={() => {
-                  if (day.day <= constraints.to && day.day >= constraints.from)
-                  return DayCellInteract(recordStore,
+          {days.map( (day, di) => {
+            const constrained = (day.day > constraints.to || day.day < constraints.from);
+            if (constrained) return <DayCellInactive day={day} />;
+            if (!parseInt(day.day)) return <DayCellInactive day={day} customColor={'white'} />;
+            return <DayCell
+              key={di}
+              day={day}
+              records={recordStore}
+              onClick={() =>
+                DayCellInteract(recordStore,
                     recordDispatch, day, formatDatesDay(date, day.day), refreshData
-                  );
-                  else swal.fire({
-                    title: 'Неможливо зареєструватись на даний день'
-                  });
-                }} />
+                  )
+              } />
+            }
           )}
         </div>
       })}

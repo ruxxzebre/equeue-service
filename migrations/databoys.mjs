@@ -92,4 +92,13 @@ export const initializeDB = async (addTables) => {
   }
 };
 
-initializeDB(true);
+// initializeDB(true);
+// (async () => {
+//   await knex.schema.createTable('config', table => {
+//     table.increments('id');
+//     table.string('name');
+//     table.string('jsonvalue');
+//     table.timestamp('created_at').defaultTo(knex.fn.now());
+//     table.timestamp('updated_at').defaultTo(knex.fn.now());
+//   });
+// })();
