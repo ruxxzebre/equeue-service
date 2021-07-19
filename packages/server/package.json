@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "demon": "nodemon server.js"
+  },
+  "dependencies": {
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "joi": "^17.4.1",
+    "knex": "^0.95.7",
+    "lodash": "^4.17.21",
+    "passport": "^0.4.1",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.11"
+  }
+}
