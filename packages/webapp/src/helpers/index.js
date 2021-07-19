@@ -117,28 +117,6 @@ export const generateEntries = (
   return res;
 };
 
-export const initializeEntries = (state) => {
-  const gened = [];
-  for (let i = state.availableDayFrom; i < state.availableDayTo; i++) {
-    gened.push(
-      ...generateEntries(
-        i,
-        state.availableDayTo,
-        state.timeRange,
-        state.currentYear,
-        state.currentMonth
-      )
-    );
-  }
-  const entries = {};
-  const entriesIds = gened.map((i) => {
-    const id = i.id;
-    delete i.id;
-    entries[id] = i;
-    return id;
-  });
-  return { entries, entriesIds };
-};
 
 /**
  *
