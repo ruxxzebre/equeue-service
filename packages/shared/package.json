@@ -1,0 +1,9 @@
+{
+  "name": "@bwi/shared",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "joi": "^17.4.1"
+  }
+}

@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { Entry, EntrySchema } = require('../models/entries');
+const { Entry } = require('../models/entries');
+const { schemas } = require('@bwi/shared');
+const { EntrySchema } = schemas;
 
 const router = Router();
 

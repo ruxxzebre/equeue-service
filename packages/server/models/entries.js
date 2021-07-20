@@ -1,17 +1,4 @@
 const { db } = require('../db');
-const Joi = require('joi');
-
-const EntrySchema = Joi.object({
-  "date": Joi.string().required(),
-  "time": Joi.string().required(),
-  "name": Joi.string().required(),
-  "phone": Joi.string().required(),
-  "created_at": Joi.number(),
-});
-
-const validatebookbody = (body) => {
-  return !!EntrySchema.validate(body).error;
-};
 
 const removeDateCollisions = (data) => {
   const datePool = [];
@@ -58,6 +45,4 @@ const Entry = {
   }
 };
 
-module.exports.validatebookbody = validatebookbody;
 module.exports.Entry = Entry;
-module.exports.EntrySchema = EntrySchema;

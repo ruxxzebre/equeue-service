@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import { v4 as uuid } from "uuid";
+import { API } from "../helpers/api";
 import { generateDays, generateEntries, initializeState } from "../helpers";
 
 const store = createStore({
@@ -53,7 +54,13 @@ const store = createStore({
       }
     },
   },
-  actions: {},
+  actions: {
+    initEntry: async (ctx) => {
+      console.log(ctx);
+      const response = await API.get("/entry");
+      const { data } = response;
+    },
+  },
   getters: {
     getDays: (state) => {
       return generateDays({
@@ -85,5 +92,7 @@ const store = createStore({
   },
   modules: {},
 });
+
+store.dispatch('initEntry');
 
 export default store;

@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@bwi/server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -8,6 +8,7 @@
     "demon": "nodemon server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
@@ -15,7 +16,8 @@
     "knex": "^0.95.7",
     "lodash": "^4.17.21",
     "passport": "^0.4.1",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "@bwi/shared": "1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.11"

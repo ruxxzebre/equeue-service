@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "@bwi/webapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/luxon": "^1.27.1",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.6",
     "lodash": "^4.17.21",
@@ -19,7 +20,8 @@
     "vee-validate": "^4.4.6",
     "vue": "^3.0.0",
     "vue-sweetalert2": "^5.0.2",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "@bwi/shared": "1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

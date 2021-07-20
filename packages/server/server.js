@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 // const expressSession = require("express-session");
 // const passport = require("passport");
 
@@ -26,14 +27,15 @@ if (app.get("env") === "production") {
 const indexRoute = require('./routers/index');
 const rootRoute = require('./routers/root');
 
-app.use('/api', indexRoute);
-app.use('/', rootRoute);
-
+app.use(cors());
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/api', indexRoute);
+app.use('/', rootRoute);
 
 app.listen(port, () => {
   console.log('Listening on port %s', port);
