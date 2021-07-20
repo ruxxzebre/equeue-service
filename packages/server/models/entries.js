@@ -1,6 +1,8 @@
 const { db } = require('../db');
+const { schemas: { EntrySchema } } = require('@bwi/shared');
 
 const removeDateCollisions = (data) => {
+  return data;
   const datePool = [];
   return data.filter((thing) => {
     const includs = datePool.includes(thing.date);
@@ -42,7 +44,14 @@ const Entry = {
       return { newRecord: newRecord[0], error: null };
     }
     return { record, error: "Failed making record." } ;
-  }
+  },
+  async updateRecord(record) {
+    const rec = await db('events').where('id', record.id).select('*');
+    if (!rec) {
+      return this.makeRecord(record);
+    }
+    // const updateRecord = await db('events').update();
+  },
 };
 
 module.exports.Entry = Entry;

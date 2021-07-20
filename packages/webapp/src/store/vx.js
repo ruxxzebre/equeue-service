@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import { v4 as uuid } from "uuid";
+// import { DateTime } from "luxon";
 import { API } from "../helpers/api";
 import { generateDays, generateEntries, initializeState } from "../helpers";
 
@@ -34,6 +35,19 @@ const store = createStore({
         ];
       }
       state.entries.find((e) => e.id === entry.id).counter += 1;
+      console.log(state.entries);
+    },
+    addCleanEntry: (state, payload) => {
+      const { entry } = payload;
+      if (!entry.id) return null;
+      state.entries = [
+        ...state.entries.filter((e) => entry.id !== e.id),
+        entry,
+      ];
+    },
+    incrementEntry: (state, payload) => {
+      const { entryId } = payload;
+      state.entries.find((e) => e.id === entryId).counter += 1;
     },
     setInput: (state, payload) => {
       console.log(state.input);
@@ -58,7 +72,23 @@ const store = createStore({
     initEntry: async (ctx) => {
       console.log(ctx);
       const response = await API.get("/entry");
-      const { data } = response;
+      const { data: entries } = response;
+      console.log(entries);
+      const filtered = [];
+      for (let idx in entries) {
+        // entries[idx].date = DateTime.fromISO(data.date).toFormat('DD-MM-YYYY');
+        if (!entries[idx].time) continue;
+        filtered.push(entries[idx]);
+      }
+      filtered.forEach((entry) => {
+        ctx.commit('addCleanEntry', { entry });
+      });
+    },
+    addEntry: async (ctx, payload) => {
+      const entry = payload.entry;
+      entry.name = payload.fullName;
+      entry.phone = payload.phone;
+      await API.post('/entry', entry);
     },
   },
   getters: {

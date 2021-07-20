@@ -25,7 +25,8 @@ router.get('/entry',async  (req, res) => {
 router.post('/entry', async (req, res) => {
   if (!EntrySchema.validate(req.body).error) {
     const event = req.body;
-    const result = await Entry.makeRecord(event);
+    // const result = await Entry.makeRecord(event);
+    const result = await Entry.updateRecord(event);
     if (result.error)
       return res.status(400).send(result);
     else

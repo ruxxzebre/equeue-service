@@ -25,35 +25,53 @@ const initializeDB = async (addTables) => {
       table.string('time');
       table.string('date');
       table.string('phone');
+      table.integer('counter');
       table.timestamp('created_at').defaultTo(knex.fn.now());
     });
   }
 
   await Promise.all([
     {
-      "name": "asdas",
-      "phone": "dasddasd",
-      "date": "Wed May 05 2021 09:00:00 GMT+0300"
+      "date": "18-07-2021",
+      "time": "9:10",
+      "counter": 1,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
     },
     {
-      "name": "asdasdasd",
-      "phone": "asdasds",
-      "date": "Wed May 12 2021 09:00:00 GMT+0300"
+      "time": "9:00",
+      "date": "20-07-2021",
+      "counter": 2,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
     },
     {
-      "name": "dasdasd",
-      "phone": "asdas",
-      "date": "Wed May 19 2021 09:00:00 GMT+0300"
+      "time": "13:10",
+      "date": "20-07-2021",
+      "counter": 1,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
     },
     {
-      "name": "asd",
-      "phone": "ddasdas",
-      "date": "Wed May 19 2021 09:10:00 GMT+0300"
+      "time": "17:50",
+      "date": "20-07-2021",
+      "counter": 2,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
     },
     {
-      "name": "asdas",
-      "phone": "dasdasd",
-      "date": "Fri May 28 2021 09:00:00 GMT+0300"
+      "time": "15:10",
+      "date": "22-07-2021",
+      "counter": 2,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
+    },
+    {
+      "time": "17:50",
+      "date": "22-07-2021",
+      "counter": 2,
+      "name": "sadaasdas",
+      "phone": "+38062532523"
     }
   ].map(async (i) => {
     await knex('events').insert(i)

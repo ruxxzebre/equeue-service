@@ -2,6 +2,15 @@ import { DateTime } from "luxon";
 import _ from "lodash";
 // import { v4 as uuid } from "uuid";
 
+export const Validator = {
+  date: function(date) {
+    if (date instanceof Date) {
+      const newdate = DateTime.from(date);
+      return newdate.format('')
+    }
+  },
+};
+
 /**
  * Creates array range from certain number to limit.
  * @param {number} from
@@ -44,6 +53,9 @@ export const parseTimeRange = (timeRange) => {
 // FORMAT SHOULD BE "15-07-2021"
 export const parseDate = (str) => {
   if (!str) return null;
+  // if (str instanceof Date) {
+  //   return DateTime.from(str).format('DD-MM-YYYY').string;
+  // }
   let dateArray = str.split("-");
   if (dateArray.length !== 3) return null;
   if (

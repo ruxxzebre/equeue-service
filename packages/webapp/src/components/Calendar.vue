@@ -86,7 +86,7 @@ export default {
       });
     },
     bookEntry(fullName, phone, entry) {
-      this.$store.commit("addEntry", { entry });
+      this.$store.dispatch("addEntry", { entry, fullName, phone });
     },
   },
 };
