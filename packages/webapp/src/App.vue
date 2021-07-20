@@ -6,7 +6,7 @@
     <ul>
       <li>Saving config in database</li>
       <li>Saving entries to and fetching it from db</li>
-      <li>REST API access for frontend</li>
+      <li><s>REST API access for frontend</s></li>
       <li>Admin panel with ability to change global configuration</li>
       <li>Authorization to admin panel</li>
     </ul>
