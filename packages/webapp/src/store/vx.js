@@ -87,9 +87,10 @@ const store = createStore({
     },
     addEntry: async (ctx, payload) => {
       const entry = payload.entry;
-      entry.name = payload.fullName;
-      entry.phone = payload.phone;
-      await API.post('/entry', entry);
+      // entry.name = payload.fullName;
+      // entry.phone = payload.phone;
+      // await API.post('/entry', entry);
+      ctx.commit('addEntry', { entry });
     },
   },
   getters: {
