@@ -70,7 +70,7 @@ const store = createStore({
   },
   actions: {
     initEntry: async (ctx) => {
-      console.log(ctx);
+      return null;
       const response = await API.get("/entry");
       const { data: entries } = response;
       console.log(entries);
