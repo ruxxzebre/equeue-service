@@ -70,7 +70,7 @@ const store = createStore({
   },
   actions: {
     initEntry: async (ctx) => {
-      let flag = true;
+      let flag = false;
       if (flag) return null;
       const response = await API.get("/entry");
       const { data: entries } = response;
@@ -89,7 +89,7 @@ const store = createStore({
       const entry = payload.entry;
       // entry.name = payload.fullName;
       // entry.phone = payload.phone;
-      // await API.post('/entry', entry);
+      await API.post('/entry', entry);
       ctx.commit('addEntry', { entry });
     },
   },
