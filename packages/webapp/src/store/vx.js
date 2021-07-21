@@ -35,7 +35,14 @@ const store = createStore({
         ];
       }
       state.entries.find((e) => e.id === entry.id).counter += 1;
-      console.log(state.entries);
+
+      state.delayedEntriesTimes.push(entry.time);
+
+
+      // Delay appearing of entry again, if there's multiple users can book it
+      setTimeout(() => {
+        state.delayedEntriesTimes = state.delayedEntriesTimes.filter(i => i.time === entry.time);
+      }, state.delayTime);
     },
     addCleanEntry: (state, payload) => {
       const { entry } = payload;
@@ -107,7 +114,8 @@ const store = createStore({
         state.entries,
         date,
         state.timeRange,
-        state.bookingMaxPerEntry
+        state.bookingMaxPerEntry,
+        state.delayedEntriesTimes,
       ),
     getEntry: (state) => (id) => state.entries[id],
     getYear: ({ currentYear }) => currentYear,

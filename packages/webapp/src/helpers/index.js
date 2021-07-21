@@ -81,7 +81,8 @@ export const generateEntries = (
   existingEntries,
   date,
   rangeState,
-  bookingMaxPerEntry
+  bookingMaxPerEntry,
+  delayedEntries
 ) => {
   const times = existingEntries.filter((e) => e.date === date).map(_.cloneDeep);
   const range = _.cloneDeep(rangeState);
@@ -120,6 +121,7 @@ export const generateEntries = (
     } else {
       range.from.minute += range.interval;
     }
+    if (delayedEntries.includes(time)) continue;
     if (!checkIfAvailable(time)) continue;
     const existingEntry = times.find((e) => e.time === time);
     if (!existingEntry) res.push(makeEntry(time, date));
@@ -160,6 +162,8 @@ export const initializeState = () => {
       unavailableTimes: ["14:00-15:00"],
     },
     bookingMaxPerEntry: 2,
+    delayedEntriesTimes: [],
+    delayTime: 1000 * 60 * 5, // in ms
     entries: [
       {
         date: "18-07-2021",
