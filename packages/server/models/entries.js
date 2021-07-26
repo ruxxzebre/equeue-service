@@ -41,8 +41,7 @@ const Entry = {
   async makeRecord(record, update = false) {
     if (!EntrySchema.validate(record).error) {
       const newRecord = await
-        update ? db('events').update(record) : db('events').insert(record)
-      ;
+        (update ? db('events').update(record) : db('events').insert(record));
       return { newRecord: newRecord[0], error: null };
     }
     return { record, error: "Failed making record." } ;
