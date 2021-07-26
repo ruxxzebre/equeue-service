@@ -5,11 +5,11 @@
     "packages/*"
   ],
   "scripts": {
-    "client": "yarn workspace client start",
-    "server": "yarn workspace server start",
-    "client/dev": "yarn workspace client serve",
-    "server/dev": "yarn workspace server dev",
-    "dev": "concurrently --kill-others-on-fail \"yarn client/dev\" \"yarn server/dev\"",
-    "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn client\""
+    "webapp": "yarn workspace @bwi/webapp start",
+    "server": "yarn workspace @bwi/server start",
+    "webappdev": "yarn workspace @bwi/webapp serve",
+    "serverdev": "yarn workspace @bwi/server dev",
+    "dev": "concurrently --kill-others-on-fail \"yarn webapp/dev\" \"yarn server/dev\"",
+    "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn webapp\""
   }
 }
