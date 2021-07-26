@@ -176,6 +176,7 @@ export const initializeState = () => {
   return state;
 };
 
+// TODO
 export const fetchState = async (stateType) => {
   if (!enumIncludes(stateTypes, stateType)) return null;
   const state = await API.get('/state?stype=' + stateType);
