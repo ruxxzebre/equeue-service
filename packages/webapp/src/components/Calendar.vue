@@ -1,7 +1,7 @@
 <template>
   <div class="calendar calendar-wrapper">
     <div :key="`calendarDay${day}`" class="row" v-for="day in days">
-      <p>{{ day.day }}</p>
+      {{ day.date.split('-').slice(0,2).join("/") }}
       <div class="time-entries">
         <div
           :key="`entry${entry.time}`"
