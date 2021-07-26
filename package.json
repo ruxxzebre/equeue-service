@@ -8,7 +8,7 @@
     "webapp": "yarn workspace @bwi/webapp start",
     "server": "yarn workspace @bwi/server start",
     "webappdev": "yarn workspace @bwi/webapp serve",
-    "serverdev": "yarn workspace @bwi/server dev",
+    "serverdev": "yarn workspace @bwi/server demon",
     "dev": "concurrently --kill-others-on-fail \"yarn webapp/dev\" \"yarn server/dev\"",
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn webapp\""
   }

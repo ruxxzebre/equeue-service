@@ -38,9 +38,11 @@ const Entry = {
     if (result) return removeDateCollisions(result);
     return { records: result, error: null };
   },
-  async makeRecord(record) {
+  async makeRecord(record, update = false) {
     if (!EntrySchema.validate(record).error) {
-      const newRecord = await db('events').insert(record);
+      const newRecord = await
+        update ? db('events').update(record) : db('events').insert(record)
+      ;
       return { newRecord: newRecord[0], error: null };
     }
     return { record, error: "Failed making record." } ;
@@ -50,7 +52,7 @@ const Entry = {
     if (!rec) {
       return this.makeRecord(record);
     }
-    // const updateRecord = await db('events').update();
+    return this.makeRecord(record, true);
   },
 };
 
