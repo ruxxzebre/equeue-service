@@ -12,4 +12,4 @@ const EntrySchema = Joi.object({
   "id": Joi.number(),
 });
 
-exports.EntrySchema = EntrySchema;
+module.exports.EntrySchema = EntrySchema;
