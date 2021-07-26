@@ -1,5 +1,8 @@
 import { DateTime } from "luxon";
 import _ from "lodash";
+import { API } from "./api";
+import { enumIncludes } from "@bwi/shared/utils";
+import { stateTypes } from "@bwi/shared/schemas";
 // import { v4 as uuid } from "uuid";
 
 export const Validator = {
@@ -136,9 +139,6 @@ export const generateEntries = (
  *
  * @param existingEntries
  */
-// export const generateEntries = (existingEntries = []) => {
-//
-// };
 
 export const initializeState = () => {
   const now = DateTime.now();
@@ -173,6 +173,12 @@ export const initializeState = () => {
       },
     ],
   };
+  return state;
+};
+
+export const fetchState = async (stateType) => {
+  if (!enumIncludes(stateTypes, stateType)) return null;
+  const state = await API.get('/state?stype=' + stateType);
   return state;
 };
 
