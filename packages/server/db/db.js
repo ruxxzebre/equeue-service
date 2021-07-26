@@ -38,7 +38,7 @@ const initializeDB = async (addTables) => {
 
   await Promise.all([
     {
-      "date": "18-07-2021",
+      "date": "27-07-2021",
       "time": "9:10",
       "counter": 1,
       "name": "sadaasdas",
@@ -46,35 +46,35 @@ const initializeDB = async (addTables) => {
     },
     {
       "time": "9:00",
-      "date": "20-07-2021",
+      "date": "27-07-2021",
       "counter": 2,
       "name": "sadaasdas",
       "phone": "+38062532523"
     },
     {
       "time": "13:10",
-      "date": "20-07-2021",
+      "date": "27-07-2021",
       "counter": 1,
       "name": "sadaasdas",
       "phone": "+38062532523"
     },
     {
       "time": "17:50",
-      "date": "20-07-2021",
+      "date": "27-07-2021",
       "counter": 2,
       "name": "sadaasdas",
       "phone": "+38062532523"
     },
     {
       "time": "15:10",
-      "date": "22-07-2021",
+      "date": "27-07-2021",
       "counter": 2,
       "name": "sadaasdas",
       "phone": "+38062532523"
     },
     {
       "time": "17:50",
-      "date": "22-07-2021",
+      "date": "27-07-2021",
       "counter": 2,
       "name": "sadaasdas",
       "phone": "+38062532523"

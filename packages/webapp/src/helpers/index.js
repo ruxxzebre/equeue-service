@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import _ from "lodash";
 import { API } from "./api";
-import { enumIncludes } from "@bwi/shared/utils";
+import { enumIncludes, createRange } from "@bwi/shared/utils";
 import { stateTypes } from "@bwi/shared/constants";
 // import { v4 as uuid } from "uuid";
 
@@ -13,19 +13,6 @@ export const Validator = {
     }
   },
 };
-
-/**
- * Creates array range from certain number to limit.
- * @param {number} from
- * @param {number} to
- * @return {array}
- */
-export function createRange(from, to) {
-  if (to <= from) return [];
-  return Array(to + 1 - from)
-    .fill(0)
-    .map((_, idx) => from + idx);
-}
 
 export const parseTime = (arg) => {
   if (typeof arg === "string") {

@@ -1,11 +1,11 @@
 import { createStore } from "vuex";
 import { v4 as uuid } from "uuid";
-// import { DateTime } from "luxon";
 import { API } from "../helpers/api";
-import { generateDays, generateEntries, initializeState } from "../helpers";
+import { initializeState } from "@bwi/shared/utils";
+import { generateDays, generateEntries } from "../helpers";
 
 const store = createStore({
-  state: initializeState(),
+  state: initializeState({}),
   mutations: {
     setYear: (state, payload) => {
       let year = parseFloat(payload.year);
@@ -97,8 +97,8 @@ const store = createStore({
       console.log(entry);
       // entry.name = payload.fullName;
       // entry.phone = payload.phone;
-      // await API.post('/entry', entry);
-      // ctx.commit('addEntry', { entry });
+      await API.post('/entry', entry);
+      ctx.commit('addEntry', { entry });
     },
   },
   getters: {

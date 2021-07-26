@@ -60,7 +60,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import PanelSelect from "./PanelSelect.vue";
-import { createRange } from "../helpers";
+import { createRange } from "@bwi/shared/utils";
 
 export default {
   name: "ControlPanel.vue",
