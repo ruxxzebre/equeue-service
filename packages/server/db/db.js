@@ -28,6 +28,12 @@ const initializeDB = async (addTables) => {
       table.integer('counter');
       table.timestamp('created_at').defaultTo(knex.fn.now());
     });
+
+    await knex.schema.createTable('states', table => {
+      table.increments('id');
+      table.string('stateType');
+      table.string('jsonStringified');
+    });
   }
 
   await Promise.all([

@@ -1,13 +1,9 @@
-const { EntrySchema } = require("./schemas/entry");
-const { stateTypes } = require("./constants/stateTypes");
+const schemas = require("./schemas");
+const constants = require("./constants");
 const utils = require("./utils");
 
 module.exports = {
-  schemas: {
-    EntrySchema,
-  },
-  constants: {
-    stateTypes,
-  },
+  schemas,
+  constants,
   utils,
 }

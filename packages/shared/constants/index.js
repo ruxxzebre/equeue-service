@@ -1,4 +1,4 @@
-export const stateTypes = {
+const index = {
   PHILOSOPHY_FACULTY: "PHILOSOPHY_FACULTY",
   LAW_FACULTY: "LAW_FACULTY",
   FIAT: "FIAT",
@@ -6,3 +6,5 @@ export const stateTypes = {
   ECONOMICS_FACULTY: "ECONOMICS_FACULTY",
   FIM: "FIM",
 };
+
+module.exports.stateTypes = index;

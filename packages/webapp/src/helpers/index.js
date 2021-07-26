@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import _ from "lodash";
 import { API } from "./api";
 import { enumIncludes } from "@bwi/shared/utils";
-import { stateTypes } from "@bwi/shared/schemas";
+import { stateTypes } from "@bwi/shared/constants";
 // import { v4 as uuid } from "uuid";
 
 export const Validator = {
