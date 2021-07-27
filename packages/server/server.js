@@ -26,6 +26,7 @@ if (app.get("env") === "production") {
 
 const indexRoute = require('./routers/index');
 const rootRoute = require('./routers/root');
+const stateRoute = require('./routers/states');
 
 app.use(cors());
 app.use(express.json({ extended: true }));
@@ -35,6 +36,7 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
 
 app.use('/api', indexRoute);
+app.use('/api', stateRoute);
 app.use('/', rootRoute);
 
 app.listen(port, () => {
