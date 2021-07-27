@@ -17,3 +17,10 @@ const levelMigrate = async () => {
 const squirrelMigrate = async () => {
   console.log('TODO');
 };
+
+// levelMigrate().then(() => {
+//   console.log('flex');
+//   ConfigDB.getConfig(stateTypes.PHILOSOPHY_FACULTY).then((a) => {
+//     console.log(a);
+//   });
+// });

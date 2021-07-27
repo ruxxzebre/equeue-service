@@ -30,4 +30,4 @@ const ConfigDB = {
 };
 
 // yes
-module.exports.configDB = ConfigDB;
+module.exports.ConfigDB = ConfigDB;
