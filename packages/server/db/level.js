@@ -1,7 +1,6 @@
 const level = require('level');
 const path = require('path');
 const { stateTypes } = require('@bwi/shared/constants');
-// const { initializeState } = require('@bwi/shared/utils');
 
 const kvdb = level(path.join(__dirname + '/db.level'));
 
@@ -29,12 +28,6 @@ const ConfigDB = {
   setConfig,
   getConfig,
 };
-
-// ConfigDB.setConfig(stateTypes.FIM, { junk: 'dumb' });
-
-setTimeout(async () => {
-  console.log(await ConfigDB.getConfig(stateTypes.FIM));
-}, 500);
 
 // yes
 module.exports.configDB = ConfigDB;
