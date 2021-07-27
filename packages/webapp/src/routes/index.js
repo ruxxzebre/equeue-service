@@ -1,16 +1,22 @@
 /* eslint-disable */
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import Root from "../views/Root";
+import Admin from "../views/Admin";
 
 const routes = [
   {
-    path: '/:stateType',
+    path: '/',
     name: 'Root',
-    component: "",
+    component: Root,
+    beforeEnter: (to, from) => {
+      // console.log(to, from);
+      return true;
+    },
   },
   {
     path: '/admin',
     name: 'Admin',
-    component: ""
+    component: Admin,
   },
   {
     path: '/about',
@@ -20,7 +26,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 });
 

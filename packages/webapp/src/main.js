@@ -1,15 +1,14 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import "./registerServiceWorker";
 import VueSweetalert2 from "vue-sweetalert2";
-import store from "./store/vx";
-import router from "./routes";
 import "sweetalert2/dist/sweetalert2.min.css";
 
-const app = createApp(App);
+import "./registerServiceWorker";
+import { app } from "./vueapp.js";
+import store from "./store/vx";
+import { stateware } from "./store";
+import router from "./routes";
 
-app
-  .use(store)
-  // .use(router)
-  .use(VueSweetalert2)
-  .mount("#app");
+const runMids = () => {
+  app.use(store).use(router).use(stateware).use(VueSweetalert2).mount("#app");
+};
+
+runMids();

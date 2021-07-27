@@ -1,9 +1,9 @@
 <template>
-  <router-view></router-view>
+  <div>Admin flex</div>
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "Admin",
 }
 </script>

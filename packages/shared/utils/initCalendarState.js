@@ -7,7 +7,7 @@ const initializeState = ({
   minuteInterval = 10,
   unavailableTimes = ["14:00-15:00"],
   currentDay, currentYear, currentMonth, bookingMaxPerEntry = 2,
-   }, storeType = null) => {
+   }) => {
   const now = DateTime.now();
   const state = {
     input: {
