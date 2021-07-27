@@ -1,17 +1,6 @@
 const { initializeState } = require("./initCalendarState");
 const { amountPerFaculty } = require("../constants");
-
-const enumIncludes = (object, value) => {
-  if (typeof object !== "object") return false;
-  return Object.values(object).includes(value);
-}
-
-function createRange(from, to) {
-  if (to <= from) return [];
-  return Array(to + 1 - from)
-    .fill(0)
-    .map((_, idx) => from + idx);
-}
+const { enumIncludes, createRange } = require("./misc");
 
 const initializedStatesPerFaculty = (() => {
   const states = {};

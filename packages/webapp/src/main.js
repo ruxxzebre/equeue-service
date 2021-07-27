@@ -6,4 +6,10 @@ import store from "./store/vx";
 import router from "./routes";
 import "sweetalert2/dist/sweetalert2.min.css";
 
-createApp(App).use(store).use(router).use(VueSweetalert2).mount("#app");
+const app = createApp(App);
+
+app
+  .use(store)
+  // .use(router)
+  .use(VueSweetalert2)
+  .mount("#app");

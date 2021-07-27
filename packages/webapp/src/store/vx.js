@@ -1,8 +1,17 @@
 import { createStore } from "vuex";
 import { v4 as uuid } from "uuid";
+import parse from "url-parse";
 import { API } from "../helpers/api";
 import { initializeState } from "@bwi/shared/utils";
+import { stateTypes, amountPerFaculty } from "@bwi/shared/constants";
 import { generateDays, generateEntries } from "../helpers";
+
+// to fetch different stores
+const getStoreType = () => {
+  const query = parse(window.location.href, true);
+  if (!query.st || !stateTypes[query.st]) return null;
+  return query.st;
+}
 
 const store = createStore({
   state: initializeState({}),
