@@ -8,6 +8,38 @@ const stateTypes = {
   FIM: "FIM",
 };
 
+// TODO
+const facultyStrings = {
+  [stateTypes.PHILOSOPHY_FACULTY]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.LAW_FACULTY]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.FIAT]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.HISTORY_FACULTY]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.FHBBT]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.ECONOMICS_FACULTY]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+  [stateTypes.FIM]: {
+    heading: "Філософський факультет",
+    description: "філософствуєм"
+  },
+};
+
 const amountPerFaculty = {
   [stateTypes.PHILOSOPHY_FACULTY]: 2,
   [stateTypes.LAW_FACULTY]: 3,
@@ -20,3 +52,4 @@ const amountPerFaculty = {
 
 module.exports.stateTypes = stateTypes;
 module.exports.amountPerFaculty = amountPerFaculty;
+module.exports.facultyStrings = facultyStrings;
