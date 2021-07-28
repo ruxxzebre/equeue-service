@@ -3,17 +3,19 @@ import { v4 as uuid } from "uuid";
 import parse from "url-parse";
 import { API } from "../helpers/api";
 import { initializeState } from "@bwi/shared/utils";
+// eslint-disable-next-line no-unused-vars
 import { stateTypes, amountPerFaculty } from "@bwi/shared/constants";
 import { generateDays, generateEntries } from "../helpers";
 
 // to fetch different stores
+// eslint-disable-next-line no-unused-vars
 const getStoreType = () => {
   const query = parse(window.location.href, true);
   if (!query.st || !stateTypes[query.st]) return null;
   return query.st;
-}
+};
 
-const store = createStore({
+export const storeObject = {
   state: initializeState({}),
   mutations: {
     setYear: (state, payload) => {
@@ -47,10 +49,11 @@ const store = createStore({
 
       state.delayedEntriesTimes.push(entry.time);
 
-
       // Delay appearing of entry again, if there's multiple users can book it
       setTimeout(() => {
-        state.delayedEntriesTimes = state.delayedEntriesTimes.filter(i => i.time === entry.time);
+        state.delayedEntriesTimes = state.delayedEntriesTimes.filter(
+          (i) => i.time === entry.time
+        );
       }, state.delayTime);
     },
     addCleanEntry: (state, payload) => {
@@ -98,7 +101,7 @@ const store = createStore({
         filtered.push(entries[idx]);
       }
       filtered.forEach((entry) => {
-        ctx.commit('addCleanEntry', { entry });
+        ctx.commit("addCleanEntry", { entry });
       });
     },
     addEntry: async (ctx, payload) => {
@@ -106,11 +109,12 @@ const store = createStore({
       console.log(entry);
       // entry.name = payload.fullName;
       // entry.phone = payload.phone;
-      await API.post('/entry', entry);
-      ctx.commit('addEntry', { entry });
+      await API.post("/entry", entry);
+      ctx.commit("addEntry", { entry });
     },
   },
   getters: {
+    getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
     getDays: (state) => {
       return generateDays({
         year: state.currentYear,
@@ -125,7 +129,7 @@ const store = createStore({
         date,
         state.timeRange,
         state.bookingMaxPerEntry,
-        state.delayedEntriesTimes,
+        state.delayedEntriesTimes
       ),
     getEntry: (state) => (id) => state.entries[id],
     getYear: ({ currentYear }) => currentYear,
@@ -141,8 +145,8 @@ const store = createStore({
         input[key],
   },
   modules: {},
-});
+};
 
-store.dispatch('initEntry');
+// store.dispatch('initEntry');
 
-export default store;
+export default createStore(storeObject);

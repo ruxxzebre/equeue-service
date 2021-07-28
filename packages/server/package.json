@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "demon": "nodemon server.js"
+    "demon": "nodemon server.js",
+    "migrane": "node ./db/migrations.js"
   },
   "dependencies": {
     "@bwi/shared": "1.0.0",

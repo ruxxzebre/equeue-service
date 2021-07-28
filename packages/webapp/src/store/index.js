@@ -1,4 +1,9 @@
 import parse from "url-parse";
+import { createStore } from "vuex";
+import { API } from "../helpers/api";
+import { storeObject } from "../store/vx";
+import router from "../routes";
+import VueSweetalert2 from "vue-sweetalert2";
 
 /**
  *
@@ -10,7 +15,7 @@ export const stateware = {
   /**
    *
    * @param app
-   * @param {StatewareOptions} options
+   * @param { StatewareOptions } options
    */
   // eslint-disable-next-line no-unused-vars
   install: (app, options) => {
@@ -21,9 +26,18 @@ export const stateware = {
     let faculty;
     if (!query.faculty) {
       faculty = 2;
+      return null;
     } else {
       faculty = query.faculty;
     }
-    console.log(faculty);
+    API.get(`/get-state?stateType=${faculty}`).then(({ data }) => {
+      const state = data;
+      storeObject.state = state;
+      const store = createStore(storeObject);
+      app.use(store);
+      app.use(router).use(VueSweetalert2).mount("#app");
+      console.log(store.getters.getBookingMaxPerEntry);
+      store.dispatch("initEntry");
+    });
   },
 };

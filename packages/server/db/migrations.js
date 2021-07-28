@@ -4,14 +4,14 @@ const { stateTypes, amountPerFaculty } = require('@bwi/shared/constants');
 
 const levelMigrate = async () => {
   const ISWBMPEVal = (faculty) => initializeState({ bookingMaxPerEntry: amountPerFaculty[faculty] });
-  const { PHILOSOPHY_FACULTY, LAW_FACULTY, FIAT, HISTORY_FACULTY, FHBBT, ECONIMICS_FACULTY, FIM } = stateTypes;
+  const { PHILOSOPHY_FACULTY, LAW_FACULTY, FIAT, HISTORY_FACULTY, FHBBT, ECONOMICS_FACULTY, FIM } = stateTypes;
   await ConfigDB.setConfig(PHILOSOPHY_FACULTY, ISWBMPEVal(PHILOSOPHY_FACULTY));
   await ConfigDB.setConfig(FIM, ISWBMPEVal(FIM));
   await ConfigDB.setConfig(LAW_FACULTY, ISWBMPEVal(LAW_FACULTY));
   await ConfigDB.setConfig(FIAT, ISWBMPEVal(FIAT));
   await ConfigDB.setConfig(HISTORY_FACULTY, ISWBMPEVal(HISTORY_FACULTY));
   await ConfigDB.setConfig(FHBBT, ISWBMPEVal(FHBBT));
-  await ConfigDB.setConfig(ECONIMICS_FACULTY, ISWBMPEVal(ECONIMICS_FACULTY));
+  await ConfigDB.setConfig(ECONOMICS_FACULTY, ISWBMPEVal(ECONOMICS_FACULTY));
 };
 
 const squirrelMigrate = async () => {
@@ -24,3 +24,4 @@ const squirrelMigrate = async () => {
 //     console.log(a);
 //   });
 // });
+levelMigrate();
