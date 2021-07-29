@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@bwi/shared": "1.0.0",
+    "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
@@ -19,7 +20,8 @@
     "level": "^7.0.0",
     "lodash": "^4.17.21",
     "passport": "^0.4.1",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.11"

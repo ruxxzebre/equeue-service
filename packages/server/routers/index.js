@@ -19,6 +19,7 @@ router.get('/export', async (req, res) => {
     records = await Entry.getRecords();
   else
     records = await Entry.getRecords(params);
+  // console.log(records);
   return await caseExporterXL(res, records);
 });
 

@@ -11,10 +11,10 @@ const cellByType = (worksheet, inputCell, indices) => {
   const cell = worksheet.cell(...indices);
 
   const { value } = inputCell;
-  if (inputCell.opts) {
-    const type = inputCell.opts.type;
+  if (inputCell?.opts) {
+    const type = inputCell?.opts?.type;
     if (type === 'date') {
-      const date = moment(value).format(inputCell.opts.format);
+      const date = moment(value).format(inputCell?.opts?.format);
       if (!date || date === 'Invalid date') { return cell.string(''); }
       return cell.string(date.toString() || '');
     }
@@ -27,7 +27,7 @@ const cellByType = (worksheet, inputCell, indices) => {
   }
   if (
     ((value === 0) || typeof value === 'number')
-    || (value.match && value.match(/^\d+\.?\d+$/g).length)
+    || (value.match && value.match(/^\d+\.?\d+$/g)?.length)
   ) {
     return cell.number(parseInt(value, 10));
   }
@@ -45,7 +45,7 @@ const cellByType = (worksheet, inputCell, indices) => {
 };
 
 const getColumnWidth = (cell, column, type) => {
-  if (cell.opts.width) { return cell.opts.width; }
+  if (cell?.opts?.width) { return cell.opts.width; }
   let value;
   let label;
   label = cell.label;
@@ -57,8 +57,8 @@ const getColumnWidth = (cell, column, type) => {
   if (!type) { throw new Error('Unknown sheet type.'); }
   const ADDITIONAL_WIDTH = 5;
   const width = (Math.max(
-    value.toString().length,
-    label.toString().length,
+    value?.toString()?.length,
+    label?.toString()?.length,
   ) + ADDITIONAL_WIDTH) || 10;
   if (!columnWidths[type].has(column)) {
     columnWidths[type].set(column, width);
@@ -93,7 +93,7 @@ const createSheets = (type, workbook, content) => {
 };
 
 const exportToExcel = async (response, content, type = 'defaultExport', filename = 'Report') => {
-  // const onlyLatest = false;
+  const onlyLatest = false;
   const workbook = new xl.Workbook({
     dateFormat: 'm/d/yy hh:mm:ss',
   });
@@ -103,9 +103,7 @@ const exportToExcel = async (response, content, type = 'defaultExport', filename
     workbook.write(`${filename}.xlsx`, response);
   } catch (err) {
     if (Object.keys(err).length) {
-      console.log(err);
     } else {
-      console.log('err');
     }
     response.sendStatus(500);
   }
