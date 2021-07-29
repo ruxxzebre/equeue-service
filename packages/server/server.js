@@ -9,7 +9,7 @@ const morgan = require('morgan');
 
 const sessions = [];
 const app = express();
-const port = process.env.PORT || '3000';
+const port = parseFloat(process.env.PORT) || 3000;
 
 /*
 https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
@@ -62,6 +62,7 @@ app.post('/valpas', (req, res) => {
   return res.sendStatus(401);
 });
 
-app.listen(port, () => {
+// localhost:3000 -> serverIP:3000
+app.listen(port, '0.0.0.0', () => {
   console.log('Listening on port %s', port);
 });
