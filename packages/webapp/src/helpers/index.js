@@ -6,10 +6,10 @@ import { stateTypes } from "@bwi/shared/constants";
 // import { v4 as uuid } from "uuid";
 
 export const Validator = {
-  date: function(date) {
+  date: function (date) {
     if (date instanceof Date) {
       const newdate = DateTime.from(date);
-      return newdate.format('')
+      return newdate.format("");
     }
   },
 };
@@ -87,10 +87,7 @@ export const generateEntries = (
     const timep = parseTime(time);
     let flag = 0;
     unavailableTimes.forEach((timeu) => {
-      flag += (
-        timep.hour >= timeu.start.hour
-        && timep.hour < timeu.end.hour
-      );
+      flag += timep.hour >= timeu.start.hour && timep.hour < timeu.end.hour;
     });
     return !flag;
   };
@@ -120,7 +117,6 @@ export const generateEntries = (
   }
   return res;
 };
-
 
 /**
  *
@@ -166,11 +162,11 @@ export const initializeState = () => {
 // TODO
 export const fetchState = async (stateType) => {
   if (!enumIncludes(stateTypes, stateType)) return null;
-  const state = await API.get('/state?stype=' + stateType);
+  const state = await API.get("/state?stype=" + stateType);
   return state;
 };
 
-export const generateDays = ({
+export const generateDays_ = ({
   year,
   month,
   constraintsDayFrom = null,
@@ -217,4 +213,29 @@ export const generateDays = ({
     day: i,
     date: `${i}-${month < 10 ? `0${month}` : month}-${year}`,
   }));
+};
+
+export const dayToCommonFormat = (date) => {
+  const { day, month, year } = date;
+  return `${day}-${month < 10 ? `0${month}` : month}-${year}`;
+};
+
+export const generateDays = ({
+  constraintsDayFrom = null,
+  constraintsDayTo = null,
+}) => {
+  if (!constraintsDayFrom || !constraintsDayTo) return null;
+  const dayFrom = DateTime.fromISO(constraintsDayFrom);
+  const dayTo = DateTime.fromISO(constraintsDayTo);
+  let dayTemp = dayFrom;
+  const calendarDays = [];
+  while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {
+    // filter weekends
+    if (![6, 7].includes(dayTemp.weekday)) {
+      calendarDays.push(dayToCommonFormat(dayTemp));
+    }
+
+    dayTemp = dayTemp.plus({ day: 1 });
+  }
+  return calendarDays.map((date) => ({ date }));
 };

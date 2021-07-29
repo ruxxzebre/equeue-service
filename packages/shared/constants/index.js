@@ -15,27 +15,27 @@ const facultyStrings = {
     description: "філософствуєм"
   },
   [stateTypes.LAW_FACULTY]: {
-    heading: "Філософський факультет",
+    heading: "Юридичний факультет",
     description: "філософствуєм"
   },
   [stateTypes.FIAT]: {
-    heading: "Філософський факультет",
+    heading: "ФІПТ",
     description: "філософствуєм"
   },
   [stateTypes.HISTORY_FACULTY]: {
-    heading: "Філософський факультет",
+    heading: "Історії та міжнародних відносин",
     description: "філософствуєм"
   },
   [stateTypes.FHBBT]: {
-    heading: "Філософський факультет",
+    heading: "ФХББТ",
     description: "філософствуєм"
   },
   [stateTypes.ECONOMICS_FACULTY]: {
-    heading: "Філософський факультет",
+    heading: "Економічний факультет ",
     description: "філософствуєм"
   },
   [stateTypes.FIM]: {
-    heading: "Філософський факультет",
+    heading: "ФІМ",
     description: "філософствуєм"
   },
 };

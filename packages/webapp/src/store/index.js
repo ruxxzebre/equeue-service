@@ -25,18 +25,18 @@ export const stateware = {
     const { query } = root;
     let faculty;
     if (!query.faculty) {
-      faculty = 2;
-      return null;
+      faculty = "FIAT";
     } else {
       faculty = query.faculty;
     }
     API.get(`/get-state?stateType=${faculty}`).then(({ data }) => {
       const state = data;
       storeObject.state = state;
+      storeObject.state.faculty = faculty;
       const store = createStore(storeObject);
+      console.log(storeObject);
       app.use(store);
       app.use(router).use(VueSweetalert2).mount("#app");
-      console.log(store.getters.getBookingMaxPerEntry);
       store.dispatch("initEntry");
     });
   },

@@ -114,11 +114,10 @@ export const storeObject = {
     },
   },
   getters: {
+    getFaculty: ({ faculty }) => faculty,
     getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
     getDays: (state) => {
       return generateDays({
-        year: state.currentYear,
-        month: state.currentMonth,
         constraintsDayFrom: state.availableDayFrom,
         constraintsDayTo: state.availableDayTo,
       });

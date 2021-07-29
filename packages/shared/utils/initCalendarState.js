@@ -18,8 +18,8 @@ const initializeState = ({
     currentYear: currentYear || now.year,
     currentDay: currentDay || now.day,
     daysInCurrentMonth: now.daysInMonth,
-    availableDayFrom: now.day,
-    availableDayTo: now.daysInMonth,
+    availableDayFrom: now.toString(),
+    availableDayTo: now.plus({ days: 8 }).toString(),
     acceptableYears: createRange(2020, 2022),
     acceptableMonths: createRange(1, 12),
     timeRange: {

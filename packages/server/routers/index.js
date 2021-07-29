@@ -1,12 +1,25 @@
 const { Router } = require('express');
 const { Entry } = require('../models/entries');
 const { schemas } = require('@bwi/shared');
+const caseExporterXL = require("@bwi/shared/exporter");
 const { EntrySchema } = schemas;
 
 const router = Router();
 
-router.get('/export', (req, res) => {
+router.get('/export', async (req, res) => {
+  const params = {};
+  let records;
+  const q = req.query;
+  if (parseInt(q.id, 10)) params.id = parseInt(q.id, 10);
+  if (q.name) params.name = q.name;
+  if (q.date) params.date = q.date;
+  if (q.phone) params.phone = q.phone;
 
+  if (!Object.keys(params).length)
+    records = await Entry.getRecords();
+  else
+    records = await Entry.getRecords(params);
+  return await caseExporterXL(res, records);
 });
 
 router.get('/entry',async  (req, res) => {
