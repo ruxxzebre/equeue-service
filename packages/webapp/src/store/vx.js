@@ -6,6 +6,7 @@ import { initializeState } from "@bwi/shared/utils";
 // eslint-disable-next-line no-unused-vars
 import { stateTypes, amountPerFaculty } from "@bwi/shared/constants";
 import { generateDays, generateEntries } from "../helpers";
+import createPersistedState from "vuex-persistedstate";
 
 // to fetch different stores
 // eslint-disable-next-line no-unused-vars
@@ -145,6 +146,7 @@ export const storeObject = {
         input[key],
   },
   modules: {},
+  plugins: [createPersistedState()],
 };
 
 // store.dispatch('initEntry');

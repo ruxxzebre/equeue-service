@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
-import createPersistedState from "vuex-persistedstate";
 import Root from "../views/Root";
 import Admin from "../views/Admin";
 import {API} from "../helpers/api";
@@ -40,7 +39,6 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  plugins: [createPersistedState()],
   routes,
 });
 
