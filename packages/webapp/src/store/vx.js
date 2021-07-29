@@ -106,10 +106,11 @@ export const storeObject = {
     },
     addEntry: async (ctx, payload) => {
       const entry = payload.entry;
-      console.log(entry);
-      // entry.name = payload.fullName;
-      // entry.phone = payload.phone;
-      await API.post("/entry", entry);
+      entry.faculty = ctx.state.faculty;
+      entry.name = payload.fullName;
+      entry.phone = payload.phone;
+      const res = await API.post("/entry", entry);
+      console.log(res);
       ctx.commit("addEntry", { entry });
     },
   },

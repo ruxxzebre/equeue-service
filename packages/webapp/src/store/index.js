@@ -31,6 +31,7 @@ export const stateware = {
     }
     API.get(`/get-state?stateType=${faculty}`).then(({ data }) => {
       const state = data;
+      localStorage.clear();
       storeObject.state = state;
       storeObject.state.faculty = faculty;
       const store = createStore(storeObject);
