@@ -46,6 +46,13 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use('/api', indexRoute);
 app.use('/api', stateRoute);
 app.use('/', rootRoute);
+app.get('/check', (_, res) => {
+  res.send('Ohaio');
+});
+app.post('/postcheck', (req, res) => {
+  res.send(req.body);
+});
+
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.sendStatus(401);
