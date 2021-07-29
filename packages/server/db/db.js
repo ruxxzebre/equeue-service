@@ -128,7 +128,7 @@ const initializeDB = async (addTables) => {
     //
     // // Finally, add a catch statement
   } catch(e) {
-    console.log(e);
+    // console.log(e);
   }
 };
 

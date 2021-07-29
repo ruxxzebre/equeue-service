@@ -31,14 +31,17 @@ export const stateware = {
     }
     API.get(`/get-state?stateType=${faculty}`).then(({ data }) => {
       const state = data;
-      localStorage.clear();
+      if (localStorage.getItem("prevFaculty") !== faculty) {
+        localStorage.clear();
+      }
       storeObject.state = state;
       storeObject.state.faculty = faculty;
       const store = createStore(storeObject);
-      console.log(storeObject);
+      // console.log(storeObject);
       app.use(store);
       app.use(router).use(VueSweetalert2).mount("#app");
       store.dispatch("initEntry");
+      localStorage.setItem("prevFaculty", faculty);
     });
   },
 };

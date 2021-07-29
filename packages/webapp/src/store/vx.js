@@ -69,7 +69,7 @@ export const storeObject = {
       state.entries.find((e) => e.id === entryId).counter += 1;
     },
     setInput: (state, payload) => {
-      console.log(state.input);
+      // console.log(state.input);
       let { key, value } = payload;
       switch (key) {
         case "phone": {
@@ -93,7 +93,7 @@ export const storeObject = {
       if (flag) return null;
       const response = await API.get("/entry");
       const { data: entries } = response;
-      console.log(entries);
+      // console.log(entries);
       const filtered = [];
       for (let idx in entries) {
         // entries[idx].date = DateTime.fromISO(data.date).toFormat('DD-MM-YYYY');

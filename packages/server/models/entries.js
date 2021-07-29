@@ -47,6 +47,12 @@ const Entry = {
     return { record, error: "Failed making record." } ;
   },
   async updateRecord(record) {
+    let patch = true;
+    if (patch) {
+      delete record.id;
+      return this.makeRecord(record);
+    }
+
     const rec = record.id &&
       await db('events').where('id', record.id).select('*');
     if (!rec) {
