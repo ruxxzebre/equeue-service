@@ -1,6 +1,6 @@
 <template>
   <div>Адмін панель</div>
-  <a href="http://localhost:3000/api/export">
+  <a :href="`${ipconfig.ip}/export`">
     <button type="button">Експортувати у EXCEL (XLSX)</button>
   </a>
   <select @change="setSelFac">
@@ -95,6 +95,7 @@
 
 <script>
 import { facultyStrings } from "@bwi/shared/constants";
+import { ipconfig } from "@bwi/shared/configs";
 import { API } from "../helpers/api";
 
 export default {
@@ -126,6 +127,7 @@ export default {
       }),
       selectedFaculty: "FIAT",
       fStates: null,
+      ipconfig,
     };
   },
   created() {
