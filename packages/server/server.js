@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const history = require('connect-history-api-fallback');
 const { v4: uuid } = require('uuid');
+const morgan = require('morgan');
 // const expressSession = require("express-session");
 // const passport = require("passport");
 
@@ -40,6 +41,7 @@ app.use(express.urlencoded());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use('/api', indexRoute);
 app.use('/api', stateRoute);
