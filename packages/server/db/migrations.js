@@ -3,7 +3,7 @@ const { ConfigDB } = require("./level");
 const { stateTypes, amountPerFaculty } = require('@bwi/shared/constants');
 
 const levelMigrate = async () => {
-  const ISWBMPEVal = (faculty) => initializeState({ bookingMaxPerEntry: amountPerFaculty[faculty] });
+  const ISWBMPEVal = (faculty) => initializeState({ bookingMaxPerEntry: amountPerFaculty[faculty], minuteInterval: 15 });
   const { PHILOLOGICAL_FACULTY, LAW_FACULTY, FIAT, HISTORY_FACULTY, FHBBT, ECONOMICS_FACULTY, FIM } = stateTypes;
   await ConfigDB.setConfig(PHILOLOGICAL_FACULTY, ISWBMPEVal(PHILOLOGICAL_FACULTY));
   await ConfigDB.setConfig(FIM, ISWBMPEVal(FIM));
