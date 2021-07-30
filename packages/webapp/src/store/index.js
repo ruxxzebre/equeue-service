@@ -37,7 +37,7 @@ export const stateware = {
       storeObject.state = state;
       storeObject.state.faculty = faculty;
       const store = createStore(storeObject);
-      // console.log(storeObject);
+      console.log(storeObject);
       app.use(store);
       app.use(router).use(VueSweetalert2).mount("#app");
       store.dispatch("initEntry");

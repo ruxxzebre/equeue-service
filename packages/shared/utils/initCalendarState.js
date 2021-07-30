@@ -19,7 +19,7 @@ const initializeState = ({
     currentDay: currentDay || now.day,
     daysInCurrentMonth: now.daysInMonth,
     availableDayFrom: now.toString(),
-    availableDayTo: now.plus({ days: 8 }).toString(),
+    availableDayTo: DateTime.fromObject({ year: 2021, month: 8, day: 17 }).toString(),
     acceptableYears: createRange(2020, 2022),
     acceptableMonths: createRange(1, 12),
     timeRange: {
@@ -29,6 +29,12 @@ const initializeState = ({
       unavailableTimes: unavailableTimes || ["14:00-15:00"],
     },
     bookingMaxPerEntry: bookingMaxPerEntry || 2,
+    exclusiveDates: [
+      "30-07-2021",
+      "31-07-2021",
+      "01-08-2021",
+      "02-08-2021"
+    ],
     delayedEntriesTimes: [],
     delayTime: 1000 * 60 * 5, // in ms
     entries: [

@@ -122,6 +122,7 @@ export const storeObject = {
       return generateDays({
         constraintsDayFrom: state.availableDayFrom,
         constraintsDayTo: state.availableDayTo,
+        exclusiveDates: state.exclusiveDates,
       });
     },
     getEntries: (state) => (date) =>

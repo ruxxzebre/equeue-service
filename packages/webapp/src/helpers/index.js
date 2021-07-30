@@ -123,7 +123,7 @@ export const generateEntries = (
  * @param existingEntries
  */
 
-export const initializeState = () => {
+export const initializeState_ = () => {
   const now = DateTime.now();
   const state = {
     input: {
@@ -223,19 +223,27 @@ export const dayToCommonFormat = (date) => {
 export const generateDays = ({
   constraintsDayFrom = null,
   constraintsDayTo = null,
+  exclusiveDates = [],
 }) => {
+  exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
   if (!constraintsDayFrom || !constraintsDayTo) return null;
+  console.log(constraintsDayTo);
   const dayFrom = DateTime.fromISO(constraintsDayFrom);
   const dayTo = DateTime.fromISO(constraintsDayTo);
+  console.log(dayFrom.toLocaleString());
+  console.log(dayTo.toLocaleString());
   let dayTemp = dayFrom;
   const calendarDays = [];
   while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {
     // filter weekends
-    if (![6, 7].includes(dayTemp.weekday)) {
+    if (
+      ![6, 7].includes(dayTemp.weekday) ||
+      exclusiveDates.includes(dayTemp.toLocaleString())
+    ) {
       calendarDays.push(dayToCommonFormat(dayTemp));
     }
 
-    dayTemp = dayTemp.plus({ day: 1 });
+    dayTemp = dayTemp.plus({day: 1});
   }
   return calendarDays.map((date) => ({ date }));
 };
