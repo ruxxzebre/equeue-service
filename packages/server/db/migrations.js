@@ -4,8 +4,8 @@ const { stateTypes, amountPerFaculty } = require('@bwi/shared/constants');
 
 const levelMigrate = async () => {
   const ISWBMPEVal = (faculty) => initializeState({ bookingMaxPerEntry: amountPerFaculty[faculty] });
-  const { PHILOSOPHY_FACULTY, LAW_FACULTY, FIAT, HISTORY_FACULTY, FHBBT, ECONOMICS_FACULTY, FIM } = stateTypes;
-  await ConfigDB.setConfig(PHILOSOPHY_FACULTY, ISWBMPEVal(PHILOSOPHY_FACULTY));
+  const { PHILOLOGICAL_FACULTY, LAW_FACULTY, FIAT, HISTORY_FACULTY, FHBBT, ECONOMICS_FACULTY, FIM } = stateTypes;
+  await ConfigDB.setConfig(PHILOLOGICAL_FACULTY, ISWBMPEVal(PHILOLOGICAL_FACULTY));
   await ConfigDB.setConfig(FIM, ISWBMPEVal(FIM));
   await ConfigDB.setConfig(LAW_FACULTY, ISWBMPEVal(LAW_FACULTY));
   await ConfigDB.setConfig(FIAT, ISWBMPEVal(FIAT));
@@ -20,7 +20,7 @@ const squirrelMigrate = async () => {
 
 // levelMigrate().then(() => {
 //   console.log('flex');
-//   ConfigDB.getConfig(stateTypes.PHILOSOPHY_FACULTY).then((a) => {
+//   ConfigDB.getConfig(stateTypes.PHILOLOGICAL_FACULTY).then((a) => {
 //     console.log(a);
 //   });
 // });

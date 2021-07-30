@@ -1,5 +1,5 @@
 const stateTypes = {
-  PHILOSOPHY_FACULTY: "PHILOSOPHY_FACULTY",
+  PHILOLOGICAL_FACULTY: "PHILOLOGICAL_FACULTY",
   LAW_FACULTY: "LAW_FACULTY",
   FIAT: "FIAT",
   HISTORY_FACULTY: "HISTORY_FACULTY",
@@ -10,8 +10,8 @@ const stateTypes = {
 
 // TODO
 const facultyStrings = {
-  [stateTypes.PHILOSOPHY_FACULTY]: {
-    heading: "Філософський факультет",
+  [stateTypes.PHILOLOGICAL_FACULTY]: {
+    heading: "Філологічний факультет",
     description: "філософствуєм"
   },
   [stateTypes.LAW_FACULTY]: {
@@ -19,29 +19,29 @@ const facultyStrings = {
     description: "філософствуєм"
   },
   [stateTypes.FIAT]: {
-    heading: "ФІПТ",
+    heading: "Факультет інформаційних і прикладних технологій",
     description: "філософствуєм"
   },
   [stateTypes.HISTORY_FACULTY]: {
-    heading: "Історії та міжнародних відносин",
+    heading: "Факультет історії та міжнародних відносин",
     description: "філософствуєм"
   },
   [stateTypes.FHBBT]: {
     heading: "ФХББТ",
-    description: "філософствуєм"
+    description: "Факультет хімії, біології та біотехнології"
   },
   [stateTypes.ECONOMICS_FACULTY]: {
-    heading: "Економічний факультет ",
+    heading: "Економічний факультет",
     description: "філософствуєм"
   },
   [stateTypes.FIM]: {
-    heading: "ФІМ",
+    heading: "Факультет іноземних мов",
     description: "філософствуєм"
   },
 };
 
 const amountPerFaculty = {
-  [stateTypes.PHILOSOPHY_FACULTY]: 2,
+  [stateTypes.PHILOLOGICAL_FACULTY]: 2,
   [stateTypes.LAW_FACULTY]: 3,
   [stateTypes.FIAT]: 3,
   [stateTypes.HISTORY_FACULTY]: 2,
