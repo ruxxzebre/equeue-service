@@ -27,7 +27,7 @@ const facultyStrings = {
     description: "філософствуєм"
   },
   [stateTypes.FHBBT]: {
-    heading: "ФХББТ",
+    heading: "Факультет хімії, біології та біотехнології",
     description: "Факультет хімії, біології та біотехнології"
   },
   [stateTypes.ECONOMICS_FACULTY]: {
