@@ -13,6 +13,7 @@
     "dev": "concurrently --kill-others-on-fail \"yarn webapp/dev\" \"yarn server/dev\"",
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn webapp\"",
     "prod": "yarn webappbuild && yarn server",
-    "migrane": "yarn workspace @bwi/server migrane"
+    "migrane": "yarn workspace @bwi/server migrane",
+    "demon": "yarn webappbuild && pm2 packages/server/server.js"
   }
 }
