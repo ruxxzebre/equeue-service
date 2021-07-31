@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "demon": "nodemon server.js",
-    "migrane": "node ./db/migrations.js"
+    "migrane": "node ./db/migrations.js",
+    "build": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
     "@bwi/shared": "1.0.0",
@@ -29,6 +30,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.11"
+    "nodemon": "^2.0.11",
+    "webpack": "^5.47.1",
+    "webpack-cli": "^4.7.2"
   }
 }
