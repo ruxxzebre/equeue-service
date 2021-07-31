@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const history = require('connect-history-api-fallback');
+// const history = require('connect-history-api-fallback');
 const { v4: uuid } = require('uuid');
 const morgan = require('morgan');
 // const expressSession = require("express-session");
