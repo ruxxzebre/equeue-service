@@ -8,6 +8,7 @@
 - XLSX export
 - Pulling state depending on backend
 - Realtime fetching entries from backend research
+- cli script for migration, configuration
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
