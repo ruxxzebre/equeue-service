@@ -32,7 +32,15 @@ const indexRoute = require('./routers/index');
 const rootRoute = require('./routers/root');
 const stateRoute = require('./routers/states');
 
-// app.use(cors());
+const whitelist = ["http://localhost:3000", "http://localhost:8080"];
+app.use(cors({
+  origin: (origin, cb) => {
+    if (whitelist.includes(origin)) {
+      return cb(null, true);
+    }
+    cb(new Error());
+  },
+}));
 // app.use(history({
 //   index: "/index.html"
 // }));
