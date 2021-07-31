@@ -5,7 +5,6 @@ const { stateTypes } = require('@bwi/shared/constants');
 const router = Router();
 
 router.get('/get-state', async (req, res) => {
-  console.log(req.query);
   if (!req.query.stateType) return res.sendStatus(404);
   const stateToFetch = await ConfigDB.getConfig(req.query.stateType);
   if (!stateToFetch) return res.sendStatus(400);

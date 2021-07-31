@@ -7,9 +7,11 @@ const kvdb = level(path.join(__dirname + '/db.level'));
 /**
  *
  * @param {string} confType
+ * @param {object} newState
  * @return {Promise<void | null | any>}
  */
 const setConfig = async (confType, newState) => {
+  // polishing
   if (!stateTypes[confType]) return null;
   return await kvdb.put(confType, JSON.stringify(newState));
 };
@@ -24,10 +26,8 @@ const getConfig = async (confType) => {
   return JSON.parse(await kvdb.get(confType));
 }
 
-const ConfigDB = {
+// yes
+module.exports.ConfigDB = {
   setConfig,
   getConfig,
 };
-
-// yes
-module.exports.ConfigDB = ConfigDB;
