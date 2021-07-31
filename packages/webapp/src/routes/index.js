@@ -1,8 +1,9 @@
 /* eslint-disable */
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import md5 from "md5";
 import Root from "../views/Root";
 import Admin from "../views/Admin";
-import {API} from "../helpers/api";
+// import {API} from "../helpers/api";
 
 const routes = [
   {
@@ -24,7 +25,7 @@ const routes = [
     component: Admin,
     beforeEnter: () => {
       const pass = prompt('password: ');
-      if (pass === 'flex') {
+      if (md5(pass) === '897a779351421523cadbafccdce22efe') {
         return true;
       }
       return { path: "/" };
