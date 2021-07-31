@@ -14,6 +14,7 @@
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn webapp\"",
     "prod": "yarn webappbuild && yarn server",
     "migrane": "yarn workspace @bwi/server migrane",
-    "demon": "yarn webappbuild && pm2 packages/server/server.js"
+    "demon": "yarn webappbuild && pm2 packages/server/server.js",
+    "clean": "rimraf ./packages/*/dist"
   }
 }

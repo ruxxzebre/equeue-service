@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@bwi/shared": "1.0.0",
+    "babel-eslint": "^10.1.0",
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
@@ -21,6 +24,7 @@
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
+    "prettier": "^2.3.2",
     "sqlite3": "^5.0.2",
     "uuid": "^8.3.2"
   },
