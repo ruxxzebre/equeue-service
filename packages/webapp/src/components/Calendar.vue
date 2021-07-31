@@ -42,11 +42,9 @@ export default {
             grid-template-columns: repeat(2, 0.7fr);
           ">
             <label for="swal-input1" style="align-self: center;">ПІБ</label>
-            <input id="swal-input1" placeholder="Кава Іван Вейпович" class="swal2-input">
+            <input id="swal-input1" placeholder="Іваненко Іван Іванович" class="swal2-input">
             <label for="swal-input2" style="align-self: center;">Телефон</label>
-            <input id="swal-input2" value="${this.$store.getters.getInput(
-              "phone"
-            )}" placeholder="+380 XXX XX XX XXX" class="swal2-input">
+            <input id="swal-input2" placeholder="+380 XXX XX XX XXX" class="swal2-input">
             </div>
         `,
         focusConfirm: false,

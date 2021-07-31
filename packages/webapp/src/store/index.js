@@ -1,7 +1,7 @@
 import parse from "url-parse";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
-import { storeObject } from "../store/vx";
+import { storeObject } from "./vx";
 import router from "../routes";
 import VueSweetalert2 from "vue-sweetalert2";
 
