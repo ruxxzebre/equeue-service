@@ -15,6 +15,12 @@
     "prod": "yarn webappbuild && yarn server",
     "migrane": "yarn workspace @bwi/server migrane",
     "demon": "yarn webappbuild && pm2 packages/server/server.js",
-    "clean": "rimraf ./packages/*/dist"
+    "clean": "rimraf ./packages/*/dist",
+    "test": "lerna run test --scope={@bwi/server,@bwi/shared,@bwi/webapp}",
+    "new-version": "lerna version --conventional-commits --yes",
+    "diff": "lerna diff"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0",
   }
 }
