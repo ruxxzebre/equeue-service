@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "bookingproject",
+  "name": "bwi",
   "workspaces": [
     "packages/*"
   ],
