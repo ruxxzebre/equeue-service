@@ -94,10 +94,8 @@ export const storeObject = {
       if (flag) return null;
       const response = await API.get("/entry");
       const { data: entries } = response;
-      // console.log(entries);
       const filtered = [];
       for (let idx in entries) {
-        // entries[idx].date = DateTime.fromISO(data.date).toFormat('DD-MM-YYYY');
         if (!entries[idx].time) continue;
         filtered.push(entries[idx]);
       }
@@ -111,7 +109,7 @@ export const storeObject = {
       entry.name = payload.fullName;
       entry.phone = payload.phone;
       const res = await API.post("/entry", entry);
-      console.log(res);
+      // TODO: failure handling
       ctx.commit("addEntry", { entry });
     },
   },
