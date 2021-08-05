@@ -33,10 +33,18 @@ router.get('/entry',async  (req, res) => {
   if (q.date) params.date = q.date;
   if (q.phone) params.phone = q.phone;
 
+  let records;
   if (!Object.keys(params).length) {
-    return res.send(await Entry.getRecords());
+    records = await Entry.getRecords();
+  } else {
+    records = await Entry.getRecords(params);
   }
-  return res.send(await Entry.getRecords(params));
+  records.forEach((i) => {
+    delete i.name;
+    delete i.phone;
+    delete i.faculty;
+  });
+  res.send(records);
 });
 
 router.post('/entry', async (req, res) => {
