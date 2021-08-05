@@ -1,9 +1,7 @@
-/* eslint-disable */
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import md5 from "md5";
 import Root from "../views/Root";
 import Admin from "../views/Admin";
-// import {API} from "../helpers/api";
 
 const routes = [
   {
