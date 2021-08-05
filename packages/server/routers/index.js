@@ -18,10 +18,9 @@ router.get('/export', async (req, res) => {
   const filterKeys = ["name", "date", "phone", "id"];
   filterKeys.forEach((key) => params[key] = q[key]);
 
-  if (!Object.keys(params).length)
-    records = await Entry.getRecords();
-  else
-    records = await Entry.getRecords(params);
+  records = Object.keys(params).length
+    ? await Entry.getRecords(params)
+    : await Entry.getRecords();
   return await caseExporterXL(res, records);
 });
 
@@ -35,11 +34,10 @@ router.get('/entry',async  (req, res) => {
   filterKeys.forEach((key) => params[key] = q[key]);
 
   let records;
-  if (!Object.keys(params).length) {
-    records = await Entry.getRecords();
-  } else {
-    records = await Entry.getRecords(params);
-  }
+  records = Object.keys(params).length
+    ? await Entry.getRecords(params)
+    : await Entry.getRecords();
+
   records.forEach((i) => {
     delete i.name;
     delete i.phone;
