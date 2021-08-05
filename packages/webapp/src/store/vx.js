@@ -48,7 +48,7 @@ export const storeObject = {
     },
   },
   actions: {
-    initEntry: async (ctx) => {
+    initEntry: async ({ commit }) => {
       let flag = false;
       if (flag) return null;
       const response = await API.get("/entry");
@@ -58,11 +58,10 @@ export const storeObject = {
         if (!entries[idx].time) continue;
         filtered.push(entries[idx]);
       }
-      filtered.forEach((entry) => {
-        ctx.commit("addCleanEntry", { entry });
-      });
+      filtered.forEach((entry) =>
+        commit("addCleanEntry", { entry }));
     },
-    addEntry: async (ctx, payload) => {
+    addEntry: async ({ dispatch }, payload) => {
       const entry = payload.entry;
       entry.counter += 1;
       entry.faculty = ctx.state.faculty;
@@ -71,28 +70,28 @@ export const storeObject = {
       const res = await API.post("/entry", entry);
       console.log(res);
       // TODO: failure handling
-      ctx.dispatch("initEntry");
+      dispatch("initEntry");
     },
   },
   getters: {
     getFaculty: ({ faculty }) => faculty,
     getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
-    getDays: (state) => {
+    getDays: ({availableDayFrom, availableDayTo, exclusiveDates}) => {
       return generateDays({
-        constraintsDayFrom: state.availableDayFrom,
-        constraintsDayTo: state.availableDayTo,
-        exclusiveDates: state.exclusiveDates,
+        availableDayFrom,
+        availableDayTo,
+        exclusiveDates,
       });
     },
-    getEntries: (state) => (date) =>
+    getEntries: ({ entries, timeRange, bookingMaxPerEntry, delayedEntriesTimes }) => (date) =>
       generateEntries(
-        state.entries,
+        entries,
         date,
-        state.timeRange,
-        state.bookingMaxPerEntry,
-        state.delayedEntriesTimes
+        timeRange,
+        bookingMaxPerEntry,
+        delayedEntriesTimes
       ),
-    getEntry: (state) => (id) => state.entries[id],
+    getEntry: ({ entries }) => (id) => entries[id],
     getYear: ({ currentYear }) => currentYear,
     getMonth: ({ currentMonth }) => currentMonth,
     getAvailableDayFrom: ({ availableDayFrom }) => availableDayFrom,

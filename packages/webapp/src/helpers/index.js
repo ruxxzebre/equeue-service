@@ -221,15 +221,15 @@ export const dayToCommonFormat = (date) => {
 };
 
 export const generateDays = ({
-  constraintsDayFrom = null,
-  constraintsDayTo = null,
+                               availableDayFrom = null,
+                               availableDayTo = null,
   exclusiveDates = [],
 }) => {
   exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
-  if (!constraintsDayFrom || !constraintsDayTo) return null;
-  console.log(constraintsDayTo);
-  const dayFrom = DateTime.fromISO(constraintsDayFrom);
-  const dayTo = DateTime.fromISO(constraintsDayTo);
+  if (!availableDayFrom || !availableDayTo) return null;
+  console.log(availableDayTo);
+  const dayFrom = DateTime.fromISO(availableDayFrom);
+  const dayTo = DateTime.fromISO(availableDayTo);
   console.log(dayFrom.toLocaleString());
   console.log(dayTo.toLocaleString());
   let dayTemp = dayFrom;
