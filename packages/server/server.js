@@ -33,7 +33,9 @@ const rootRoute = require('./routers/root');
 const stateRoute = require('./routers/states');
 
 const whitelist = ["http://localhost:3000", "http://localhost:8080"];
-if (process.env.NODE_ENV === "development") {
+let development = true;
+
+if (development) {
   app.use(cors({
     origin: "*",
   }));

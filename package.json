@@ -10,7 +10,7 @@
     "webappdev": "yarn workspace @bwi/webapp serve",
     "serverdev": "yarn workspace @bwi/server demon",
     "webappbuild": "yarn workspace @bwi/webapp build",
-    "dev": "concurrently --kill-others-on-fail \"yarn webapp/dev\" \"yarn server/dev\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn webappdev\" \"yarn serverdev\"",
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn webapp\"",
     "prod": "yarn webappbuild && yarn server",
     "migrane": "yarn workspace @bwi/server migrane",
@@ -21,6 +21,7 @@
     "diff": "lerna diff"
   },
   "devDependencies": {
+    "concurrently": "^6.2.0",
     "lerna": "^4.0.0"
   }
 }

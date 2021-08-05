@@ -3,13 +3,12 @@ import { defaultState, stateTypes } from "@bwi/shared/constants";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { storeObject } from "./vx";
-import router from "../routes";
-import VueSweetalert2 from "vue-sweetalert2";
 
 /**
  *
  * @typedef {object} StatewareOptions
  * @property {string} queryName
+ * @property {function} cb
  */
 
 export const stateware = {
@@ -33,7 +32,7 @@ export const stateware = {
       storeObject.state.faculty = queryValue;
       const store = createStore(storeObject);
       app.use(store);
-      app.use(router).use(VueSweetalert2).mount("#app");
+      options.cb(app);
       store.dispatch("initEntry");
     });
   },
