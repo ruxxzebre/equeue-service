@@ -1,20 +1,8 @@
 import { createStore } from "vuex";
-import { v4 as uuid } from "uuid";
-import parse from "url-parse";
 import { API } from "../helpers/api";
 import { initializeState } from "@bwi/shared/utils";
-// eslint-disable-next-line no-unused-vars
-import { stateTypes, amountPerFaculty } from "@bwi/shared/constants";
 import { generateDays, generateEntries } from "../helpers";
 import createPersistedState from "vuex-persistedstate";
-
-// to fetch different stores
-// eslint-disable-next-line no-unused-vars
-const getStoreType = () => {
-  const query = parse(window.location.href, true);
-  if (!query.st || !stateTypes[query.st]) return null;
-  return query.st;
-};
 
 export const storeObject = {
   state: initializeState({}),
