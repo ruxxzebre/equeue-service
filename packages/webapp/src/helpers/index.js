@@ -230,8 +230,8 @@ export const generateDays = ({
   console.log(availableDayTo);
   const dayFrom = DateTime.fromISO(availableDayFrom);
   const dayTo = DateTime.fromISO(availableDayTo);
-  console.log(dayFrom.toLocaleString());
-  console.log(dayTo.toLocaleString());
+  // console.log(dayFrom.toLocaleString());
+  // console.log(dayTo.toLocaleString());
   let dayTemp = dayFrom;
   const calendarDays = [];
   while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {

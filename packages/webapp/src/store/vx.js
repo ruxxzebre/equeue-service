@@ -52,7 +52,8 @@ export const storeObject = {
       let flag = false;
       if (flag) return null;
       const response = await API.get("/entry");
-      const { data: { entries } } = response;
+      const { data: entries } = response;
+      console.log(entries);
       const filtered = [];
       for (let idx in entries) {
         if (!entries[idx].time) continue;
