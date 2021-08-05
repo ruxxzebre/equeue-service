@@ -33,8 +33,9 @@ router.get('/entry',async  (req, res) => {
   if (q.date) params.date = q.date;
   if (q.phone) params.phone = q.phone;
 
-  if (!Object.keys(params).length)
+  if (!Object.keys(params).length) {
     return res.send(await Entry.getRecords());
+  }
   return res.send(await Entry.getRecords(params));
 });
 
