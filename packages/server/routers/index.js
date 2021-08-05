@@ -28,10 +28,11 @@ router.get('/export', async (req, res) => {
 router.get('/entry',async  (req, res) => {
   const params = {};
   const q = req.query;
-  if (parseInt(q.id, 10)) params.id = parseInt(q.id, 10);
-  if (q.name) params.name = q.name;
-  if (q.date) params.date = q.date;
-  if (q.phone) params.phone = q.phone;
+  if (typeof q.id === 'string') {
+    q.id = parseInt(q.id, 10);
+  }
+  const filterKeys = ["name", "date", "phone", "id"];
+  filterKeys.forEach((key) => params[key] = q[key]);
 
   let records;
   if (!Object.keys(params).length) {
