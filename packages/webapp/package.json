@@ -1,6 +1,6 @@
 {
   "name": "@bwi/webapp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@bwi/shared": "^1.1.0",
+    "@bwi/shared": "^1.2.0",
     "@types/luxon": "^1.27.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",

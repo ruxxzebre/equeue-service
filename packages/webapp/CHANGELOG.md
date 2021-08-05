@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/ruxxzebre/booking_widget/compare/v1.1.0...v1.2.0) (2021-08-05)
+
+
+### Features
+
+* lawyers flex ([44d3b98](https://github.com/ruxxzebre/booking_widget/commit/44d3b984cc0e09070bbacceafcd096bc1de4d6c9))
+
+
+
+
+
 # [1.1.0](https://github.com/ruxxzebre/booking_widget/compare/v1.0.1...v1.1.0) (2021-08-05)
 
 
