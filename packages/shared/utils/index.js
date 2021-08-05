@@ -1,3 +1,4 @@
+const { Semaphore } = require("./semaphore");
 const { initializeState } = require("./initCalendarState");
 const { amountPerFaculty } = require("../constants");
 const { enumIncludes, createRange } = require("./misc");
@@ -12,5 +13,6 @@ const initializedStatesPerFaculty = (() => {
 
 module.exports.enumIncludes = enumIncludes;
 module.exports.createRange = createRange;
+module.exports.Semaphore = Semaphore;
 module.exports.initializeState = initializeState;
 module.exports.initializedStatesPerFaculty = initializedStatesPerFaculty;

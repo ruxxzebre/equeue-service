@@ -108,7 +108,8 @@ export const storeObject = {
       entry.faculty = ctx.state.faculty;
       entry.name = payload.fullName;
       entry.phone = payload.phone;
-      // const res = await API.post("/entry", entry);
+      const res = await API.post("/entry", entry);
+      console.log(res);
       // TODO: failure handling
       ctx.commit("addEntry", { entry });
     },
