@@ -84,7 +84,20 @@ export default {
       });
     },
     bookEntry(fullName, phone, entry) {
-      this.$store.dispatch("addEntry", { entry, fullName, phone });
+      const { $swal: swal } = this;
+      this.$store.dispatch("addEntry", { entry, fullName, phone })
+        .then((message) => {
+          swal.fire({
+            title: "Успіх",
+            text: message,
+          });
+        })
+        .catch((message) => {
+          swal.fire({
+            title: "Помилка",
+            text: message,
+          });
+        });
     },
   },
 };

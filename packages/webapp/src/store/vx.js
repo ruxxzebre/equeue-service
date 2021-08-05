@@ -67,10 +67,30 @@ export const storeObject = {
       entry.faculty = state.faculty;
       entry.name = payload.fullName;
       entry.phone = payload.phone;
-      const res = await API.post("/entry", entry);
-      console.log(res);
-      // TODO: failure handling
-      dispatch("initEntry");
+      return new Promise((resolve, reject) => {
+        API.post("/entry", entry)
+          .then(() => {
+            // const splitted = entry.date.split('-');
+            // let localizedDate = { day: "", month: "", year: "" };
+            // localizedDate.day = splitted[0] + 'го';
+            // localizedDate.month = ["січня"];
+            resolve(`Запис створено успішно! Приходьте ${entry.date} о ${entry.time}.`);
+          })
+          .catch(({ response }) => {
+            let error;
+            switch (response.status) {
+              case 406: {
+                error = "Помилка запису, певно хтось вже обрав даний час, спробуйте ще раз.";
+                break;
+              }
+              default: {
+                error = "Помилка запису, спробуйте ще раз.";
+              }
+            }
+            reject(error);
+          });
+        dispatch("initEntry");
+      });
     },
   },
   getters: {

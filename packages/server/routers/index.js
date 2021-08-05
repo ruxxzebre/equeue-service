@@ -49,8 +49,10 @@ router.get('/entry',async  (req, res) => {
 router.post('/entry', async (req, res) => {
   if (!EntrySchema.validate(req.body).error) {
     const event = req.body;
-    const result = await throttler.callFunction(() => Entry.updateRecord(event));
-    if (result.error) return res.status(400).send(result);
+    const result = await throttler.callFunction(() => Entry.makeRecord(event));
+    if (result.error) {
+      return res.status(result.code || 400).send(result);
+    }
     else return res.send(result);
   }
   return res.status(400).send(EntrySchema.validate(req.body));
