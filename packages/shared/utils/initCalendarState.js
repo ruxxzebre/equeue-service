@@ -5,7 +5,7 @@ const initializeState = ({
   dayStartsAt = "9:00",
   dayEndsAt = "18:30",
   minuteInterval = 10,
-  unavailableTimes = ["14:00-15:00"],
+  unavailableTimes = ["13:00-14:00"],
   currentDay, currentYear, currentMonth, bookingMaxPerEntry = 2,
   availableDayFrom,
   availableDayTo
