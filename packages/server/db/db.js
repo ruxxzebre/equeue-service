@@ -16,7 +16,7 @@ async function bookEvent(data, validator) {
   return { error: 'Failed event booking.' };
 }
 
-const initializeDB = async (addTables) => {
+const initializeDB = async (addTables, withData = false) => {
   if (addTables) {
     await knex.schema.createTable('events', table => {
       table.increments('id');
@@ -37,6 +37,7 @@ const initializeDB = async (addTables) => {
     });
   }
 
+  if (withData)
   await Promise.all([
     {
       "date": "27-07-2021",
