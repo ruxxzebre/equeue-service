@@ -74,8 +74,7 @@ export const generateEntries = (
   bookingMaxPerEntry,
   delayedEntries
 ) => {
-  // const times = existingEntries.filter((e) => e.date === date).map(_.cloneDeep);
-  const times = [];
+  const times = existingEntries.filter((e) => e.date === date).map(_.cloneDeep);
   const range = _.cloneDeep(rangeState);
   const from = parseTime(range.dayStartsAt);
   const to = parseTime(range.dayEndsAt);
