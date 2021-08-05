@@ -7,6 +7,8 @@ const initializeState = ({
   minuteInterval = 10,
   unavailableTimes = ["14:00-15:00"],
   currentDay, currentYear, currentMonth, bookingMaxPerEntry = 2,
+  availableDayFrom,
+  availableDayTo
    }) => {
   const now = DateTime.now();
   const state = {
@@ -18,8 +20,8 @@ const initializeState = ({
     currentYear: currentYear || now.year,
     currentDay: currentDay || now.day,
     daysInCurrentMonth: now.daysInMonth,
-    availableDayFrom: now.toString(),
-    availableDayTo: DateTime.fromObject({ year: 2021, month: 8, day: 17 }).toString(),
+    availableDayFrom: availableDayFrom || now.toString(),
+    availableDayTo: availableDayTo || DateTime.fromObject({ year: 2021, month: 8, day: 17 }).toString(),
     acceptableYears: createRange(2020, 2022),
     acceptableMonths: createRange(1, 12),
     timeRange: {

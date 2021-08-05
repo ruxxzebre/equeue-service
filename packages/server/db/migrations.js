@@ -1,10 +1,23 @@
 const { initializeState } = require("@bwi/shared/utils");
+const { DateTime } = require("luxon");
 const fs = require("fs");
 const { ConfigDB } = require("./level");
 const { stateTypes, amountPerFaculty } = require('@bwi/shared/constants');
 
+const stateDefinedByTask = (stateType) => {
+  return {
+    bookingMaxPerEntry: amountPerFaculty[stateType],
+    minuteInterval: 10,
+    dayEndsAt: "17:50",
+    availableDayFrom:
+      DateTime.fromObject({ year: 2021, month: 8, day: 16 }).toString(),
+    availableDayTo:
+      DateTime.fromObject({ year: 2021, month: 9, day: 16 }).toString()
+  }
+};
+
 const levelMigrate = async () => {
-  const ISWBMPEVal = (stateType) => initializeState({ bookingMaxPerEntry: amountPerFaculty[stateType], minuteInterval: 15 });
+  const ISWBMPEVal = (stateType) => initializeState(stateDefinedByTask(stateType));
   const { LAWYERS } = stateTypes;
   await ConfigDB.setConfig(LAWYERS, ISWBMPEVal(LAWYERS));
   console.log("LEVEL DB SUCCESSFULLY INITIALIZED.");
