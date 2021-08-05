@@ -10,8 +10,7 @@ const routes = [
     path: '/',
     name: 'Root',
     component: Root,
-    beforeEnter: (to, from) => {
-      console.log(to.query);
+    beforeEnter: (to) => {
       if (to.query.adm) {
         return { path: '/adm' };
       }

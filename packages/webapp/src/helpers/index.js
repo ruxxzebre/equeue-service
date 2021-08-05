@@ -111,9 +111,15 @@ export const generateEntries = (
     if (delayedEntries.includes(time)) continue;
     if (!checkIfAvailable(time)) continue;
     const existingEntry = times.find((e) => e.time === time);
-    if (!existingEntry) res.push(makeEntry(time, date));
-    else if (existingEntry.counter < bookingMaxPerEntry)
+    if (!existingEntry) {
+      res.push(makeEntry(time, date));
+    }
+    else if (
+      existingEntry.counter < bookingMaxPerEntry
+      && existingEntry.counter !== 0
+    ) {
       res.push(existingEntry);
+    }
   }
   return res;
 };
@@ -227,7 +233,6 @@ export const generateDays = ({
 }) => {
   exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
   if (!availableDayFrom || !availableDayTo) return null;
-  console.log(availableDayTo);
   const dayFrom = DateTime.fromISO(availableDayFrom);
   const dayTo = DateTime.fromISO(availableDayTo);
   // console.log(dayFrom.toLocaleString());
