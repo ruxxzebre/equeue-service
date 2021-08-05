@@ -1,5 +1,4 @@
 const { Semaphore } = require("@bwi/shared/utils");
-
 const { Router } = require('express');
 const { Entry } = require('../models/entries');
 const { schemas } = require('@bwi/shared');
