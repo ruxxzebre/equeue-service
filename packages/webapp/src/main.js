@@ -5,7 +5,7 @@ import { app } from "./vueapp.js";
 import { stateware } from "./store";
 
 const runMids = () => {
-  app.use(stateware);
+  app.use(stateware, { queryName: "faculty" });
 };
 
 

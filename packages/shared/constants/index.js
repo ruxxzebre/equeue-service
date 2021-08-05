@@ -8,6 +8,8 @@ const stateTypes = {
   FIM: "FIM",
 };
 
+const defaultState = stateTypes.FIAT;
+
 // TODO
 const facultyStrings = {
   [stateTypes.PHILOLOGICAL_FACULTY]: {
@@ -51,5 +53,6 @@ const amountPerFaculty = {
 };
 
 module.exports.stateTypes = stateTypes;
+module.exports.defaultState = defaultState;
 module.exports.amountPerFaculty = amountPerFaculty;
 module.exports.facultyStrings = facultyStrings;

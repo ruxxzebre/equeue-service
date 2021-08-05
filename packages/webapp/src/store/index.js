@@ -1,4 +1,5 @@
 import parse from "url-parse";
+import { defaultState, stateTypes } from "@bwi/shared/constants";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { storeObject } from "./vx";
@@ -8,7 +9,7 @@ import VueSweetalert2 from "vue-sweetalert2";
 /**
  *
  * @typedef {object} StatewareOptions
- * @property {}
+ * @property {string} queryName
  */
 
 export const stateware = {
@@ -17,31 +18,23 @@ export const stateware = {
    * @param app
    * @param { StatewareOptions } options
    */
-  // eslint-disable-next-line no-unused-vars
   install: (app, options) => {
-    // console.log(app, options);
     const root = parse(window.location.href, true);
     if (root.pathname !== "/") return null;
     const { query } = root;
-    let faculty;
-    if (!query.faculty) {
-      faculty = "FIAT";
+    let queryValue;
+    if (!query[options.queryName] || !stateTypes[query[options.queryName]]) {
+      queryValue = defaultState;
     } else {
-      faculty = query.faculty;
+      queryValue = query[options.queryName];
     }
-    API.get(`/get-state?stateType=${faculty}`).then(({ data }) => {
-      const state = data;
-      if (localStorage.getItem("prevFaculty") !== faculty) {
-        localStorage.clear();
-      }
+    API.get(`/get-state?stateType=${queryValue}`).then(({ data: state }) => {
       storeObject.state = state;
-      storeObject.state.faculty = faculty;
+      storeObject.state.faculty = queryValue;
       const store = createStore(storeObject);
-      console.log(storeObject);
       app.use(store);
       app.use(router).use(VueSweetalert2).mount("#app");
       store.dispatch("initEntry");
-      localStorage.setItem("prevFaculty", faculty);
     });
   },
 };
