@@ -39,7 +39,7 @@ const Entry = {
         .where('time', record.time)
         .select('*')).length;
       if (!isRecordBooked) {
-        newRecord = db('events').insert(record);
+        newRecord = await db('events').insert(record);
         return { newRecord: newRecord[0], error: null };
       }
       return { record, error: "Failed making record.", code: 406 };
