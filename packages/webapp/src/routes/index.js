@@ -12,7 +12,6 @@ const routes = [
       if (to.query.adm) {
         return { path: '/adm' };
       }
-      // console.log(to, from);
       return true;
     },
   },
