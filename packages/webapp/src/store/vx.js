@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { initializeState } from "@bwi/shared/utils";
 import { generateDays, generateEntries } from "../helpers";
-import createPersistedState from "vuex-persistedstate";
+// import createPersistedState from "vuex-persistedstate";
 
 export const storeObject = {
   state: initializeState({}),
@@ -125,7 +125,7 @@ export const storeObject = {
         input[key],
   },
   modules: {},
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
 };
 
 // store.dispatch('initEntry');
