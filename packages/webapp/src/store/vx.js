@@ -29,34 +29,6 @@ export const storeObject = {
       if (!month) return null;
       state.currentMonth = month;
     },
-    setAvailableDays: (state, payload) => {
-      const from = parseFloat(payload.from) || state.availableDayFrom;
-      const to = parseFloat(payload.to) || state.availableDayTo;
-      if (from < to && from > state.currentDay && to > state.currentDay) {
-        state.availableDayFrom = from;
-        state.availableDayTo = to;
-      }
-    },
-    addEntry: (state, payload) => {
-      const { entry } = payload;
-      if (!entry.id) {
-        entry.id = uuid();
-        state.entries = [
-          ...state.entries.filter((e) => entry.id !== e.id),
-          entry,
-        ];
-      }
-      state.entries.find((e) => e.id === entry.id).counter += 1;
-
-      state.delayedEntriesTimes.push(entry.time);
-
-      // Delay appearing of entry again, if there's multiple users can book it
-      setTimeout(() => {
-        state.delayedEntriesTimes = state.delayedEntriesTimes.filter(
-          (i) => i.time === entry.time
-        );
-      }, state.delayTime);
-    },
     addCleanEntry: (state, payload) => {
       const { entry } = payload;
       if (!entry.id) return null;
@@ -70,7 +42,6 @@ export const storeObject = {
       state.entries.find((e) => e.id === entryId).counter += 1;
     },
     setInput: (state, payload) => {
-      // console.log(state.input);
       let { key, value } = payload;
       switch (key) {
         case "phone": {
@@ -93,7 +64,7 @@ export const storeObject = {
       let flag = false;
       if (flag) return null;
       const response = await API.get("/entry");
-      const { data: entries } = response;
+      const { data: { entries } } = response;
       const filtered = [];
       for (let idx in entries) {
         if (!entries[idx].time) continue;
@@ -105,13 +76,14 @@ export const storeObject = {
     },
     addEntry: async (ctx, payload) => {
       const entry = payload.entry;
+      entry.counter += 1;
       entry.faculty = ctx.state.faculty;
       entry.name = payload.fullName;
       entry.phone = payload.phone;
       const res = await API.post("/entry", entry);
       console.log(res);
       // TODO: failure handling
-      ctx.commit("addEntry", { entry });
+      ctx.dispatch("initEntry");
     },
   },
   getters: {
