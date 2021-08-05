@@ -27,13 +27,18 @@ export const stateware = {
     } else {
       queryValue = query[options.queryName];
     }
-    API.get(`/get-state?stateType=${queryValue}`).then(({ data: state }) => {
-      storeObject.state = state;
-      storeObject.state.faculty = queryValue;
-      const store = createStore(storeObject);
-      app.use(store);
-      options.cb(app);
-      store.dispatch("initEntry");
-    });
+    API.get(`/get-state?stateType=${queryValue}`).then(
+      async ({ data: state }) => {
+        storeObject.state = state;
+        storeObject.state.faculty = queryValue;
+        const store = createStore(storeObject);
+        app.use(store);
+        options.cb(app);
+        await store.dispatch("initEntry"); // load entries immediately
+        setInterval(() => {
+          store.dispatch("initEntry");
+        }, 5000); // fetch entries every 5 seconds
+        // TODO: implement webhooks
+      });
   },
 };
