@@ -21,7 +21,7 @@
 import { mapGetters } from "vuex";
 import Calendar from "../components/Calendar.vue";
 import ControlPanel from "../components/ControlPanel.vue";
-import { facultyStrings } from "@bwi/shared/constants";
+import { stateStrings } from "@bwi/shared/constants";
 
 export default {
   name: "App",
@@ -39,7 +39,7 @@ export default {
     ...mapGetters({ faculty: "getFaculty" }),
   },
   mounted() {
-    this.facString = facultyStrings[this.faculty].heading;
+    this.facString = stateStrings[this.faculty].heading;
   },
 };
 </script>

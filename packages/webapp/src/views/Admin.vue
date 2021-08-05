@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { facultyStrings } from "@bwi/shared/constants";
+import { stateStrings, defaultState } from "@bwi/shared/constants";
 import { ipconfig } from "@bwi/shared/configs";
 import { API } from "../helpers/api";
 
@@ -119,13 +119,13 @@ export default {
   },
   data() {
     return {
-      facultyStrings,
-      faculties: Object.keys(facultyStrings).map((k) => {
-        const st = facultyStrings[k];
+      stateStrings,
+      faculties: Object.keys(stateStrings).map((k) => {
+        const st = stateStrings[k];
         st.key = k;
         return st;
       }),
-      selectedFaculty: "FIAT",
+      selectedFaculty: defaultState,
       fStates: null,
       ipconfig,
     };
