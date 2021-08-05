@@ -61,10 +61,10 @@ export const storeObject = {
       filtered.forEach((entry) =>
         commit("addCleanEntry", { entry }));
     },
-    addEntry: async ({ dispatch }, payload) => {
+    addEntry: async ({ dispatch, state }, payload) => {
       const entry = payload.entry;
       entry.counter += 1;
-      entry.faculty = ctx.state.faculty;
+      entry.faculty = state.faculty;
       entry.name = payload.fullName;
       entry.phone = payload.phone;
       const res = await API.post("/entry", entry);
