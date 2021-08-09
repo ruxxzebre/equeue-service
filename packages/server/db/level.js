@@ -16,6 +16,10 @@ const setConfig = async (confType, newState) => {
   return await kvdb.set(confType, newState);
 };
 
+const clearConfig = async () => {
+  return await kvdb.clear();
+}
+
 /**
  *
  * @param {string} confType
@@ -30,4 +34,5 @@ const getConfig = async (confType) => {
 module.exports.ConfigDB = {
   setConfig,
   getConfig,
+  clearConfig,
 };

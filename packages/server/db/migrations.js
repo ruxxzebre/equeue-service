@@ -17,6 +17,7 @@ const stateDefinedByTask = (stateType) => {
 };
 
 const levelMigrate = async () => {
+  await ConfigDB.clearConfig();
   const ISWBMPEVal = (stateType) => initializeState(stateDefinedByTask(stateType));
   const { LAWYERS } = stateTypes;
   await ConfigDB.setConfig(LAWYERS, ISWBMPEVal(LAWYERS));
@@ -41,11 +42,7 @@ const squirrelMigrate = async () => {
   });
 };
 
-// levelMigrate().then(() => {
-//   console.log('flex');
-//   ConfigDB.getConfig(stateTypes.PHILOLOGICAL_FACULTY).then((a) => {
-//     console.log(a);
-//   });
-// });
-levelMigrate();
-squirrelMigrate();
+(async () => {
+  await levelMigrate();
+  await squirrelMigrate();
+})();
