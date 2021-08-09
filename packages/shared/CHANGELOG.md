@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/ruxxzebre/booking_widget/compare/v1.2.0...v1.3.0) (2021-08-09)
+
+
+### Bug Fixes
+
+* unavaliable times right ([c39f503](https://github.com/ruxxzebre/booking_widget/commit/c39f503a0ba209e4f9396593c0233bc4a76c9952))
+
+
+### Features
+
+* Docker Compose + Dockerfiles ([9700802](https://github.com/ruxxzebre/booking_widget/commit/9700802b5b51f00763102c9c3b8853494ee9b3d6))
+* migrations according to task ([62e8126](https://github.com/ruxxzebre/booking_widget/commit/62e81268418bf5a34446ec5a499225b6dc6ae33a))
+
+
+
+
+
 # [1.2.0](https://github.com/ruxxzebre/booking_widget/compare/v1.1.0...v1.2.0) (2021-08-05)
 
 
