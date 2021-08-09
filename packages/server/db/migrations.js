@@ -24,8 +24,12 @@ const levelMigrate = async () => {
 };
 
 const squirrelMigrate = async () => {
-  const err = await new Promise(r =>
-    fs.unlink(__dirname + '/db.sqlite3', (err) => r(err)));
+  const demons = __dirname + '/db.sqlite3';
+  let err;
+  if (fs.existsSync(demons)) {
+    err = await new Promise(r =>
+      fs.unlink(__dirname + '/db.sqlite3', (err) => r(err)));
+  }
   if (err && err.errno !== -2) {
     throw new Error("Something happened when removing db");
   }
