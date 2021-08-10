@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/ruxxzebre/booking_widget/compare/v1.4.3...v1.5.0) (2021-08-10)
+
+
+### Features
+
+* simple authentication ([cf5b9de](https://github.com/ruxxzebre/booking_widget/commit/cf5b9de40ea0599da652734012a8c01ebb444c3a))
+
+
+
+
+
 ## [1.4.3](https://github.com/ruxxzebre/booking_widget/compare/v1.4.1...v1.4.3) (2021-08-10)
 
 

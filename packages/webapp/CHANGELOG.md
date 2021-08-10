@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/ruxxzebre/booking_widget/compare/v1.4.3...v1.5.0) (2021-08-10)
+
+
+### Bug Fixes
+
+* admin page needs store for smth, patch it up for a moment ([b644357](https://github.com/ruxxzebre/booking_widget/commit/b64435750ec4d38965d61c2da2a6640eac0b8c52))
+* modal error mode layout ([b234174](https://github.com/ruxxzebre/booking_widget/commit/b23417479f6ae5e61c7112e6aa976a0cd6fec7d0))
+* simplest admin page ([33891af](https://github.com/ruxxzebre/booking_widget/commit/33891afc43c1df010f045e6949fd59d8d2de01bf))
+
+
+### Features
+
+* new modal ([7c75562](https://github.com/ruxxzebre/booking_widget/commit/7c75562cbea021064d798c93d072d042a28963e5))
+* todo separated modal component ([301baf7](https://github.com/ruxxzebre/booking_widget/commit/301baf7541a5a20c1519300341ce6ff3a324b67c))
+
+
+
+
+
 ## [1.4.3](https://github.com/ruxxzebre/booking_widget/compare/v1.4.1...v1.4.3) (2021-08-10)
 
 
