@@ -1,20 +1,8 @@
 import { createStore } from "vuex";
-import { v4 as uuid } from "uuid";
-import parse from "url-parse";
 import { API } from "../helpers/api";
 import { initializeState } from "@bwi/shared/utils";
-// eslint-disable-next-line no-unused-vars
-import { stateTypes, amountPerFaculty } from "@bwi/shared/constants";
 import { generateDays, generateEntries } from "../helpers";
-import createPersistedState from "vuex-persistedstate";
-
-// to fetch different stores
-// eslint-disable-next-line no-unused-vars
-const getStoreType = () => {
-  const query = parse(window.location.href, true);
-  if (!query.st || !stateTypes[query.st]) return null;
-  return query.st;
-};
+// import createPersistedState from "vuex-persistedstate";
 
 export const storeObject = {
   state: initializeState({}),
@@ -29,34 +17,6 @@ export const storeObject = {
       if (!month) return null;
       state.currentMonth = month;
     },
-    setAvailableDays: (state, payload) => {
-      const from = parseFloat(payload.from) || state.availableDayFrom;
-      const to = parseFloat(payload.to) || state.availableDayTo;
-      if (from < to && from > state.currentDay && to > state.currentDay) {
-        state.availableDayFrom = from;
-        state.availableDayTo = to;
-      }
-    },
-    addEntry: (state, payload) => {
-      const { entry } = payload;
-      if (!entry.id) {
-        entry.id = uuid();
-        state.entries = [
-          ...state.entries.filter((e) => entry.id !== e.id),
-          entry,
-        ];
-      }
-      state.entries.find((e) => e.id === entry.id).counter += 1;
-
-      state.delayedEntriesTimes.push(entry.time);
-
-      // Delay appearing of entry again, if there's multiple users can book it
-      setTimeout(() => {
-        state.delayedEntriesTimes = state.delayedEntriesTimes.filter(
-          (i) => i.time === entry.time
-        );
-      }, state.delayTime);
-    },
     addCleanEntry: (state, payload) => {
       const { entry } = payload;
       if (!entry.id) return null;
@@ -69,27 +29,9 @@ export const storeObject = {
       const { entryId } = payload;
       state.entries.find((e) => e.id === entryId).counter += 1;
     },
-    setInput: (state, payload) => {
-      // console.log(state.input);
-      let { key, value } = payload;
-      switch (key) {
-        case "phone": {
-          if (value.length < 4) {
-            state.input[key] = "+380";
-          }
-          break;
-        }
-        case "fullName": {
-          state.input[key] = value;
-          break;
-        }
-        default:
-          return null;
-      }
-    },
   },
   actions: {
-    initEntry: async (ctx) => {
+    initEntry: async ({ commit }) => {
       let flag = false;
       if (flag) return null;
       const response = await API.get("/entry");
@@ -99,40 +41,61 @@ export const storeObject = {
         if (!entries[idx].time) continue;
         filtered.push(entries[idx]);
       }
-      filtered.forEach((entry) => {
-        ctx.commit("addCleanEntry", { entry });
-      });
+      filtered.forEach((entry) =>
+        commit("addCleanEntry", { entry }));
     },
-    addEntry: async (ctx, payload) => {
+    addEntry: async ({ dispatch, state }, payload) => {
       const entry = payload.entry;
-      entry.faculty = ctx.state.faculty;
+      entry.counter += 1;
+      entry.faculty = state.faculty;
       entry.name = payload.fullName;
       entry.phone = payload.phone;
-      const res = await API.post("/entry", entry);
-      console.log(res);
-      // TODO: failure handling
-      ctx.commit("addEntry", { entry });
+      return new Promise((resolve, reject) => {
+        API.post("/entry", entry)
+          .then(() => {
+            // const splitted = entry.date.split('-');
+            // let localizedDate = { day: "", month: "", year: "" };
+            // localizedDate.day = splitted[0] + 'го';
+            // localizedDate.month = ["січня"];
+            resolve(`Запис створено успішно! Приходьте ${entry.date} о ${entry.time}.`);
+          })
+          .catch(({ response }) => {
+            let error;
+            switch (response.status) {
+              case 406: {
+                error = "Помилка запису, певно хтось вже обрав даний час, спробуйте ще раз.";
+                break;
+              }
+              default: {
+                error = "Помилка запису, спробуйте ще раз.";
+              }
+            }
+            reject(error);
+          });
+        dispatch("initEntry");
+      });
     },
   },
   getters: {
     getFaculty: ({ faculty }) => faculty,
     getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
-    getDays: (state) => {
+    getDays: ({availableDayFrom, availableDayTo, exclusiveDates, filterRules}) => {
       return generateDays({
-        constraintsDayFrom: state.availableDayFrom,
-        constraintsDayTo: state.availableDayTo,
-        exclusiveDates: state.exclusiveDates,
+        availableDayFrom,
+        availableDayTo,
+        exclusiveDates,
+        filterRules,
       });
     },
-    getEntries: (state) => (date) =>
+    getEntries: ({ entries, timeRange, bookingMaxPerEntry, delayedEntriesTimes }) => (date) =>
       generateEntries(
-        state.entries,
+        entries,
         date,
-        state.timeRange,
-        state.bookingMaxPerEntry,
-        state.delayedEntriesTimes
+        timeRange,
+        bookingMaxPerEntry,
+        delayedEntriesTimes
       ),
-    getEntry: (state) => (id) => state.entries[id],
+    getEntry: ({ entries }) => (id) => entries[id],
     getYear: ({ currentYear }) => currentYear,
     getMonth: ({ currentMonth }) => currentMonth,
     getAvailableDayFrom: ({ availableDayFrom }) => availableDayFrom,
@@ -146,7 +109,7 @@ export const storeObject = {
         input[key],
   },
   modules: {},
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
 };
 
 // store.dispatch('initEntry');

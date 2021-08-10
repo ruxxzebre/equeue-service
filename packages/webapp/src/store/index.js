@@ -3,6 +3,7 @@ import { defaultState, stateTypes } from "@bwi/shared/constants";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { storeObject } from "./vx";
+import { storeGlobal } from "./sg";
 
 /**
  *
@@ -19,7 +20,7 @@ export const stateware = {
    */
   install: (app, options) => {
     const root = parse(window.location.href, true);
-    if (root.pathname !== "/") return null;
+    // if (root.pathname !== "/") return options.cb(false);
     const { query } = root;
     let queryValue;
     if (!query[options.queryName] || !stateTypes[query[options.queryName]]) {
@@ -27,13 +28,23 @@ export const stateware = {
     } else {
       queryValue = query[options.queryName];
     }
-    API.get(`/get-state?stateType=${queryValue}`).then(({ data: state }) => {
-      storeObject.state = state;
-      storeObject.state.faculty = queryValue;
-      const store = createStore(storeObject);
-      app.use(store);
-      options.cb(app);
-      store.dispatch("initEntry");
-    });
+    API.get(`/get-state?stateType=${queryValue}`).then(
+      async ({ data: state }) => {
+        storeObject.state = state;
+        storeObject.state.faculty = queryValue;
+        const store = createStore({
+          modules: {
+            calendarManagement: storeObject,
+            global: storeGlobal,
+          }
+        });
+        app.use(store);
+        await store.dispatch("initEntry"); // load entries immediately
+        setInterval(() => {
+          store.dispatch("initEntry");
+        }, 5000); // fetch entries every 5 seconds
+        options.cb(true);
+        // TODO: implement webhooks
+      });
   },
 };

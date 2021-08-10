@@ -1,7 +1,7 @@
 class Semaphore {
   /**
    * Creates a semaphore that limits the number of concurrent Promises being handled
-   * @param {*} maxConcurrentRequests max number of concurrent promises being handled at any time
+   * @param {number} maxConcurrentRequests max number of concurrent promises being handled at any time
    */
   constructor(maxConcurrentRequests = 1) {
     this.currentRequests = [];

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import _ from "lodash";
 
 export default {
@@ -28,19 +28,20 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations({ toggleModal: "toggleModalVisibility" }),
     getEntries(date) {
       return this.$store.getters.getEntries(date);
     },
     registerModal(entry) {
+      this.$store.commit("setCurrentEntry", entry);
+      this.toggleModal();
       entry = _.cloneDeep(entry);
+      if (entry) return;
       this.$swal({
         title: "Зареєструватись",
         showCancelButton: true,
         html: `
-          <div style="
-            display: grid;
-            grid-template-columns: repeat(2, 0.7fr);
-          ">
+          <div class="book-modal">
             <label for="swal-input1" style="align-self: center;">ПІБ</label>
             <input id="swal-input1" placeholder="Іваненко Іван Іванович" class="swal2-input">
             <label for="swal-input2" style="align-self: center;">Телефон</label>
@@ -84,7 +85,20 @@ export default {
       });
     },
     bookEntry(fullName, phone, entry) {
-      this.$store.dispatch("addEntry", { entry, fullName, phone });
+      const { $swal: swal } = this;
+      this.$store.dispatch("addEntry", { entry, fullName, phone })
+        .then((message) => {
+          swal.fire({
+            title: "Успіх",
+            text: message,
+          });
+        })
+        .catch((message) => {
+          swal.fire({
+            title: "Помилка",
+            text: message,
+          });
+        });
     },
   },
 };

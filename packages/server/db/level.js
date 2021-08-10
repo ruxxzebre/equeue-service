@@ -1,8 +1,8 @@
-const level = require('level');
+const Keyv = require('keyv');
 const path = require('path');
 const { stateTypes } = require('@bwi/shared/constants');
 
-const kvdb = level(path.join(__dirname + '/db.level'));
+const kvdb = new Keyv(`sqlite://${path.join(__dirname + '/kvdb.sqlite3')}`);
 
 /**
  *
@@ -13,8 +13,12 @@ const kvdb = level(path.join(__dirname + '/db.level'));
 const setConfig = async (confType, newState) => {
   // polishing
   if (!stateTypes[confType]) return null;
-  return await kvdb.put(confType, JSON.stringify(newState));
+  return await kvdb.set(confType, newState);
 };
+
+const clearConfig = async () => {
+  return await kvdb.clear();
+}
 
 /**
  *
@@ -23,11 +27,12 @@ const setConfig = async (confType, newState) => {
  */
 const getConfig = async (confType) => {
   if (!stateTypes[confType]) return null;
-  return JSON.parse(await kvdb.get(confType));
+  return await kvdb.get(confType);
 }
 
 // yes
 module.exports.ConfigDB = {
   setConfig,
   getConfig,
+  clearConfig,
 };

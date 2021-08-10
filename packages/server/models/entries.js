@@ -2,6 +2,7 @@ const { db } = require('../db');
 const { schemas: { EntrySchema } } = require('@bwi/shared');
 
 const removeDateCollisions = (data) => {
+  // NOTE: TEMPORARY OBSOLETE
   return data;
   const datePool = [];
   return data.filter((thing) => {
@@ -25,28 +26,28 @@ const Entry = {
           });
         }
       });
-      // let temp = [];
-      // Object.keys(params).map(k => {
-      //   temp.push(
-      //     db('events').select('*').regexp(params[k])
-      //   );
-      // });
-      // temp = await Promise.all(temp);
-      // temp.forEach(t => result.push(...t));
     }
 
     if (result) return removeDateCollisions(result);
     return { records: result, error: null };
   },
-  async makeRecord(record, update = false) {
+  async makeRecord(record) {
+    let newRecord;
     if (!EntrySchema.validate(record).error) {
-      const newRecord = await
-        (update ? db('events').update(record) : db('events').insert(record));
-      return { newRecord: newRecord[0], error: null };
+      const isRecordBooked = (await db('events')
+        .where('date', record.date)
+        .where('time', record.time)
+        .select('*')).length;
+      if (!isRecordBooked) {
+        newRecord = await db('events').insert(record);
+        return { newRecord: newRecord[0], error: null };
+      }
+      return { record, error: "Failed making record.", code: 406 };
     }
-    return { record, error: "Failed making record." } ;
+    return { record, error: "Failed making record.", code: 412 };
   },
   async updateRecord(record) {
+    // NOTE: TEMPORARY OBSOLETE
     let patch = true;
     if (patch) {
       delete record.id;

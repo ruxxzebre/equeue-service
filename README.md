@@ -4,13 +4,7 @@
 ## TODOs
 
 - Admin page
-- Full backend integration
-- XLSX export
-- Pulling state depending on backend
-- Realtime fetching entries from backend research
 - cli script for migration, configuration
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 Tiny, but straight forward and configurable portable widget to include in your site.
 Everything packed inside, almost no extra configuration needed.

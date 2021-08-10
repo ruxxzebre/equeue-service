@@ -1,46 +1,62 @@
-/* eslint-disable */
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
-import md5 from "md5";
+import { createRouter, createWebHistory } from "vue-router";
+// import { secured } from "@bwi/shared/configs";
+// import md5 from "md5";
 import Root from "../views/Root";
 import Admin from "../views/Admin";
-// import {API} from "../helpers/api";
+import About from "../views/About";
+import { API } from "../helpers/api";
 
 const routes = [
   {
-    path: '/',
-    name: 'Root',
+    path: "/",
+    name: "Root",
     component: Root,
-    beforeEnter: (to, from) => {
-      console.log(to.query);
-      if (to.query.adm) {
-        return { path: '/adm' };
-      }
-      // console.log(to, from);
-      return true;
-    },
   },
   {
-    path: '/adm',
-    name: 'Admin',
+    path: "/admin",
+    name: "Admin",
     component: Admin,
-    beforeEnter: () => {
-      const pass = prompt('password: ');
-      if (md5(pass) === '897a779351421523cadbafccdce22efe') {
-        return true;
-      }
-      return { path: "/" };
-    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: "/about",
+    name: "About",
+    beforeEnter: () => {},
+    component: About,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+const protectedPages = ["/admin"];
+
+/**
+ *
+ * @param {RouteLocationNormalized} to
+ * @return {boolean}
+ */
+export const isPageProtected = (to) => {
+  return !!protectedPages.find((page) =>
+    to.matched.find((i) => i.path.includes(page))
+  );
+};
+
+router.beforeEach(async (to, from, next) => {
+  // TODO: fix not holding session
+  const isAuthenticated = (await API.get("/auth/valid")).data.authenticated;
+  if (isPageProtected(to) && !isAuthenticated) {
+    const username = await prompt("Логін: ");
+    const password = await prompt("Пароль: ");
+    const authed = await API.post("/auth/login", { username, password })
+      .then(() => true)
+      .catch(() => null);
+    console.log(authed);
+    if (!authed) return next("/");
+    return next();
+  }
+  return next();
 });
 
 export default router;

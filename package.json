@@ -18,7 +18,10 @@
     "clean": "rimraf ./packages/*/dist",
     "test": "lerna run test --scope={@bwi/server,@bwi/shared,@bwi/webapp}",
     "new-version": "lerna version --conventional-commits --yes",
-    "diff": "lerna diff"
+    "diff": "lerna diff",
+    "hell-start": "pm2 start packages/server/server.js",
+    "hell-kill": "pm2 kill",
+    "rebuild": "npm rebuild"
   },
   "devDependencies": {
     "concurrently": "^6.2.0",

@@ -1,9 +1,6 @@
 import { DateTime } from "luxon";
 import _ from "lodash";
-import { API } from "./api";
-import { enumIncludes, createRange } from "@bwi/shared/utils";
-import { stateTypes } from "@bwi/shared/constants";
-// import { v4 as uuid } from "uuid";
+import { parseFilterRule } from "@bwi/shared/parsers";
 
 export const Validator = {
   date: function (date) {
@@ -111,108 +108,17 @@ export const generateEntries = (
     if (delayedEntries.includes(time)) continue;
     if (!checkIfAvailable(time)) continue;
     const existingEntry = times.find((e) => e.time === time);
-    if (!existingEntry) res.push(makeEntry(time, date));
-    else if (existingEntry.counter < bookingMaxPerEntry)
+    if (!existingEntry) {
+      res.push(makeEntry(time, date));
+    }
+    else if (
+      existingEntry.counter < bookingMaxPerEntry
+      && existingEntry.counter !== 0
+    ) {
       res.push(existingEntry);
+    }
   }
   return res;
-};
-
-/**
- *
- * @param existingEntries
- */
-
-export const initializeState_ = () => {
-  const now = DateTime.now();
-  const state = {
-    input: {
-      phone: "",
-      fullName: "",
-    },
-    currentMonth: now.month,
-    currentYear: now.year,
-    currentDay: now.day,
-    daysInCurrentMonth: now.daysInMonth,
-    availableDayFrom: now.day,
-    availableDayTo: now.daysInMonth,
-    acceptableYears: createRange(2020, 2022),
-    acceptableMonths: createRange(1, 12),
-    timeRange: {
-      dayStartsAt: "9:00",
-      dayEndsAt: "18:30",
-      minuteInterval: 10,
-      unavailableTimes: ["14:00-15:00"],
-    },
-    bookingMaxPerEntry: 2,
-    delayedEntriesTimes: [],
-    delayTime: 1000 * 60 * 5, // in ms
-    entries: [
-      {
-        date: "18-07-2021",
-        time: "9:10",
-        counter: 1,
-        id: "b9f620e8-95d7-4ee2-b175-fec37957c4ec",
-      },
-    ],
-  };
-  return state;
-};
-
-// TODO
-export const fetchState = async (stateType) => {
-  if (!enumIncludes(stateTypes, stateType)) return null;
-  const state = await API.get("/state?stype=" + stateType);
-  return state;
-};
-
-export const generateDays_ = ({
-  year,
-  month,
-  constraintsDayFrom = null,
-  constraintsDayTo = null,
-}) => {
-  const calendarDays = [];
-  const date = DateTime.fromObject({ year, month, day: 1 });
-  const wkday = date.weekday;
-  if (wkday > 1) {
-    let c = wkday;
-    while (c !== 1) {
-      calendarDays.push("");
-      c -= 1;
-    }
-  }
-  (() => {
-    let c = 1;
-    while (c <= date.daysInMonth) {
-      calendarDays.push(c);
-      c += 1;
-    }
-  })();
-  const wkdayLast = DateTime.fromObject({
-    year,
-    month,
-    day: date.daysInMonth,
-  }).weekday;
-  if (wkdayLast < 7) {
-    let c = wkdayLast;
-    while (c !== 7) {
-      calendarDays.push("");
-      c += 1;
-    }
-  }
-  if (constraintsDayFrom && constraintsDayTo) {
-    return calendarDays
-      .filter((day) => day >= constraintsDayFrom && day <= constraintsDayTo)
-      .map((i) => ({
-        day: i,
-        date: `${i}-${month < 10 ? `0${month}` : month}-${year}`,
-      }));
-  }
-  return calendarDays.map((i) => ({
-    day: i,
-    date: `${i}-${month < 10 ? `0${month}` : month}-${year}`,
-  }));
 };
 
 export const dayToCommonFormat = (date) => {
@@ -221,26 +127,28 @@ export const dayToCommonFormat = (date) => {
 };
 
 export const generateDays = ({
-  constraintsDayFrom = null,
-  constraintsDayTo = null,
+                               availableDayFrom = null,
+                               availableDayTo = null,
+  filterRules = [],
   exclusiveDates = [],
+  inclusiveDates = [],
 }) => {
-  exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
-  if (!constraintsDayFrom || !constraintsDayTo) return null;
-  console.log(constraintsDayTo);
-  const dayFrom = DateTime.fromISO(constraintsDayFrom);
-  const dayTo = DateTime.fromISO(constraintsDayTo);
-  console.log(dayFrom.toLocaleString());
-  console.log(dayTo.toLocaleString());
+  if (!availableDayFrom || !availableDayTo) return null;
+  const dayFrom = DateTime.fromISO(availableDayFrom);
+  const dayTo = DateTime.fromISO(availableDayTo);
   let dayTemp = dayFrom;
   const calendarDays = [];
   while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {
-    // filter weekends
-    if (
-      ![6, 7].includes(dayTemp.weekday) ||
-      exclusiveDates.includes(dayTemp.toLocaleString())
+    const commonDate = dayToCommonFormat(dayTemp);
+    let c = 0;
+    filterRules.forEach((rule) => {
+      c += parseFilterRule(rule)(dayTemp);
+    });
+
+    if ((!c && !exclusiveDates.includes(commonDate)) ||
+      inclusiveDates.includes(commonDate)
     ) {
-      calendarDays.push(dayToCommonFormat(dayTemp));
+      calendarDays.push(commonDate);
     }
 
     dayTemp = dayTemp.plus({day: 1});

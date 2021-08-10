@@ -5,8 +5,13 @@ const initializeState = ({
   dayStartsAt = "9:00",
   dayEndsAt = "18:30",
   minuteInterval = 10,
-  unavailableTimes = ["14:00-15:00"],
+  exclusiveDates = [],
+  inclusiveDates = [],
+  unavailableTimes = ["13:00-14:00"],
   currentDay, currentYear, currentMonth, bookingMaxPerEntry = 2,
+  availableDayFrom,
+  availableDayTo,
+  filterRules = [],
    }) => {
   const now = DateTime.now();
   const state = {
@@ -14,12 +19,13 @@ const initializeState = ({
       phone: "",
       fullName: "",
     },
+    filterRules,
     currentMonth: currentMonth || now.month,
     currentYear: currentYear || now.year,
     currentDay: currentDay || now.day,
     daysInCurrentMonth: now.daysInMonth,
-    availableDayFrom: now.toString(),
-    availableDayTo: DateTime.fromObject({ year: 2021, month: 8, day: 17 }).toString(),
+    availableDayFrom: availableDayFrom || now.toString(),
+    availableDayTo: availableDayTo || DateTime.fromObject({ year: 2021, month: 8, day: 17 }).toString(),
     acceptableYears: createRange(2020, 2022),
     acceptableMonths: createRange(1, 12),
     timeRange: {
@@ -28,13 +34,9 @@ const initializeState = ({
       minuteInterval: minuteInterval || 10,
       unavailableTimes: unavailableTimes || ["14:00-15:00"],
     },
-    bookingMaxPerEntry: bookingMaxPerEntry || 2,
-    exclusiveDates: [
-      "30-07-2021",
-      "31-07-2021",
-      "01-08-2021",
-      "02-08-2021"
-    ],
+    bookingMaxPerEntry: bookingMaxPerEntry,
+    exclusiveDates,
+    inclusiveDates,
     delayedEntriesTimes: [],
     delayTime: 1000 * 60 * 5, // in ms
     entries: [
