@@ -56,7 +56,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use('/api', indexRoute);
 app.use('/api', stateRoute);
-app.use('/', rootRoute);
+app.use('/api', rootRoute);
 
 // localhost:3000 -> serverIP:3000
 let firelock = false;
