@@ -13,8 +13,8 @@ const stateDefinedByTask = (stateType) => {
       DateTime.fromObject({ year: 2021, month: 8, day: 16 }).toString(),
     availableDayTo:
       DateTime.fromObject({ year: 2021, month: 9, day: 16 }).toString(),
-    exclusiveDates: ["23-09-2021", "23-09-2021"],
-    inclusiveDates: ["28-09-2021"],
+    exclusiveDates: ["23-08-2021", "24-08-2021"],
+    inclusiveDates: ["28-08-2021"],
     filterRules: ["weekend:2"],
   }
 };

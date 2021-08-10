@@ -133,7 +133,6 @@ export const generateDays = ({
   exclusiveDates = [],
   inclusiveDates = [],
 }) => {
-  exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
   if (!availableDayFrom || !availableDayTo) return null;
   const dayFrom = DateTime.fromISO(availableDayFrom);
   const dayTo = DateTime.fromISO(availableDayTo);
