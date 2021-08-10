@@ -19,7 +19,7 @@ export const stateware = {
    */
   install: (app, options) => {
     const root = parse(window.location.href, true);
-    if (root.pathname !== "/") return null;
+    if (root.pathname !== "/") return options.cb(false);
     const { query } = root;
     let queryValue;
     if (!query[options.queryName] || !stateTypes[query[options.queryName]]) {
@@ -33,11 +33,11 @@ export const stateware = {
         storeObject.state.faculty = queryValue;
         const store = createStore(storeObject);
         app.use(store);
-        options.cb(app);
         await store.dispatch("initEntry"); // load entries immediately
         setInterval(() => {
           store.dispatch("initEntry");
         }, 5000); // fetch entries every 5 seconds
+        options.cb(true);
         // TODO: implement webhooks
       });
   },
