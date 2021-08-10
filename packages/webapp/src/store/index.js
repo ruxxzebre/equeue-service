@@ -3,6 +3,7 @@ import { defaultState, stateTypes } from "@bwi/shared/constants";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { storeObject } from "./vx";
+import { storeGlobal } from "./sg";
 
 /**
  *
@@ -31,7 +32,12 @@ export const stateware = {
       async ({ data: state }) => {
         storeObject.state = state;
         storeObject.state.faculty = queryValue;
-        const store = createStore(storeObject);
+        const store = createStore({
+          modules: {
+            calendarManagement: storeObject,
+            global: storeGlobal,
+          }
+        });
         app.use(store);
         await store.dispatch("initEntry"); // load entries immediately
         setInterval(() => {

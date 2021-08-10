@@ -29,23 +29,6 @@ export const storeObject = {
       const { entryId } = payload;
       state.entries.find((e) => e.id === entryId).counter += 1;
     },
-    setInput: (state, payload) => {
-      let { key, value } = payload;
-      switch (key) {
-        case "phone": {
-          if (value.length < 4) {
-            state.input[key] = "+380";
-          }
-          break;
-        }
-        case "fullName": {
-          state.input[key] = value;
-          break;
-        }
-        default:
-          return null;
-      }
-    },
   },
   actions: {
     initEntry: async ({ commit }) => {
