@@ -20,7 +20,7 @@ export const stateware = {
    */
   install: (app, options) => {
     const root = parse(window.location.href, true);
-    if (root.pathname !== "/") return options.cb(false);
+    // if (root.pathname !== "/") return options.cb(false);
     const { query } = root;
     let queryValue;
     if (!query[options.queryName] || !stateTypes[query[options.queryName]]) {
