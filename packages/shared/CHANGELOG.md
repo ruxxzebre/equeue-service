@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/ruxxzebre/booking_widget/compare/v1.3.0...v1.4.0) (2021-08-10)
+
+
+### Bug Fixes
+
+* vueconf ([8009427](https://github.com/ruxxzebre/booking_widget/commit/800942719bbadba9b83043b8d3f9299d42eea033))
+
+
+### Features
+
+* inclusive and exclusive dates, filter rules + rules parser ([a26cecb](https://github.com/ruxxzebre/booking_widget/commit/a26cecb682e443b07ef8608d26f4c438ce8437c4))
+
+
+
+
+
 # [1.3.0](https://github.com/ruxxzebre/booking_widget/compare/v1.2.0...v1.3.0) (2021-08-09)
 
 

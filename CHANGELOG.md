@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/ruxxzebre/booking_widget/compare/v1.3.0...v1.4.0) (2021-08-10)
+
+
+### Bug Fixes
+
+* cleanup ([2513276](https://github.com/ruxxzebre/booking_widget/commit/2513276522460e04e2cb75e416bbe9ce62fa6835))
+* spa ([aacdc0d](https://github.com/ruxxzebre/booking_widget/commit/aacdc0d43b22acdefbc90473fa87f9c74756fd8d))
+* sugarcrash ([b523932](https://github.com/ruxxzebre/booking_widget/commit/b5239325e7c38374051b2d25ecad492050933f5b))
+* vueconf ([8009427](https://github.com/ruxxzebre/booking_widget/commit/800942719bbadba9b83043b8d3f9299d42eea033))
+
+
+### Features
+
+* easter 1 ([439296c](https://github.com/ruxxzebre/booking_widget/commit/439296cba375a291ee395efeb7d10644901b44c7))
+* export server app ([a2d6434](https://github.com/ruxxzebre/booking_widget/commit/a2d643487739fc5a9464c08d68be07320176d15d))
+* hell-start/kill scripts ([89e4417](https://github.com/ruxxzebre/booking_widget/commit/89e44173a18cbc20d269eda15ebe1ad36ecb0cae))
+* inclusive and exclusive dates, filter rules + rules parser ([a26cecb](https://github.com/ruxxzebre/booking_widget/commit/a26cecb682e443b07ef8608d26f4c438ce8437c4))
+
+
+
+
+
 # [1.3.0](https://github.com/ruxxzebre/booking_widget/compare/v1.2.0...v1.3.0) (2021-08-09)
 
 
