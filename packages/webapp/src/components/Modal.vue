@@ -170,7 +170,7 @@ export default {
 }
 
 .error {
-  grid-template-rows: 1fr 1fr 0.5fr 0.3fr 1.5fr;
+  grid-template-rows: 1fr 1fr 0.5fr 0.4fr 0.6fr;
   grid-template-areas:
     "title title"
     "label1 input1"
