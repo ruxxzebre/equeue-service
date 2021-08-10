@@ -13,4 +13,4 @@ const runApp = async () => {
   app.mount("#app");
 };
 
-runApp();
+runApp().then(() => {});
