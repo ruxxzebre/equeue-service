@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import md5 from "md5";
 import Root from "../views/Root";
+import Admin from "../views/Admin";
+import About from "../views/About";
 
 const routes = [
   {
@@ -10,20 +13,25 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
+    component: Admin,
+    beforeEnter: () => {
+      const pass = prompt('password: ');
+      if (md5(pass) === '897a779351421523cadbafccdce22efe') {
+        return true;
+      }
+      return { path: "/" };
+    },
   },
   {
     path: '/about',
     name: 'About',
-    component: {
-      template: "<h1>Have a good day</h1>"
-    }
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    beforeEnter: () => {  },
+    component: About,
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 });
 
