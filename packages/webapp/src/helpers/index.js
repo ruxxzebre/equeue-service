@@ -1,10 +1,6 @@
 import { DateTime } from "luxon";
 import _ from "lodash";
-import { API } from "./api";
-import { enumIncludes, createRange } from "@bwi/shared/utils";
-import { stateTypes } from "@bwi/shared/constants";
 import { parseFilterRule } from "@bwi/shared/parsers";
-// import { v4 as uuid } from "uuid";
 
 export const Validator = {
   date: function (date) {
@@ -125,103 +121,6 @@ export const generateEntries = (
   return res;
 };
 
-/**
- *
- * @param existingEntries
- */
-
-export const initializeState_ = () => {
-  const now = DateTime.now();
-  const state = {
-    input: {
-      phone: "",
-      fullName: "",
-    },
-    currentMonth: now.month,
-    currentYear: now.year,
-    currentDay: now.day,
-    daysInCurrentMonth: now.daysInMonth,
-    availableDayFrom: now.day,
-    availableDayTo: now.daysInMonth,
-    acceptableYears: createRange(2020, 2022),
-    acceptableMonths: createRange(1, 12),
-    timeRange: {
-      dayStartsAt: "9:00",
-      dayEndsAt: "18:30",
-      minuteInterval: 10,
-      unavailableTimes: ["14:00-15:00"],
-    },
-    bookingMaxPerEntry: 2,
-    delayedEntriesTimes: [],
-    delayTime: 1000 * 60 * 5, // in ms
-    entries: [
-      {
-        date: "18-07-2021",
-        time: "9:10",
-        counter: 1,
-        id: "b9f620e8-95d7-4ee2-b175-fec37957c4ec",
-      },
-    ],
-  };
-  return state;
-};
-
-// TODO
-export const fetchState = async (stateType) => {
-  if (!enumIncludes(stateTypes, stateType)) return null;
-  const state = await API.get("/state?stype=" + stateType);
-  return state;
-};
-
-export const generateDays_ = ({
-  year,
-  month,
-  constraintsDayFrom = null,
-  constraintsDayTo = null,
-}) => {
-  const calendarDays = [];
-  const date = DateTime.fromObject({ year, month, day: 1 });
-  const wkday = date.weekday;
-  if (wkday > 1) {
-    let c = wkday;
-    while (c !== 1) {
-      calendarDays.push("");
-      c -= 1;
-    }
-  }
-  (() => {
-    let c = 1;
-    while (c <= date.daysInMonth) {
-      calendarDays.push(c);
-      c += 1;
-    }
-  })();
-  const wkdayLast = DateTime.fromObject({
-    year,
-    month,
-    day: date.daysInMonth,
-  }).weekday;
-  if (wkdayLast < 7) {
-    let c = wkdayLast;
-    while (c !== 7) {
-      calendarDays.push("");
-      c += 1;
-    }
-  }
-  if (constraintsDayFrom && constraintsDayTo) {
-    return calendarDays
-      .filter((day) => day >= constraintsDayFrom && day <= constraintsDayTo)
-      .map((i) => ({
-        day: i,
-        date: `${i}-${month < 10 ? `0${month}` : month}-${year}`,
-      }));
-  }
-  return calendarDays.map((i) => ({
-    day: i,
-    date: `${i}-${month < 10 ? `0${month}` : month}-${year}`,
-  }));
-};
-
 export const dayToCommonFormat = (date) => {
   const { day, month, year } = date;
   return `${day}-${month < 10 ? `0${month}` : month}-${year}`;
@@ -241,7 +140,6 @@ export const generateDays = ({
   let dayTemp = dayFrom;
   const calendarDays = [];
   while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {
-    // filter weekends
     const commonDate = dayToCommonFormat(dayTemp);
     let c = 0;
     filterRules.forEach((rule) => {

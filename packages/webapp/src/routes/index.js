@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { secured } from "@bwi/shared/configs";
 import md5 from "md5";
 import Root from "../views/Root";
 import Admin from "../views/Admin";
@@ -15,8 +16,8 @@ const routes = [
     name: 'Admin',
     component: Admin,
     beforeEnter: () => {
-      const pass = prompt('password: ');
-      if (md5(pass) === '897a779351421523cadbafccdce22efe') {
+      const pass = prompt('Пароль: ');
+      if (md5(pass) === secured.passwordHash) {
         return true;
       }
       return { path: "/" };
