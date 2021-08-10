@@ -96,11 +96,12 @@ export const storeObject = {
   getters: {
     getFaculty: ({ faculty }) => faculty,
     getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
-    getDays: ({availableDayFrom, availableDayTo, exclusiveDates}) => {
+    getDays: ({availableDayFrom, availableDayTo, exclusiveDates, filterRules}) => {
       return generateDays({
         availableDayFrom,
         availableDayTo,
         exclusiveDates,
+        filterRules,
       });
     },
     getEntries: ({ entries, timeRange, bookingMaxPerEntry, delayedEntriesTimes }) => (date) =>

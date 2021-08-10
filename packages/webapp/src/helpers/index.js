@@ -3,6 +3,7 @@ import _ from "lodash";
 import { API } from "./api";
 import { enumIncludes, createRange } from "@bwi/shared/utils";
 import { stateTypes } from "@bwi/shared/constants";
+import { parseFilterRule } from "@bwi/shared/parsers";
 // import { v4 as uuid } from "uuid";
 
 export const Validator = {
@@ -229,23 +230,28 @@ export const dayToCommonFormat = (date) => {
 export const generateDays = ({
                                availableDayFrom = null,
                                availableDayTo = null,
+  filterRules = [],
   exclusiveDates = [],
+  inclusiveDates = [],
 }) => {
   exclusiveDates = exclusiveDates.map(parseDate).map((i) => i.toLocaleString());
   if (!availableDayFrom || !availableDayTo) return null;
   const dayFrom = DateTime.fromISO(availableDayFrom);
   const dayTo = DateTime.fromISO(availableDayTo);
-  // console.log(dayFrom.toLocaleString());
-  // console.log(dayTo.toLocaleString());
   let dayTemp = dayFrom;
   const calendarDays = [];
   while (dayTemp.toLocaleString() !== dayTo.toLocaleString()) {
     // filter weekends
-    if (
-      ![6, 7].includes(dayTemp.weekday) ||
-      exclusiveDates.includes(dayTemp.toLocaleString())
+    const commonDate = dayToCommonFormat(dayTemp);
+    let c = 0;
+    filterRules.forEach((rule) => {
+      c += parseFilterRule(rule)(dayTemp);
+    });
+
+    if ((!c && !exclusiveDates.includes(commonDate)) ||
+      inclusiveDates.includes(commonDate)
     ) {
-      calendarDays.push(dayToCommonFormat(dayTemp));
+      calendarDays.push(commonDate);
     }
 
     dayTemp = dayTemp.plus({day: 1});
