@@ -86,6 +86,11 @@ app.post('/valpas', (req, res) => {
 });
 
 // localhost:3000 -> serverIP:3000
-app.listen(port, '0.0.0.0', () => {
-  console.log('Listening on port %s', port);
-});
+let firelock = false;
+
+if (!firelock)
+  app.listen(port, '0.0.0.0', () => {
+    console.log('Listening on port %s', port);
+  });
+
+module.exports.app = app;
