@@ -5,7 +5,6 @@ var env0 = Object.create(null),
   IF = Symbol.for("if"),
   LAMBDA = Symbol.for("lambda");
 
-ev([], []);
 function ev(x, env) {
   if (x && x.constructor === Symbol) {
     return env[x][0];

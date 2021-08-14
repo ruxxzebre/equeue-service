@@ -43,14 +43,23 @@ const wrapLibFn = (name, fn) => ({ name, fn });
  * @param {CommonInstruction[]} instructions
  * @return {any}
  */
-// const mapConfigInstructions = (instructions) => {
-//   if (!Array.isArray(instructions)) return {};
-//   const obj = {};
-//   instructions.forEach((i) => obj[i.name] = (arg) => {
-//     setGlobal(i, arg);
-//   });
-//   return obj;
-// };
+const mapSetterStateInstructions = (instructions, ctx) => {
+  if (!Array.isArray(instructions)) return {};
+  const obj = {};
+  instructions.forEach((i) => obj[i.name] = (arg) => {
+    if (i.argRequired && !arg && !i.default) {
+      throw new Error(`Argument(s) for ${i.name} is required`);
+    }
+    if (i.argRequired && !arg && i.default) {
+      return ctx.state[i.name] = i.default;
+    }
+    if (arg && typeof arg === i.argType) {
+      return ctx.state[i.name] = arg;
+    }
+    throw new Error(`Invalid argument type in ${i.name}`);
+  });
+  return obj;
+};
 
 const HIGH_PRIORITY_LIB_FNS = {
   HIGHEST: "include",
@@ -82,6 +91,10 @@ const fns = (ctx) => ({
     return ctx;
   },
   statePreferences: {
+    ...mapSetterStateInstructions([
+      { name: "bookingMaxPerEntry", argType: "number", argRequired: false, default: 1 },
+      { name: "minuteInterval", argType: "number", argRequired: false, default: 10 },
+    ], ctx),
     bookingMaxPerEntry: (num) => ctx.state.bookingMaxPerEntry = num,
     minuteInterval: (num) => ctx.state.minuteInterval = num,
     dayTimeRange: (from, to) =>
@@ -233,3 +246,6 @@ console.log(output.dayReducer(DateTime.now()));
 // console.log(compiler.compile(query)(DateTime.now()));
 //
 // module.exports.getFilter = (q) => parseInstruction(translateInstruction(q));
+
+module.exports.makeCompiler = makeCompiler;
+module.exports.fns = fns;
