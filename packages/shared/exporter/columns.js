@@ -10,10 +10,6 @@ const defaultColumns = (r = {}) => [
     label: 'Час',
   },
   {
-    value: _.get(r, 'faculty', ''),
-    label: 'Факультет',
-  },
-  {
     value: _.get(r, 'name', ''),
     label: 'ПІБ',
   },

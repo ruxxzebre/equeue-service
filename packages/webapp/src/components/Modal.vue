@@ -59,6 +59,9 @@ export default {
   },
   methods: {
     getErrors(type) {
+      if (type === "status") {
+        return !!Object.keys(this.errors).length;
+      }
       if (this.errors[type]) {
         if (Array.isArray(this.errors[type])) {
           return this.errors[type][0];
@@ -80,11 +83,12 @@ export default {
       }
     },
     submitForm() {
-      // this.toggleModal();
       this.validate("phone", this.formData.phone);
       this.validate("name", this.formData.name);
       const { $swal: swal } = this;
-      // if (this.formData) return;
+      if (this.getErrors("status")) {
+        return;
+      }
       this.toggleModal();
       this.$store
         .dispatch("addEntry", {
