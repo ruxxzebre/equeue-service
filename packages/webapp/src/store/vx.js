@@ -41,8 +41,7 @@ export const storeObject = {
         if (!entries[idx].time) continue;
         filtered.push(entries[idx]);
       }
-      filtered.forEach((entry) =>
-        commit("addCleanEntry", { entry }));
+      filtered.forEach((entry) => commit("addCleanEntry", { entry }));
     },
     addEntry: async ({ dispatch, state }, payload) => {
       const entry = payload.entry;
@@ -57,13 +56,16 @@ export const storeObject = {
             // let localizedDate = { day: "", month: "", year: "" };
             // localizedDate.day = splitted[0] + 'го';
             // localizedDate.month = ["січня"];
-            resolve(`Запис створено успішно! Приходьте ${entry.date} о ${entry.time}.`);
+            resolve(
+              `Запис створено успішно! Приходьте ${entry.date} о ${entry.time}.`
+            );
           })
           .catch(({ response }) => {
             let error;
             switch (response.status) {
               case 406: {
-                error = "Помилка запису, певно хтось вже обрав даний час, спробуйте ще раз.";
+                error =
+                  "Помилка запису, певно хтось вже обрав даний час, спробуйте ще раз.";
                 break;
               }
               default: {
@@ -72,14 +74,27 @@ export const storeObject = {
             }
             reject(error);
           });
-        dispatch("initEntry");
+        (async () => {
+          // const loader = $loading.show({
+          //   // Optional parameters
+          //   container: null,
+          //   canCancel: true,
+          //   onCancel: this.onCancel,
+          // });
+          await dispatch("initEntry");
+        })();
       });
     },
   },
   getters: {
     getFaculty: ({ faculty }) => faculty,
     getBookingMaxPerEntry: ({ bookingMaxPerEntry }) => bookingMaxPerEntry,
-    getDays: ({availableDayFrom, availableDayTo, exclusiveDates, filterRules}) => {
+    getDays: ({
+      availableDayFrom,
+      availableDayTo,
+      exclusiveDates,
+      filterRules,
+    }) => {
       return generateDays({
         availableDayFrom,
         availableDayTo,
@@ -87,15 +102,20 @@ export const storeObject = {
         filterRules,
       });
     },
-    getEntries: ({ entries, timeRange, bookingMaxPerEntry, delayedEntriesTimes }) => (date) =>
-      generateEntries(
-        entries,
-        date,
-        timeRange,
-        bookingMaxPerEntry,
-        delayedEntriesTimes
-      ),
-    getEntry: ({ entries }) => (id) => entries[id],
+    getEntries:
+      ({ entries, timeRange, bookingMaxPerEntry, delayedEntriesTimes }) =>
+      (date) =>
+        generateEntries(
+          entries,
+          date,
+          timeRange,
+          bookingMaxPerEntry,
+          delayedEntriesTimes
+        ),
+    getEntry:
+      ({ entries }) =>
+      (id) =>
+        entries[id],
     getYear: ({ currentYear }) => currentYear,
     getMonth: ({ currentMonth }) => currentMonth,
     getAvailableDayFrom: ({ availableDayFrom }) => availableDayFrom,

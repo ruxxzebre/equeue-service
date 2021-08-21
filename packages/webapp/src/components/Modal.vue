@@ -158,6 +158,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$small: 300px;
+$medium: 900px;
+
 .modal-content {
   display: grid;
   grid-template-columns: 0.3fr 1.7fr;
@@ -178,7 +181,13 @@ export default {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 40%; /* Could be more or less, depending on screen size */
+
+  @media screen and (max-width: $small) {
+    width: 40%;
+  }
+  @media screen and (min-width: $medium) {
+    width: 25vw;
+  }
 }
 
 .error {
