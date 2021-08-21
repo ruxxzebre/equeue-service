@@ -43,14 +43,23 @@ const wrapLibFn = (name, fn) => ({ name, fn });
  * @param {CommonInstruction[]} instructions
  * @return {any}
  */
-// const mapConfigInstructions = (instructions) => {
-//   if (!Array.isArray(instructions)) return {};
-//   const obj = {};
-//   instructions.forEach((i) => obj[i.name] = (arg) => {
-//     setGlobal(i, arg);
-//   });
-//   return obj;
-// };
+const mapSetterStateInstructions = (instructions, ctx) => {
+  if (!Array.isArray(instructions)) return {};
+  const obj = {};
+  instructions.forEach((i) => obj[i.name] = (arg) => {
+    if (i.argRequired && !arg && !i.default) {
+      throw new Error(`Argument(s) for ${i.name} is required`);
+    }
+    if (i.argRequired && !arg && i.default) {
+      return ctx.state[i.name] = i.default;
+    }
+    if (arg && typeof arg === i.argType) {
+      return ctx.state[i.name] = arg;
+    }
+    throw new Error(`Invalid argument type in ${i.name}`);
+  });
+  return obj;
+};
 
 const HIGH_PRIORITY_LIB_FNS = {
   HIGHEST: "include",
@@ -82,6 +91,10 @@ const fns = (ctx) => ({
     return ctx;
   },
   statePreferences: {
+    ...mapSetterStateInstructions([
+      { name: "bookingMaxPerEntry", argType: "number", argRequired: false, default: 1 },
+      { name: "minuteInterval", argType: "number", argRequired: false, default: 10 },
+    ], ctx),
     bookingMaxPerEntry: (num) => ctx.state.bookingMaxPerEntry = num,
     minuteInterval: (num) => ctx.state.minuteInterval = num,
     dayTimeRange: (from, to) =>
@@ -107,16 +120,26 @@ const fns = (ctx) => ({
       const fmt = dayToCommonFormat(date);
       return !indate.includes(fmt);
     }),
+    notToday: () => wrapLibFn("exclude",(date) => {
+      return date.toLocaleString() !== DateTime.now().toLocaleString();
+    }),
     /**
      * Checks if date is weekend
      * @param {1 | 2 | undefined} num - saturday (1) or sunday (2)
      * @return {function(DateTime): boolean}
      */
-    weekend: (num) =>
+    weekend: (arg) =>
       wrapLibFn("weekend",(date) => {
-      return (
-        [1,2].includes(num) ? [num] : [6, 7]
-      ).includes(date.weekday);
+        if (!isNaN(parseFloat(arg))) {
+          const num = arg;
+          return (
+            [1,2].includes(num) ? [num] : [6, 7]
+          ).includes(date.weekday);
+        }
+        if (arg === "true" || arg === "false") {
+          arg = arg === "true";
+          return [6, 7].includes(date.weekday) ^ !arg;
+        }
     }),
     /**
      * Checks if date's day is in specific range
@@ -194,16 +217,17 @@ const makeCompiler = () => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const query = `
   (dayPreferences
     (dateRange "12-08-2021" "29-08-2021")
     (weekend)
   )
 `;
-query;
 
 // TODO: write unit tests
 
+// eslint-disable-next-line no-unused-vars
 const stateDefinedByTaskQuery = `
   (stateDefine
     (bookingMaxPerEntry 1)
@@ -214,7 +238,7 @@ const stateDefinedByTaskQuery = `
       (dateRange "12-08-2021" "29-08-2021")
       (exclude "24-08-2021" "25-08-2021" "27-08-2021")
       (include "29-08-2021")
-      (weekend)
+      (weekend false)
     )
   )
 `;
@@ -225,11 +249,15 @@ compiler.initCTX({
 });
 compiler.initSTDLib(fns);
 
-const output = compiler.compile(stateDefinedByTaskQuery);
+// const output = compiler.compile(stateDefinedByTaskQuery);
 // console.log(lispNotationToJSArrays(stateDefinedByTaskQuery));
 
-console.log(output.dayReducer(DateTime.now()));
+// console.log(output.dayReducer(DateTime.now()));
 
 // console.log(compiler.compile(query)(DateTime.now()));
 //
 // module.exports.getFilter = (q) => parseInstruction(translateInstruction(q));
+
+module.exports.makeCompiler = makeCompiler;
+module.exports.compiler = compiler;
+module.exports.fns = fns;

@@ -34,7 +34,6 @@ export const storeGlobal = {
   getters: {
     getModalVisibility: ({ modal }) => modal.hidden,
     getFormData: ({ modalForm }) => {
-      console.log(modalForm);
       return modalForm;
     },
     getCurrentEntry: ({ currentEntry }) => currentEntry,

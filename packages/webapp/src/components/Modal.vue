@@ -28,8 +28,7 @@
           />
         </div>
         <div class="errors" v-if="Object.keys(errors).length">
-          {{ errors.phone[0] }}<br />
-          {{ errors.name[0] }}
+          {{ getErrors("phone") || getErrors("name") || null }}
         </div>
         <button class="button" type="submit">Надіслати</button>
       </div>
@@ -45,7 +44,7 @@ export default {
   data() {
     return {
       errors: {},
-      errorClass: null,
+      // errorClass: null,
     };
   },
   computed: {
@@ -54,8 +53,23 @@ export default {
       formData: "getFormData",
       currentEntry: "getCurrentEntry",
     }),
+    errorClass() {
+      return Object.keys(this.errors) ? "error" : null;
+    },
   },
   methods: {
+    getErrors(type) {
+      if (type === "status") {
+        return !!Object.keys(this.errors).length;
+      }
+      if (this.errors[type]) {
+        if (Array.isArray(this.errors[type])) {
+          return this.errors[type][0];
+        }
+        return this.errors[type];
+      }
+      return "";
+    },
     closeIfOutsideClick(e) {
       const elementMouseIsOver = document.elementFromPoint(
         e.clientX,
@@ -69,11 +83,13 @@ export default {
       }
     },
     submitForm() {
-      // this.toggleModal();
       this.validate("phone", this.formData.phone);
       this.validate("name", this.formData.name);
       const { $swal: swal } = this;
-      if (this.formData) return;
+      if (this.getErrors("status")) {
+        return;
+      }
+      this.toggleModal();
       this.$store
         .dispatch("addEntry", {
           entry: this.currentEntry,
@@ -123,15 +139,11 @@ export default {
           return null;
       }
 
-      errors.forEach(this.$swal.showValidationMessage);
-      this.errors[type] = errors;
+      // errors.forEach(this.$swal.showValidationMessage);
+      this.errors[type] = errors[0];
       if (!errors.length) {
         delete this.errors[type];
-        this.errorClass = null;
         // this.$store.commit("setInput", { type, value });
-      } else {
-        this.errorClass = "error";
-        console.log();
       }
     },
     input(type, value) {

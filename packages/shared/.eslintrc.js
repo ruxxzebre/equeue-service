@@ -7,7 +7,7 @@ module.exports = {
   extends: ["eslint:recommended"],
   parserOptions: {
     parser: "babel-eslint",
-    ecmaVersion: "latest",
+    ecmaVersion: 2021,
   },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
@@ -15,13 +15,21 @@ module.exports = {
   },
   overrides: [
     {
+      plugins: ["jest"],
       files: [
-        "**/__tests__/*.{j,t}s?(x)",
+        "./__tests__/*.{j,t}s?(x)",
         "**/tests/unit/**/*.spec.{j,t}s?(x)",
       ],
       env: {
         jest: true,
       },
+      rules: {
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
+      }
     },
   ],
 };

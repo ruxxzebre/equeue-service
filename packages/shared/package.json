@@ -3,11 +3,31 @@
   "version": "1.4.1",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --verbose --coverage",
+    "test:update": "jest --verbose --coverage --updateSnapshot",
+    "test:watch": "jest --verbose --watch",
+    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
+  },
+  "jest": {
+    "cacheDirectory": "./cache",
+    "coveragePathIgnorePatterns": [
+      "./configs",
+      "./constants"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 80
+      }
+    }
+  },
   "dependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.31.0",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^3.4.0",
     "excel4node": "^1.7.2",
+    "jest": "^27.0.6",
     "joi": "^17.4.1",
     "lodash": "^4.17.21",
     "luxon": "^2.0.1",

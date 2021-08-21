@@ -110,10 +110,9 @@ export const generateEntries = (
     const existingEntry = times.find((e) => e.time === time);
     if (!existingEntry) {
       res.push(makeEntry(time, date));
-    }
-    else if (
-      existingEntry.counter < bookingMaxPerEntry
-      && existingEntry.counter !== 0
+    } else if (
+      existingEntry.counter < bookingMaxPerEntry &&
+      existingEntry.counter !== 0
     ) {
       res.push(existingEntry);
     }
@@ -127,8 +126,8 @@ export const dayToCommonFormat = (date) => {
 };
 
 export const generateDays = ({
-                               availableDayFrom = null,
-                               availableDayTo = null,
+  availableDayFrom = null,
+  availableDayTo = null,
   filterRules = [],
   exclusiveDates = [],
   inclusiveDates = [],
@@ -145,13 +144,14 @@ export const generateDays = ({
       c += parseFilterRule(rule)(dayTemp);
     });
 
-    if ((!c && !exclusiveDates.includes(commonDate)) ||
+    if (
+      (!c && !exclusiveDates.includes(commonDate)) ||
       inclusiveDates.includes(commonDate)
     ) {
       calendarDays.push(commonDate);
     }
 
-    dayTemp = dayTemp.plus({day: 1});
+    dayTemp = dayTemp.plus({ day: 1 });
   }
   return calendarDays.map((date) => ({ date }));
 };
