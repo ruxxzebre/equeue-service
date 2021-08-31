@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/ruxxzebre/booking_widget/compare/v1.6.1...v1.6.2) (2021-08-31)
+
+
+### Bug Fixes
+
+* Compose finally works as expected ([11aaf8c](https://github.com/ruxxzebre/booking_widget/commit/11aaf8c1dd37ed07f91a2770f460f5a1fbf7d651))
+
+
+
+
+
 ## [1.6.1](https://github.com/ruxxzebre/booking_widget/compare/v1.6.0...v1.6.1) (2021-08-31)
 
 
