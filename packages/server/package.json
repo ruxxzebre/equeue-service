@@ -1,6 +1,6 @@
 {
   "name": "@bwi/server",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
-    "@bwi/shared": "^1.4.1",
+    "@bwi/shared": "^1.6.0",
     "@keyv/sqlite": "^2.0.2",
     "babel-eslint": "^10.1.0",
     "connect-history-api-fallback": "^1.6.0",

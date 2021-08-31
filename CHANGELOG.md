@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/ruxxzebre/booking_widget/compare/v1.5.0...v1.6.0) (2021-08-31)
+
+
+### Bug Fixes
+
+* get errors + unused faculty column ([8627aca](https://github.com/ruxxzebre/booking_widget/commit/8627acaebf19c3fe7894ce1af7d8c9a0d18be172))
+* lisp interpreter for state and time/day generation configuration ([e386240](https://github.com/ruxxzebre/booking_widget/commit/e386240f014ce91857e351700f453e5cf7385712))
+* modal + loader ([6a5133e](https://github.com/ruxxzebre/booking_widget/commit/6a5133e42764364448b6859e46f3e5984c434995))
+* style ([0f77736](https://github.com/ruxxzebre/booking_widget/commit/0f7773608b79747d318f9cb7e51ca668b26abc06))
+* yaiks ([085030e](https://github.com/ruxxzebre/booking_widget/commit/085030e96cd266fef724055f906fbdc807710a65))
+
+
+### Features
+
+* a few test dislocated ([cdedcff](https://github.com/ruxxzebre/booking_widget/commit/cdedcff68099a47ab1ca514439615aa11a166ca6))
+* extended state parsing ([ac8addc](https://github.com/ruxxzebre/booking_widget/commit/ac8addc0dc43c5667ca99b3d4a022b69085b3342))
+* fix modal + fix flisp + fix eslintrc ([af03cc8](https://github.com/ruxxzebre/booking_widget/commit/af03cc831c4d2a0b17d6fc591144841b992b0125))
+* jest update gitignore ([38f1a56](https://github.com/ruxxzebre/booking_widget/commit/38f1a56a8d1aa330d86966b6f06fed1e6934cbea))
+
+
+
+
+
 # [1.5.0](https://github.com/ruxxzebre/booking_widget/compare/v1.4.3...v1.5.0) (2021-08-10)
 
 
