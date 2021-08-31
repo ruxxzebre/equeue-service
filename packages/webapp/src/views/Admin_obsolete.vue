@@ -1,6 +1,6 @@
 <template>
   <div>Адмін панель</div>
-  <a :href="`${ipconfig.ip}/export`">
+  <a :href="`${ip}/export`">
     <button type="button">Експортувати у EXCEL (XLSX)</button>
   </a>
   <select @change="setSelFac">
@@ -95,7 +95,7 @@
 
 <script>
 import { stateStrings, defaultState } from "@bwi/shared/constants";
-import { ipconfig } from "@bwi/shared/configs";
+import { getServerURL } from "../helpers/api.js";
 import { API } from "../helpers/api";
 
 export default {
@@ -127,7 +127,7 @@ export default {
       }),
       selectedFaculty: defaultState,
       fStates: null,
-      ipconfig,
+      ip: getServerURL(),
     };
   },
   created() {

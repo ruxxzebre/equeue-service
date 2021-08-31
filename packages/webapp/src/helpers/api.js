@@ -1,5 +1,8 @@
 import axios from "axios";
-// import { ipconfig } from "@bwi/shared/configs";
+
+export const getServerURL = () => {
+  return `http://${window.location.hostname}:${process.env.VUE_APP_BASE_PORT}/api`;
+};
 
 export const API = axios.create({
   baseURL: (() => {
