@@ -1,6 +1,6 @@
 {
   "name": "@bwi/shared",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
