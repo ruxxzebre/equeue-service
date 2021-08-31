@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/ruxxzebre/booking_widget/compare/v1.6.0...v1.6.1) (2021-08-31)
+
+
+### Bug Fixes
+
+* spacing ([58a4afa](https://github.com/ruxxzebre/booking_widget/commit/58a4afa69b7bf03a1d1b574f70ff269e20e99213))
+
+
+
+
+
 # [1.6.0](https://github.com/ruxxzebre/booking_widget/compare/v1.5.0...v1.6.0) (2021-08-31)
 
 
