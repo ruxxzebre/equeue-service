@@ -1,5 +1,5 @@
 import parse from "url-parse";
-import { defaultState, stateTypes } from "@bwi/shared/constants";
+import { defaultState, stateTypes, stateStrings } from "@bwi/shared/constants";
 import { createStore } from "vuex";
 import { API } from "../helpers/api";
 import { storeObject } from "./vx";
@@ -30,14 +30,19 @@ export const stateware = {
     }
     API.get(`/get-state?stateType=${queryValue}`).then(
       async ({ data: state }) => {
+        // TODO: rename faculty to queryTypeName
         storeObject.state = state;
         storeObject.state.faculty = queryValue;
         const store = createStore({
           modules: {
             calendarManagement: storeObject,
             global: storeGlobal,
-          }
+          },
         });
+
+        const stateString = stateStrings[storeObject.state.faculty];
+        document.title = stateString.heading;
+
         app.use(store);
         await store.dispatch("initEntry"); // load entries immediately
         setInterval(() => {
@@ -45,6 +50,7 @@ export const stateware = {
         }, 5000); // fetch entries every 5 seconds
         options.cb(true);
         // TODO: implement webhooks
-      });
+      }
+    );
   },
 };
