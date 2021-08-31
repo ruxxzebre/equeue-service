@@ -48,8 +48,10 @@ app.use(expressSession({
 }));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded());
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug')
+
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
