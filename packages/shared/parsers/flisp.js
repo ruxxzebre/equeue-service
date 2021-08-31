@@ -1,5 +1,6 @@
 const { DateTime } = require('luxon');
 const _ = require('lodash');
+// const { createRange } = require("../utils/misc");
 const { lispNotationToJSArrays } = require('./jlisp');
 
 console.log('Filter LISP Parser.');
@@ -82,12 +83,58 @@ const runAllFns = (...args) =>
     }, 0) === args.length;
   };
 
+/**
+ * Sets default state values
+ * @param {object} ctx - sharedContext
+ * @param {object} ctx.state - state object to map
+ */
+const mapDefaults = (ctx) => {
+  if (!ctx.state.currentDay) ctx.state.currentDay = DateTime.now().day;
+  if (!ctx.state.currentMonth) ctx.state.currentMonth = DateTime.now().month;
+  if (!ctx.state.currentYear) ctx.state.currentYear = DateTime.now().year;
+  if (!ctx.state.entries) ctx.state.entries = [];
+}
+
+/**
+ * Wrap some outputs into according nested objects
+ * @param {object} ctx - sharedContext
+ * @param {object} ctx.state - state object to map
+ */
+const mapContextLocalWrappers = (ctx) => {
+  const clone = _.cloneDeep(ctx);
+  const stateInEntryForm = Object.entries(clone.state);
+
+  const wrappers = {
+    timeRange: ["dayStartsAt", "dayEndsAt", "minuteInterval", "unavailableTimes"],
+  };
+
+  for (let wrapperName in wrappers) {
+    const wrapper = wrappers[wrapperName];
+    ctx.state[wrapperName] = {};
+    stateInEntryForm.forEach((entry) => {
+      if (wrapper.includes(entry[0]) && entry[1]) {
+        ctx.state[wrapperName][entry[0]] = entry[1];
+        delete ctx.state[entry[0]];
+      }
+    });
+  }
+}
+
 const fns = (ctx) => ({
   dayPreferences: (...args) => {
     ctx.dayReducer = runAllFns(...args);
   },
-  stateDefine: (...args) => {
-    args.forEach(() => {});
+  /**
+   * Result of state instructions output (and temporary
+   * the others).
+   * Actually accepts the arguments,
+   * but all we need is in context, so it's fine to
+   * ignore that.
+   * @return {*}
+   */
+  stateDefine: () => {
+    mapDefaults(ctx);
+    mapContextLocalWrappers(ctx);
     return ctx;
   },
   statePreferences: {
@@ -95,8 +142,6 @@ const fns = (ctx) => ({
       { name: "bookingMaxPerEntry", argType: "number", argRequired: false, default: 1 },
       { name: "minuteInterval", argType: "number", argRequired: false, default: 10 },
     ], ctx),
-    bookingMaxPerEntry: (num) => ctx.state.bookingMaxPerEntry = num,
-    minuteInterval: (num) => ctx.state.minuteInterval = num,
     dayTimeRange: (from, to) =>
       ctx.state = { dayStartsAt: from, dayEndsAt: to, ...ctx.state },
     availableDay: (from, to) => ctx.state = {
@@ -240,6 +285,16 @@ const stateDefinedByTaskQuery = `
       (include "29-08-2021")
       (weekend false)
     )
+    /* TODO
+    (timePreferences
+      (timeRange "9:00" "17:50")
+      (unavailableTimeRanges
+        (time "14:00" "15:00")
+        (time "11:00" "12:00")
+      )
+      (minuteInterval 10)
+    )
+    */
   )
 `;
 
@@ -249,7 +304,8 @@ compiler.initCTX({
 });
 compiler.initSTDLib(fns);
 
-// const output = compiler.compile(stateDefinedByTaskQuery);
+const output = compiler.compile(stateDefinedByTaskQuery);
+console.log(output);
 // console.log(lispNotationToJSArrays(stateDefinedByTaskQuery));
 
 // console.log(output.dayReducer(DateTime.now()));
