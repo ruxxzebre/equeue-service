@@ -5,10 +5,6 @@ module.exports = {
     es6: true
   },
   extends: ["eslint:recommended"],
-  parserOptions: {
-    parser: "babel-eslint",
-    ecmaVersion: 2021,
-  },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",

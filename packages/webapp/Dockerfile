@@ -1,9 +1,15 @@
-FROM node:14-alpine as build-stage
-RUN apk add g++ make python
+FROM node:16-buster as build-stage
+# Not alpine, because it's really garbage
 
 WORKDIR /app
 COPY . .
-RUN yarn install
+
+# For making env from compose be available during build
+# So MAKE SURE TO PASS ENV VARIABLES IN ARGS when using Docker Compose
+ARG VUE_APP_BASE_PORT
+ENV VUE_APP_BASE_PORT=${VUE_APP_BASE_PORT}
+
+RUN yarn
 RUN yarn webappbuild
 
 FROM nginx:stable-alpine as production-stage
