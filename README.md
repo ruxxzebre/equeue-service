@@ -1,10 +1,9 @@
-# Booking Calendar Widget
+# EQueue Service
 ## _Just works_
 
 ## TODOs
 
 - Admin page
-- cli script for migration, configuration
 
 Tiny, but straight forward and configurable portable widget to include in your site.
 Everything packed inside, almost no extra configuration needed.
