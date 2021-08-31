@@ -39,7 +39,7 @@ services:
     # to make them available for outer wilds.
     # Thank you.
 
-    # TODO: fingering with dot files aaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhhhhhhh
+    # TODO: ssl
 
     container_name: nginx-reverse
     image: nginx:latest

@@ -9,7 +9,6 @@ export const API = axios.create({
     if (process.env.VUE_APP_BASE_URL) {
       return process.env.VUE_APP_BASE_URL;
     }
-    // TODO: ssl
     return `http://${window.location.hostname}:${process.env.VUE_APP_BASE_PORT}/api`;
   })(),
   // headers: {

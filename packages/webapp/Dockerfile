@@ -4,8 +4,9 @@ FROM node:16-buster as build-stage
 WORKDIR /app
 COPY . .
 
-# Fix env variables overlapping
-RUN rm -frv .env
+# Fix env variables overlapping, if .env already exists
+RUN rm -frv packages/server/.env
+RUN rm -frv packages/webapp/.env
 
 # For making env from compose be available during build
 # So MAKE SURE TO PASS ENV VARIABLES IN ARGS when using Docker Compose
