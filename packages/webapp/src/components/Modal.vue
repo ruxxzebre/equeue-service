@@ -182,8 +182,8 @@ $medium: 900px;
   padding: 20px;
   border: 1px solid #888;
 
-  @media screen and (max-width: $small) {
-    width: 40%;
+  @media screen and (max-width: $medium) {
+    width: 300px;
   }
   @media screen and (min-width: $medium) {
     width: 25vw;
