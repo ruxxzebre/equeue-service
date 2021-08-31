@@ -16,12 +16,31 @@ services:
     build:
       context: .
       dockerfile: ./packages/server/Dockerfile
+    environment:
+      - PORT=3000
+      - SESSION_SECRET=666
+      - ADMIN_LOGIN=root
+      - ADMIN_PASSWORD=root
     expose:
       - 3000
     networks:
       - node-network
 
   reverse:
+    # All requests are proxies through this service
+    # be sure not to pass 'ports' into other services, only use 'expose' directive
+    # and configure proxy in bin/nginx.conf
+
+    # Reverse-proxy currently used for pretty much only convenience
+    # but later will be used for redirection for e.g. frontend services
+    # so please do it that way to avoid many headaches I had ever.
+
+    # Also, yep, be sure to share ports in 'ports' directive in this proxy service
+    # to make them available for outer wilds.
+    # Thank you.
+
+    # TODO: fingering with dot files aaaaaaaaaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhhhhhhh
+
     container_name: nginx-reverse
     image: nginx:latest
     depends_on:

@@ -4,6 +4,9 @@ FROM node:16-buster as build-stage
 WORKDIR /app
 COPY . .
 
+# Fix env variables overlapping
+RUN rm -frv .env
+
 # For making env from compose be available during build
 # So MAKE SURE TO PASS ENV VARIABLES IN ARGS when using Docker Compose
 ARG VUE_APP_BASE_PORT
