@@ -1,5 +1,7 @@
-const { Entry } = require("../entries/entries.model");
+const { entriesModel } = require("../entries");
 const caseExporterXL = require("@bwi/shared/exporter");
+
+const { Entry } = entriesModel;
 
 module.exports = {
     async exportEntries(req, res) {
