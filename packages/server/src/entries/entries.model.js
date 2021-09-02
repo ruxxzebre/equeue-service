@@ -1,4 +1,4 @@
-const { db } = require('../db');
+const { db } = require('../../db');
 const { schemas: { EntrySchema } } = require('@bwi/shared');
 
 const Entry = {

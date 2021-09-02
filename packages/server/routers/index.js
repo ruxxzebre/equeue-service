@@ -33,17 +33,17 @@ router.get('/entry',async  (req, res) => {
   const filterKeys = ["name", "date", "phone", "id"];
   filterKeys.forEach((key) => params[key] = q[key]);
 
-  let records;
-  records = Object.keys(params).length
+  let data;
+  data = Object.keys(params).length
     ? await Entry.getRecords(params)
     : await Entry.getRecords();
 
-  records.forEach((i) => {
+  data.records.forEach((i) => {
     delete i.name;
     delete i.phone;
     delete i.faculty;
   });
-  res.send(records);
+  res.send(data.records);
 });
 
 router.post('/entry', async (req, res) => {

@@ -50,13 +50,18 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
+const { routers } = require('./src');
+const indexRoute = require('./routers/index');
+const rootRoute = require('./routers/root');
 const stateRoute = require('./routers/states');
 const authRoute = require('./routers/auth');
-const { routers } = require('./src');
 
-app.use('/api', routers);
-app.use('/api', stateRoute);
-app.use('/api/auth', authRoute);
+app.use('/api/v1', indexRoute);
+app.use('/api/v1', stateRoute);
+app.use('/api/v1', rootRoute);
+app.use('/api/v1/auth', authRoute);
+
+app.use('/api/v2', routers);
 
 // localhost:3000 -> serverIP:3000
 let fireLock = false;
