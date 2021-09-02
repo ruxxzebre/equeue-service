@@ -1,0 +1,1 @@
+module.exports.entriesRouter = require('./entries.route');

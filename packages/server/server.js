@@ -15,11 +15,6 @@ const port = process.env.PORT || 3000;
 https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
 */
 
-const indexRoute = require('./routers/index');
-const rootRoute = require('./routers/root');
-const stateRoute = require('./routers/states');
-const authRoute = require('./routers/auth');
-
 const whitelist = ["http://localhost:3000", "http://localhost:8080"];
 let development = true;
 
@@ -55,9 +50,12 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-app.use('/api', indexRoute);
+const stateRoute = require('./routers/states');
+const authRoute = require('./routers/auth');
+const { routers } = require('./src');
+
+app.use('/api', routers);
 app.use('/api', stateRoute);
-app.use('/api', rootRoute);
 app.use('/api/auth', authRoute);
 
 // localhost:3000 -> serverIP:3000

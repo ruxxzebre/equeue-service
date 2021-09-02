@@ -1,17 +1,6 @@
 const { db } = require('../db');
 const { schemas: { EntrySchema } } = require('@bwi/shared');
 
-const removeDateCollisions = (data) => {
-  // NOTE: TEMPORARY OBSOLETE
-  return data;
-  const datePool = [];
-  return data.filter((thing) => {
-    const includs = datePool.includes(thing.date);
-    if (!includs) datePool.push(thing.date);
-    return !includs;
-  });
-}
-
 const Entry = {
   async getRecords(params = null) {
     let result = await db('events').select('*');
@@ -28,7 +17,6 @@ const Entry = {
       });
     }
 
-    if (result) return removeDateCollisions(result);
     return { records: result, error: null };
   },
   async makeRecord(record) {
