@@ -3,3 +3,4 @@ db/db.level
 db/kvdb.sqlite3
 db/db.sqlite3
 .env
+coverage

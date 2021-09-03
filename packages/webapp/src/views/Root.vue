@@ -1,5 +1,5 @@
 <template>
-<!--  <img alt="Faculty logo" src="../assets/fiat.png" style="width: 200px" />-->
+<!--  <img alt="Faculty logo" entities="../assets/fiat.png" style="width: 200px" />-->
   <h1>{{ facString }}</h1>
   <span v-if="showdev">
     <ControlPanel />

@@ -79,7 +79,7 @@ app.set('view engine', 'pug')
 
 app.use(express.static(path.join(__dirname, '../webapp/dist')));
 
-const { routers } = require('./src');
+const { routers } = require('./entities');
 const indexRoute = require('./routers/index');
 const rootRoute = require('./routers/root');
 const stateRoute = require('./routers/states');
