@@ -100,12 +100,12 @@ app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
-// localhost:3000 -> serverIP:3000
-let fireLock = false;
-
-if (!fireLock)
-  app.listen(port, '0.0.0.0', () => {
-    console.log('Listening on port %s', port);
-  });
+// // localhost:3000 -> serverIP:3000
+// let fireLock = false;
+//
+// if (!fireLock)
+//   app.listen(port, '0.0.0.0', () => {
+//     console.log('Listening on port %s', port);
+//   });
 
 module.exports.app = app;

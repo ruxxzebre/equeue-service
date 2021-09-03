@@ -1,9 +1,10 @@
 const { Router } = require('express');
-const { adminRouter } = require('./admin');
-const { entriesRouter } = require('./entries');
+const { adminRouter, adminController } = require('./admin');
+const { entriesRouter, entriesController, entriesModel } = require('./entries');
 const { apiRouter } = require('./api');
-const { authRouter } = require('./auth');
-const { usersRouter } = require('./users');
+const { authRouter, authService, authController } = require('./auth');
+const { usersRouter, usersService, usersModel, usersController } = require('./users');
+const { tokenModel, tokenService } = require('./token');
 
 const router = Router();
 
@@ -13,4 +14,20 @@ router.use(apiRouter);
 router.use(usersRouter);
 router.use('/auth', authRouter);
 
-module.exports.routers = router;
+module.exports = {
+    routers: router,
+    adminRouter,
+    adminController,
+    entriesRouter,
+    entriesController,
+    entriesModel,
+    authRouter,
+    authController,
+    authService,
+    usersRouter,
+    usersController,
+    usersService,
+    usersModel,
+    tokenModel,
+    tokenService,
+}

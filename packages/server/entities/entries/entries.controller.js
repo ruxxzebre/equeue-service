@@ -1,4 +1,4 @@
-const { Entry } = require("./entries.model");
+const Entry = require("./entries.model");
 const { EntrySchema } = require("@bwi/shared/schemas");
 const throttler = require("../../helpers/throttler");
 
@@ -14,8 +14,8 @@ module.exports = {
 
         let records;
         records = Object.keys(params).length
-            ? await Entry.getRecords(params)
-            : await Entry.getRecords();
+            ? await Entry.getEntries(params)
+            : await Entry.getEntries();
 
         records.forEach((i) => {
             delete i.name;
@@ -25,14 +25,14 @@ module.exports = {
         res.send(records);
     },
     async makeEntry(req, res) {
-    if (!EntrySchema.validate(req.body).error) {
-        const event = req.body;
-        const result = await throttler.callFunction(() => Entry.makeRecord(event));
-        if (result.error) {
-            return res.status(result.code || 400).send(result);
+        if (!EntrySchema.validate(req.body).error) {
+            const event = req.body;
+            const result = await throttler.callFunction(() => Entry.insertEntry(event));
+            if (result.error) {
+                return res.status(result.code || 400).send(result);
+            }
+            else return res.send(result);
         }
-        else return res.send(result);
-    }
     return res.status(400).send(EntrySchema.validate(req.body));
     }
 }

@@ -1,20 +1,69 @@
+const httpStatus = require('http-status');
+const catchAsync = require('../../utils/catchAsync');
+const { authService } = require('./auth.service');
+const { usersService } = require('../users');
+const { tokenService } = require('../token');
+const emailService = {};
+
+const register = catchAsync(async (req, res) => {
+    const user = await usersService.createUser(req.body);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.status(httpStatus.CREATED).send({ user, tokens });
+});
+
+const login = catchAsync(async (req, res) => {
+    const { email, password } = req.body;
+    const user = await authService.loginUserWithEmailAndPassword(email, password);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.send({ user, tokens });
+});
+
+const logout = catchAsync(async (req, res) => {
+    await authService.logout(req.body.refreshToken);
+    res.status(httpStatus.NO_CONTENT).send();
+});
+
+const refreshTokens = catchAsync(async (req, res) => {
+    const tokens = await authService.refreshAuth(req.body.refreshToken);
+    res.send({ ...tokens });
+});
+
+const forgotPassword = catchAsync(async (req, res) => {
+    res.status(httpStatus.NOT_IMPLEMENTED);
+    // const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
+    // await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
+    // res.status(httpStatus.NO_CONTENT).send();
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+    await authService.resetPassword(req.query.token, req.body.password);
+    res.status(httpStatus.NO_CONTENT).send();
+});
+
+const sendVerificationEmail = catchAsync(async (req, res) => {
+    res.status(httpStatus.NOT_IMPLEMENTED);
+    // const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
+    // await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
+    // res.status(httpStatus.NO_CONTENT).send();
+});
+
+const verifyEmail = catchAsync(async (req, res) => {
+    await authService.verifyEmail(req.query.token);
+    res.status(httpStatus.NO_CONTENT).send();
+});
+
+const verifyToken = catchAsync(async (req, res) => {
+    res.send(200);
+});
+
 module.exports = {
-    login(req, res) {
-        const { username, password } = req.body;
-        if (req.session.authenticated) {
-            return res.json({message: "Fine."});
-        } else {
-            if (
-                username === process.env.ADMIN_LOGIN
-                && password === process.env.ADMIN_PASSWORD
-            ) {
-                req.session.authenticated = true;
-                return res.json({message: "Logged."});
-            }
-        }
-        return res.status(401).send({message: "Bad credentials."});
-    },
-    valid(req, res) {
-        res.json({ authenticated: !!req.session.authenticated });
-    },
-}
+    register,
+    login,
+    logout,
+    refreshTokens,
+    forgotPassword,
+    resetPassword,
+    sendVerificationEmail,
+    verifyEmail,
+    verifyToken,
+};
