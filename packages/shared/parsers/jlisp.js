@@ -45,6 +45,13 @@ class Source {
   next() {
     return this.s[this.i++];
   }
+  prev() {
+    if (this.i > 0) {
+      return this.s[this.i--];
+    }
+    this.i = 0;
+    return this.s[0];
+  }
 }
 
 const spaces = "\t\n\r ";
@@ -54,11 +61,50 @@ const err = (...args) => {
   throw new Error(args.join(" "));
 }
 
+/**
+ *
+ * @param {Source} s
+ */
 function skipSpaces(s) {
   while(spaces.indexOf(s.curr()) >= 0) {
     s.next();
   }
 }
+
+/**
+ *
+ * @param {Source} s
+ */
+function skipComments(s) {
+  let commSymbolsCount = 0;
+  let commEndCount = 0;
+  if('/'.indexOf(s.curr()) >= 0) {
+    commSymbolsCount++;
+    s.next();
+  }
+  if('*'.indexOf(s.curr()) >= 0) {
+    commSymbolsCount++;
+    s.next();
+  }
+  if (commSymbolsCount != 2) {
+    while (commSymbolsCount) {
+      s.prev();
+      commSymbolsCount--;
+    }
+    return;
+  }
+  while (commEndCount !== 2) {
+    while ('*'.indexOf(s.curr()) < 0) {
+      s.next();
+    }
+    commEndCount++;
+    while ('/'.indexOf(s.curr()) < 0) {
+      s.next();
+    }
+    commEndCount++;
+  }
+}
+
 
 function readList(s) {
   if (s.curr() === "(") {
@@ -66,6 +112,7 @@ function readList(s) {
     let res = [];
     for(;;) {
       skipSpaces(s);
+      skipComments(s);
       if (!s.curr() || s.curr() === ")") break;
       res.push(read(s));
     }
@@ -107,6 +154,7 @@ const read_table = { "(": readList,
   "\"": readString }
 
 function read(s) {
+  skipComments(s);
   skipSpaces(s);
   return (read_table[s.curr()] || readSymbolOrNumber)(s);
 }
@@ -115,6 +163,7 @@ env0[Symbol.for("+")] = [(x, y) => x + y];
 env0[Symbol.for("-")] = [(x, y) => x - y];
 env0[Symbol.for("<")] = [(x, y) => x < y];
 
+/* eslint-line-disable */
 let text = `
 (progn
   (setq fibo (lambda (x)
@@ -124,7 +173,6 @@ let text = `
                        (fibo (- x 2))))))
   (fibo 10))
 `;
-text;
 // let source = new Source(text);
 // let test = read(source);
 

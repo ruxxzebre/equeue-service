@@ -278,7 +278,7 @@ const stateDefinedByTaskQuery = `
     (bookingMaxPerEntry 1)
     (minuteInterval 10)
     (dayTimeRange "09:00" "17:50")
-    (availableDay "16-08-2021" "16-09-2021")
+    /* (availableDay "16-08-2021" "16-09-2021") */
     (dayPreferences
       (dateRange "12-08-2021" "29-08-2021")
       (exclude "24-08-2021" "25-08-2021" "27-08-2021")
@@ -295,6 +295,7 @@ const stateDefinedByTaskQuery = `
       (minuteInterval 10)
     )
     */
+    (availableDay "16-08-2021" "16-09-2021")
   )
 `;
 
