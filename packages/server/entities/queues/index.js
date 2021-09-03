@@ -1,0 +1,1 @@
+module.exports.queuesRouter = require('./queues.route');

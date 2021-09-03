@@ -12,17 +12,17 @@ module.exports = {
         const filterKeys = ["name", "date", "phone", "id"];
         filterKeys.forEach((key) => params[key] = q[key]);
 
-        let records;
-        records = Object.keys(params).length
+        let data;
+        data = Object.keys(params).length
             ? await Entry.getEntries(params)
             : await Entry.getEntries();
 
-        records.forEach((i) => {
+        data.records.forEach((i) => {
             delete i.name;
             delete i.phone;
             delete i.faculty;
         });
-        res.send(records);
+        res.send(data.records);
     },
     async makeEntry(req, res) {
         if (!EntrySchema.validate(req.body).error) {

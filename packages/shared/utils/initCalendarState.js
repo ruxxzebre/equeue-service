@@ -18,10 +18,6 @@ const initializeState = ({
    }) => {
   const now = DateTime.now();
   const state = {
-    input: {
-      phone: "",
-      fullName: "",
-    },
     filterRules,
     currentMonth: currentMonth || now.month,
     currentYear: currentYear || now.year,
